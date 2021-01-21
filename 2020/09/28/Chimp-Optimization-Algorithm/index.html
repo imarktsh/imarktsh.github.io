@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/128128.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/3232.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/1616.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1.简介黑猩猩，又称普通黑猩猩，健壮的黑猩猩，或简称为“黑猩猩”，是热带非洲森林的原生物种[1]。黑猩猩被粗黑的头发覆盖着，但裸露的脸，手指，脚趾，手掌和脚底。黑猩猩和人类DNA之间的关系是如此相似，因为它们是人类的近亲，因为黑猩猩和黑猩猩的起源是七八百万年前。在模仿黑猩猩的社会多样性和狩猎行为的黑猩猩优化算法（ChOA）中[2]。黑猩猩的狩猎行为分为驾驶，追逐，阻挡和攻击[3]。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Chimp Optimization Algorithm">
+<meta property="og:url" content="http://example.com/2020/09/28/Chimp-Optimization-Algorithm/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.简介黑猩猩，又称普通黑猩猩，健壮的黑猩猩，或简称为“黑猩猩”，是热带非洲森林的原生物种[1]。黑猩猩被粗黑的头发覆盖着，但裸露的脸，手指，脚趾，手掌和脚底。黑猩猩和人类DNA之间的关系是如此相似，因为它们是人类的近亲，因为黑猩猩和黑猩猩的起源是七八百万年前。在模仿黑猩猩的社会多样性和狩猎行为的黑猩猩优化算法（ChOA）中[2]。黑猩猩的狩猎行为分为驾驶，追逐，阻挡和攻击[3]。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928134101682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131033138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928134229924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131117784.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131125847.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131137114.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131142258.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131147110.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131156696.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131245209.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131232457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131309507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200928131346442.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2020-09-28T05:13:00.000Z">
+<meta property="article:modified_time" content="2020-09-28T05:43:42.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="黑猩猩">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200928134101682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="http://example.com/2020/09/28/Chimp-Optimization-Algorithm/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Chimp Optimization Algorithm | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/28/Chimp-Optimization-Algorithm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Chimp Optimization Algorithm
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-09-28 13:13:00 / Modified: 13:43:42" itemprop="dateCreated datePublished" datetime="2020-09-28T13:13:00+08:00">2020-09-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h2><p>黑猩猩，又称普通黑猩猩，健壮的黑猩猩，或简称为“黑猩猩”，是热带非洲森林的原生物种[1]。黑猩猩被粗黑的头发覆盖着，但裸露的脸，手指，脚趾，手掌和脚底。黑猩猩和人类DNA之间的关系是如此相似，因为它们是人类的近亲，因为黑猩猩和黑猩猩的起源是七八百万年前。在模仿黑猩猩的社会多样性和狩猎行为的黑猩猩优化算法（ChOA）中[2]。黑猩猩的狩猎行为分为驾驶，追逐，阻挡和攻击[3]。</p>
+<a id="more"></a>
+
+<h2 id="2-ChOA的启发"><a href="#2-ChOA的启发" class="headerlink" title="2. ChOA的启发"></a>2. ChOA的启发</h2><p>一种新颖的基于狩猎的优化算法，称为黑猩猩优化算法（ChOA），其灵感来自黑猩猩在其群体狩猎中的个体智力和性动机，这与其他社会掠食者不同。在黑猩猩群落中，有四种类型的黑猩猩有权从事狩猎过程，称为驾驶员，屏障，追赶者和攻击者[4]。它们都有不同的能力，但是这些多样性是成功狩猎所必需的。每个黑猩猩在狩猎攻击猎物中的作用分类如下：</p>
+<p>驾驶员：驾驶员的作用是跟随猎物而不试图追赶它。<br>障碍物：障碍物的作用位于树的底部，然后爬上以阻挡从另一个方向起飞的猎物。<br>追赶者：追赶者的角色在猎物追赶追赶者之后迅速行动。<br>攻击者：最终，攻击者会预测猎物的突围路线，将猎物折返猎物，使其朝向追赶者或进入下层树冠。<br>雄性黑猩猩比雌性捕猎更多。当被捕获和杀死时，饭食将分发给所有狩猎队成员，甚至是旁观者[5]。攻击者被认为需要更多的认知努力来预测猎物的后续运动，因此，在成功狩猎后，他们会获得一块更大的肉类以作为报酬[6]。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200928134101682.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>图1： ChOA的灵感</p>
+<h2 id="3-黑猩猩与人类DNA的关系"><a href="#3-黑猩猩与人类DNA的关系" class="headerlink" title="3.黑猩猩与人类DNA的关系"></a>3.黑猩猩与人类DNA的关系</h2><p>黑猩猩在基因上与人类最接近，实际上，黑猩猩拥有约98.6％的DNA [7]。与猴子或其他群体相比，人类与黑猩猩共享更多的DNA。自从研究人员对黑猩猩基因组进行测序以来，他们已经知道人类与黑猩猩共享约99％的DNA，使它们成为我们最亲密的近亲。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200928131033138.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="4.职位更新机制"><br>图2：黑猩猩与人类DNA之间的关系</p>
+<h2 id="4-职位更新机制"><a href="#4-职位更新机制" class="headerlink" title="4.职位更新机制"></a>4.职位更新机制</h2><p>位置更新机制的过程是搜索黑猩猩在搜索空间中与其他黑猩猩位置相​​关的位置[8]。然后，将最终位置随机定位在一个圆圈中，该圆圈由攻击者，屏障，追赶者和驾驶员黑猩猩的位置定义。也就是说，猎物的位置是由四个最佳群体估计的，其他黑猩猩会随机更新它们在其中的位置[9]。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200928134229924.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>无花果3：位置更新机制</p>
+<h2 id="5-CHOA的数值实现"><a href="#5-CHOA的数值实现" class="headerlink" title="5. CHOA的数值实现"></a>5. CHOA的数值实现</h2><p>在本节中，得出了分组，驾驶，阻挡，追逐和进攻的数学模型。</p>
+<p>为了在数学上驱动和追捕猎物，用等式表示，<img src="https://img-blog.csdnimg.cn/20200928131117784.png#pic_center" alt="在这里插入图片描述"></p>
+<p>其中n表示当前迭代的次数，c，m和x是系数向量，是猎物位置的向量，并且是黑猩猩的位置向量。</p>
+<p>向量c，m，x的计算公式如下：<br><img src="https://img-blog.csdnimg.cn/20200928131125847.png#pic_center" alt="在这里插入图片描述"></p>
+<p>其中和是[0，1]范围内的随机向量。最后，m是一个基于各种混沌图谱计算出的混沌向量，因此该向量代表了黑猩猩在狩猎过程中性动机的影响[10]。</p>
+<p>为了数学上实现黑猩猩的行为，我们假设攻击者，驾驶员，屏障和追逐者可以利用的第一个最佳解决方案可以更好地了解潜在猎物的位置[11]。因此，存储了迄今获得的四个最佳解决方案，并且其他黑猩猩被迫根据最佳黑猩猩的位置更新其位置。这种关系由以下方程式表示，<br><img src="https://img-blog.csdnimg.cn/20200928131137114.png#pic_center" alt="在这里插入图片描述"></p>
+<p>当随机值在[-1，1]范围内时，黑猩猩的下一个位置可以位于其当前位置和猎物位置之间的任何位置。<br><img src="https://img-blog.csdnimg.cn/20200928131142258.png#pic_center" alt="在这里插入图片描述"></p>
+<p>形成整体方程式<br><img src="https://img-blog.csdnimg.cn/20200928131147110.png#pic_center" alt="在这里插入图片描述"></p>
+<p>正常更新位置机制或在优化过程中更新黑猩猩位置的混沌模型。数学模型表示为</p>
+<p><img src="https://img-blog.csdnimg.cn/20200928131156696.png#pic_center" alt="在这里插入图片描述"></p>
+<p>[0，1]中的随机数在哪里。 </p>
+<h2 id="6-ChOA的伪代码"><a href="#6-ChOA的伪代码" class="headerlink" title="6. ChOA的伪代码"></a>6. ChOA的伪代码</h2><p><img src="https://img-blog.csdnimg.cn/20200928131245209.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>图4： ChOA的伪代码</p>
+<h2 id="7-ChOA流程图"><a href="#7-ChOA流程图" class="headerlink" title="7. ChOA流程图"></a>7. ChOA流程图</h2><p><img src="https://img-blog.csdnimg.cn/20200928131232457.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>图5： ChOA流程图</p>
+<h2 id="8-ChOA的优缺点"><a href="#8-ChOA的优缺点" class="headerlink" title="8. ChOA的优缺点"></a>8. ChOA的优缺点</h2><p><img src="https://img-blog.csdnimg.cn/20200928131309507.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p>图6： ChOA的优缺点</p>
+<h2 id="9-ChOA的应用"><a href="#9-ChOA的应用" class="headerlink" title="9. ChOA的应用"></a>9. ChOA的应用</h2><p>ChOA算法可以应用于各种工程优化问题，例如</p>
+<p>工程设计[12]。<br>中性网络[13]。<br>数据采集​​[14]。<br>计算机分析[15]。</p>
+<p>图7： ChOA的应用<br><img src="https://img-blog.csdnimg.cn/20200928131346442.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] Khishe M，Mosavi M（2020）黑猩猩优化算法。专家系统及其应用程序149：113338。doi：10.1016 / j.eswa.2020.113338</p>
+<p>[2] Khabbazi A，Gargari E，Lucas C（2009）最小比特错误率波束成形的帝国主义竞争算法。国际生物启发计算杂志1：125。doi：10.1504 / ijbic.2009.022781</p>
+<p>[3]。Beyer H，Schwefel H（2002）期刊搜索结果–为我引用。自然计算1：3-52。doi：10.1023 / a：1015059928466</p>
+<p>[4]。Boesch C（2002）大猩猩之间的合作狩猎角色。人性13：27-46。doi：10.1007 / s12110-002-1013-6</p>
+<p>[5]。Couzin I，Laidre M（2009）裂变融合人群。当前生物学19：R633-R635。doi：10.1016 / j.cub.2009.05.034</p>
+<p>[6]。Derrac J，GarcíaS，Molina D，Herrera F（2011）关于使用非参数统计检验作为比较进化和群体智能算法的方法的实用教程。群体与进化计算1：3-18。doi：10.1016 / j.swevo.2011.02.002</p>
+<p>[7]。Faris H，Mafarja M，Heidari A等。（2018）针对特征选择问题的具有交叉方案的高效二进制Salp Swarm算法。基于知识的系统154：43-67。doi：10.1016 / j.knosys.2018.05.009</p>
+<p>[8] Heidari A，Pahlavani P（2017）是一款高效的改良灰太狼优化器，带有Lévy飞行器，用于优化任务。应用软件计算60：115-134。doi：10.1016 / j.asoc.2017.06.044</p>
+<p>[9] Kaveh M，Khishe M，Mosavi M（2018）设计和实现基于邻域搜索生物地理的优化训练器，用于使用多层感知器神经网络对声纳数据集进行分类。模拟集成电路和信号处理100：405-428。doi：10.1007 / s10470-018-1366-3</p>
+<p>[10] Khishe M，Safari A（2019年），使用由蜻蜓算法训练的MLP神经网络对声纳目标进行分类。无线个人通信108：2241-2260。doi：10.1007 / s11277-019-06520-w</p>
+<p>[11] Mafarja M，Mirjalili S（2018）混合二进制蚁狮优化器，具有粗糙集和近似熵约简用于特征选择。软计算23：6249-6265。doi：10.1007 / s00500-018-3282-y</p>
+<p>[12] Khishe M，Mosavi M，Moridi A（2018）使用多层感知器神经网络的声纳数据集分类的混沌分形步行训练器及其硬件实现。Applied Acoustics 137：121-139。doi：10.1016 / j.apacoust.2018.03.012</p>
+<p>[13] Pijarski P，Kacejko P（2019）一种新的元启发式优化方法：创新枪手（AIG）的算法。工程优化51：2049-2068。Doi：10.1080 / 0305215x.2019.1565282</p>
+<p>[14] Pijarski P，Kacejko P（2019）一种新的元启发式优化方法：创新枪手（AIG）的算法。工程优化51：2049-2068。doi：10.1080 / 0305215x.2019.1565282</p>
+<p>[15] Wolpert D，Macready W（1997）没有用于优化的免费午餐定理。IEEE进化计算事务1：67-82。doi：10.1109 / 4235.585893</p>
+<p>加入326个其他订户</p>
+<p>电子邮件地址<br>电子邮件地址</p>
+<p>订阅</p>
+<p>分享这个：<br>更多<br>像这样：<br>张贴者解码器2020年5月21日发表于人工智能技术标签：一种新颖的基于狩猎的算法，一种基于狩猎的新颖算法：黑猩猩优化算法（ChOA），用于解决不同行业任务中的不同优化问题。，ChOA的优缺点，人工智能，应用领域，ChOA的应用，人工智能，黑猩猩优化算法（ChOA）用于解决不同工业任务中的不同优化问题。，计算机科学，交叉，工程，CHOA流程图，ChOA的启示，CHOA的数值实现，博士，职位更新机制，ChOA的伪代码，黑猩猩与人类DNA的关系，研究</p>
+<p>帖子导航<br>以前的帖子上一篇：<br>解码器3：飞机分配系统的逐步执行过程和结果<br>下一篇文章下一篇：<br>反馈人工树算法（FAT）：解决广泛的实际优化问题的巨大潜力<br>关于“ 一种新颖的基于狩猎的算法：黑猩猩优化算法（ChOA） ” 的一个想法，该算法用于解决不同行业任务中的不同优化问题。”</p>
+<p>阿莎·泽维尔<br>2020年5月21日，下午7:29<br>非常有用的信息…</p>
+<p>载入中…<br>回复</p>
+<p>发表评论</p>
+<p>通过电子邮件订阅博客<br>输入您的电子邮件地址以订阅此博客，并通过电子邮件接收新帖子的通知。</p>
+<p>加入326个其他订户</p>
+<p>电子邮件地址<br>电子邮件地址</p>
+<p>订阅</p>
+<p>在线传票</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E9%BB%91%E7%8C%A9%E7%8C%A9/" rel="tag"># 黑猩猩</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-48%E5%85%A8%E6%8E%92%E5%88%97-II/" rel="prev" title="每日一题@48全排列 II">
+      <i class="fa fa-chevron-left"></i> 每日一题@48全排列 II
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/06/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-49%E7%9F%A9%E9%98%B5%E7%BD%AE%E9%9B%B6/" rel="next" title="每日一题@49矩阵置零">
+      每日一题@49矩阵置零 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">1.简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ChOA%E7%9A%84%E5%90%AF%E5%8F%91"><span class="nav-number">2.</span> <span class="nav-text">2. ChOA的启发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%BB%91%E7%8C%A9%E7%8C%A9%E4%B8%8E%E4%BA%BA%E7%B1%BBDNA%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">3.黑猩猩与人类DNA的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E8%81%8C%E4%BD%8D%E6%9B%B4%E6%96%B0%E6%9C%BA%E5%88%B6"><span class="nav-number">4.</span> <span class="nav-text">4.职位更新机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-CHOA%E7%9A%84%E6%95%B0%E5%80%BC%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">5. CHOA的数值实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-ChOA%E7%9A%84%E4%BC%AA%E4%BB%A3%E7%A0%81"><span class="nav-number">6.</span> <span class="nav-text">6. ChOA的伪代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-ChOA%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-number">7.</span> <span class="nav-text">7. ChOA流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-ChOA%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">8.</span> <span class="nav-text">8. ChOA的优缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-ChOA%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">9.</span> <span class="nav-text">9. ChOA的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">10.</span> <span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="John Doe"
+      src="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">
+   
+  </div>
+
+    <!-- 网站运行时间的设置 -->
+    <span id="timeDate">载入天数...</span>
+    <span id="times">载入时分秒...</span>  | It is building your life.
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("01/05/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+            if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+            mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+            snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
+            document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+    </script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

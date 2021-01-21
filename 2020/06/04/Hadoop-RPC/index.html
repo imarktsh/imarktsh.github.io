@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/128128.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/3232.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/1616.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="HDFS之RPCRPC 是远程过程调用(Remote Procedure Call)，即远程调用其他虚拟机中运行的 java object。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop RPC">
+<meta property="og:url" content="http://example.com/2020/06/04/Hadoop-RPC/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="HDFS之RPCRPC 是远程过程调用(Remote Procedure Call)，即远程调用其他虚拟机中运行的 java object。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvYTBhZDhmMzU0ZmI5OTgzMy5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvYjljMjYwYTdiOTVjN2M2Yy5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvMDk0NTFlYjUxMDQ3MzMwOS5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZDlkOGExMGI0NTViZWI3Yi5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZGQxOWY0MmZlNTBiNmZiZC5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvN2U4MDJlYWI2ZmNjNzhlZS5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZjEzZTE5MWJjZjkzNzYyYi5qcGVn?x-oss-process=image/format,png#pic_center">
+<meta property="article:published_time" content="2020-06-04T11:03:00.000Z">
+<meta property="article:modified_time" content="2020-09-28T03:55:34.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="Hadoop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvYTBhZDhmMzU0ZmI5OTgzMy5qcGVn?x-oss-process=image/format,png#pic_center">
+
+<link rel="canonical" href="http://example.com/2020/06/04/Hadoop-RPC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Hadoop RPC | Hexo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Hexo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/06/04/Hadoop-RPC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hadoop RPC
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-06-04 19:03:00" itemprop="dateCreated datePublished" datetime="2020-06-04T19:03:00+08:00">2020-06-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-09-28 11:55:34" itemprop="dateModified" datetime="2020-09-28T11:55:34+08:00">2020-09-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="HDFS之RPC"><a href="#HDFS之RPC" class="headerlink" title="HDFS之RPC"></a>HDFS之RPC</h2><p>RPC 是远程过程调用(Remote Procedure Call)，即远程调用其他虚拟机中运行的 java object。</p>
+<a id="more"></a>RPC 是一种客户端/服务器模式，那么在使用时包括服务端代码和客户端代码，还有我们调用的远程过程对象。HDFS 的运行就是建立在此基础之上的。本文通过分析实现一个简单的 RPC 程序来分析HDFS 的运行机理。
+<p>HDSF 作为分布式文件系统，常常涉及 DataNode、NameNode、Client 之间的配合、相互调用才能完成完整的流程。为了降低节点之间的耦合性，HDFS 将节点间的调用抽象成不同的接口，其接口主要分为两类：HadoopRPC 接口和基于 TCP 或 HTTP 的流式接口。流式接口主要用于数据传输，HadoopRPC 接口主要用于方法调用。HadoopRPC 框架设计巧妙，本文将结合 hadoop2.7 源码，对 HadoopRPC 做初步剖析。</p>
+<h2 id="RPC工作原理"><a href="#RPC工作原理" class="headerlink" title="RPC工作原理"></a>RPC工作原理</h2><p>RPC（Remote Procedure Call）即远程过程调用，是一种通过网络从远程计算机程序上请求服务的协议。RPC允许本地程序像调用本地方法一样调用远程计算机上的应用程序，其使用常见的网络传输协议（如TCP或UDP）传递RPC请求以及相应信息，使得分布式程序的开发更加容易。</p>
+<p>RPC采用客户端/服务器模式，请求程序就是客户端，服务提供程序就是服务器。RPC框架工作原理如图1所示，工作流程依次见图中标号①~⑩，其结构主要包含以下部分：<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvYTBhZDhmMzU0ZmI5OTgzMy5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>client functions</p>
+<p>请求程序，会像调用本地方法一样调用客户端stub程序（如图中①），然后接受stub程序的响应信息（如图中⑩）</p>
+</li>
+<li><p>client stub</p>
+<p>客户端stub程序，表现得就像本地程序一样，但底层却会调用请求和参数序列化并通过通信模块发送给服务器（如图中②）；客户端stub程序也会等待服务器的响应信息（如图中⑨），将响应信息反序列化并返回给请求程序（如图中⑩）</p>
+</li>
+<li><p>sockets</p>
+<p>网络通信模块，用于传输RPC请求和响应（如图中的③⑧），可以基于TCP或UDP协议</p>
+</li>
+<li><p>server stub</p>
+<p>服务端stub程序，会接收客户端发送的请求和参数（如图中④）并反序列化，根据调用信息触发对应的服务程序（如图中⑤），然后将服务程序的响应信息（如图⑥），并序列化并发回给客户端（如图中⑦）</p>
+</li>
+<li><p>server functions</p>
+<p>服务程序，会接收服务端stub程序的调用请求（如图中⑤），执行对应的逻辑并返回执行结果（如图中⑥）那么要实现RPC框架，基本上要解决三大问题：</p>
+</li>
+<li><p>函数/方法识别</p>
+<p>sever functions如何识别client functions请求及参数，并执行函数调用。java 中可利用反射可达到预期目标。</p>
+</li>
+<li><p>序列化及反序列化</p>
+<p>如何将请求及参数序列化成网络传输的字节类型，反之还原请求及参数。已有主流的序列化框架如 protobuf、avro 等。</p>
+</li>
+<li><p>网络通信</p>
+<p>java 提供网络编程支持如 NIO。</p>
+</li>
+</ul>
+<p>主流的 RPC 框架，除 HadoopRPC 外，还有 gRPC、Thrift、Hessian 等，以及 Dubbo 和 SpringCloud 中的 RPC 模块，在此不再赘述。下文将解读 HDFS 中 HadoopRPC 的实现。</p>
+<h2 id="HadoopRPC架构设计"><a href="#HadoopRPC架构设计" class="headerlink" title="HadoopRPC架构设计"></a>HadoopRPC架构设计</h2><p>HadoopRPC 实现了图 1 中所示的结构，其实现主要在 org.apache.hadoop.ipc 包下，主要由三个类组成：RPC 类、Client 类和Server 类。HadoopRPC 实现了基于 TCP/IP/Sockets 的网络通信功能。客户端可以通过 Client 类将序列化的请求发送到远程服务器，服务器会通过 Server 类接收客户端的请求。</p>
+<p>客户端 Client 在收到请求后，会将请求序列化，然后调用 Client.call() 方法发送请求到到远程服务器。为使 RPC 机制更加健壮，HadoopRPC 允许配置不同的序列化框架如 protobuf。Client 将序列化的请求 rpcRequest 封装成 Writable 类型用于网络传输。具体解析见下节—— RPC Client 解读。</p>
+<p>服务端 Server 采用 java NIO 提供的基于 Reactor 设计模式。Sever 接收到一个 RPC Writable 类型请求后，会调用 Server.call() 方法响应这个请求，并返回 Writable 类型作为响应结果。具体解析见下节—— RPC Server 解读。</p>
+<p>RPC 类提供一个统一的接口，在客户端可以获取 RPC 协议代理对象，在服务端可以调用 build() 构造 Server 类，并调用 start() 启动 Server 对象监听并响应 RPC 请求。同时，RPC 类提供 setProtocolEngine() 为客户端或服务端适配当前使用的序列化引擎。RPC 的主要两大接口如下：<br>public static ProtocolProxy getProxy/waitForProxy(…)：构造一个客户端代理对象(该对象实现了某个协议)，用于向服务器发送RPC请求。<br>public static Server RPC.Builder(Configuration).build()：为某个协议(实际上是Java接口)实例构造一个服务器对象，用于处理客户端发送的请求</p>
+<p>那么，如何使用HadoopRPC呢？只需按如下4个步骤：</p>
+<p>定义RPC协议：<br> RPC协议是客户端和服务器端之间的通信接口，它定义了服务器端对外提供的服务接口。如ClientProtocol定义了HDFS客户端与NameNode的通信接口， ClientDatanodeProtocol定义了HDFS客户端与DataNode的通信接口等。</p>
+<p> 实现RPC协议：<br>对接口的实现，将会调用Server端的接口的实现。</p>
+<p>构造并启动RPC Server：<br>构造Server并监听请求。可使用静态类Builder构造一个RPC Server，并调用函数start()启动该Server，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RPC.Server server = <span class="keyword">new</span> RPC.Builder(conf).setProtocol(MyProxyProtocol.class)</span><br><span class="line">        .setInstance(<span class="keyword">new</span> MyProxy())</span><br><span class="line">        .setBindAddress(HOST)</span><br><span class="line">        .setNumHandlers(<span class="number">2</span>)</span><br><span class="line">        .setPort(PORT)</span><br><span class="line">        .build();</span><br><span class="line">server.start();</span><br></pre></td></tr></table></figure>
+<p>构造RPC Client并发送请求：</p>
+<p>构造客户端代理对象，当有请求时客户端将通过动态代理，调用代理方法进行后续实现，如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyProxyProtocol proxy = RPC.getProxy(MyProxyProtocol.class,    MyProxyProtocol.versionID,        <span class="keyword">new</span> InetSocketAddress(HOST, PORT), conf);XXX result = proxy.fun(args);</span><br></pre></td></tr></table></figure>
+<h2 id="RPC-Client解读"><a href="#RPC-Client解读" class="headerlink" title="RPC Client解读"></a>RPC Client解读</h2><p>在 IPC（Inter-Process Communication）发生之前，客户端需要通过 RPC 提供的 getProxy 或 waitForProxy 获得代理对象，以 getProxy 的具体实现为例。</p>
+<p>RPC.getProxy 直接调用了 RPC.getProtocolProxy 方法，getProtocolProxy 方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ProtocolProxy&lt;T&gt; <span class="title">getProtocolProxy</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">   ...</span><br><span class="line">   <span class="keyword">return</span> getProtocolEngine(protocol, conf).getProxy(...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>RPC 类提供了 getProtocolEngine 类方法用于适配 RPC 框架当前使用的序列化引擎，hadoop 本身实现了 Protobuf 和 Writable 序列化的RpcEngine 。以WritableRPCEngine 为例，getProxy(…) 实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">ProtocolProxy&lt;T&gt; <span class="title">getProxy</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;   </span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// 这里调用到原生的代理</span></span><br><span class="line">  T proxy = (T) Proxy.newProxyInstance(protocol.getClassLoader(),</span><br><span class="line">      <span class="keyword">new</span> Class[] &#123; protocol &#125;, <span class="keyword">new</span> WritableRpcEngine.Invoker(protocol, addr, ticket, conf,</span><br><span class="line">          factory, rpcTimeout, fallbackToSimpleAuth));</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ProtocolProxy&lt;T&gt;(protocol, proxy, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述使用动态代理模式，Proxy 实例化时 newProxyInstance 传进去的 InvocationHandler 的实现类是 WritableRpcEngine 的内部类 Invoker。 当 proxy 调用方法时，会代理到 WritableRpcEngine.Invoker 中的 invoke 方法，其代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Invoker</span> <span class="keyword">implements</span> <span class="title">RpcInvocationHandler</span> </span>&#123;</span><br><span class="line">    ....</span><br><span class="line">      </span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Invoker</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">this</span>.client = CLIENTS.getClient(conf, factory);</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 执行的invoke方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      ObjectWritable value;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        value = (ObjectWritable)</span><br><span class="line">          client.call(RPC.RpcKind.RPC_WRITABLE, <span class="keyword">new</span> WritableRpcEngine.Invocation(method, args), remoteId, fallbackToSimpleAuth);</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (traceScope != <span class="keyword">null</span>) traceScope.close();</span><br><span class="line">      &#125;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">return</span> value.get();</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 invoke 方法中，调用了 Client 类的 call 方法，并得到 RPC 请求的返回结果。其中 new WritableRpcEngine.Invocation(method, args) 实现了 Writable 接口，这里的作用是将 method 和 args 进行序列化成 Writable 传输类型。Client 类中的 call 方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Writable <span class="title">call</span><span class="params">(RPC.RpcKind rpcKind, Writable rpcRequest, ConnectionId remoteId, <span class="keyword">int</span> serviceClass, AtomicBoolean fallbackToSimpleAuth)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Call call = createCall(rpcKind, rpcRequest);</span><br><span class="line">    Connection connection = getConnection(remoteId, call, serviceClass, fallbackToSimpleAuth);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 将远程调用信息发送给server端</span></span><br><span class="line">      connection.sendRpcRequest(call);                 <span class="comment">// send the rpc request</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (RejectedExecutionException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">&quot;connection has been closed&quot;</span>, e);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      Thread.currentThread().interrupt();</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(e);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">synchronized</span> (call) &#123;</span><br><span class="line">      <span class="comment">// 判断call是否完成，等待server端notify</span></span><br><span class="line">      <span class="keyword">while</span> (!call.done) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 当前线程blocking住，</span></span><br><span class="line">          <span class="comment">// 等待Connection线程中receiveRpcResponse调用call.notify</span></span><br><span class="line">          call.wait();                           <span class="comment">// wait for the result</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException ie) &#123;</span><br><span class="line">          Thread.currentThread().interrupt();</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedIOException(<span class="string">&quot;Call interrupted&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  </span><br><span class="line">      <span class="keyword">if</span> (call.error != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (call.error <span class="keyword">instanceof</span> RemoteException) &#123;</span><br><span class="line">          call.error.fillInStackTrace();</span><br><span class="line">          <span class="keyword">throw</span> call.error;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// local exception</span></span><br><span class="line">          InetSocketAddress address = connection.getRemoteAddress();</span><br><span class="line">          <span class="keyword">throw</span> NetUtils.wrapException(address.getHostName(),</span><br><span class="line">                  address.getPort(),</span><br><span class="line">                  NetUtils.getHostname(),</span><br><span class="line">                  <span class="number">0</span>,</span><br><span class="line">                  call.error);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 得到server结果</span></span><br><span class="line">        <span class="keyword">return</span> call.getRpcResponse();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码展现了 call() 方法作为代理方法的整个流程。从整体来讲，客户端发送请求和接收请求在两个独立的线程中完成，发送线程调用 Client.call() 线程，而接收响应则是 call() 启动的 Connection 线程（ getConnection 方法中，由于篇幅原因不再展示）。</p>
+<p>那么二者如何同步 Server 的响应信息呢？内部类 Call 对象在此起到巧妙地同步作用。当线程1调用 Client.call() 方法发送 RPC 请求到 Server，会在请求对应的 Call 对象上调用 Call.wait() 方法等待 Server 响应信息；当线程2接收到 Server 响应信息后，将响应信息保存在 Call.rpcResponse 字段中，然后调用 Call.notify() 唤醒线程1。线程1被唤醒从 Call 中取出响应信息并返回。整个流程如图2所示，分析如下。</p>
+<p>在 call 方法中先将远程调用信息封装成一个 Client.Call 对象（保存了完成标志、返回信息、异常信息等），然后得到 connection 对象用于管理 Client 与 Server 的 Socket 连接。</p>
+<p>getConnection 方法中通过 setupIOstreams 建立与 Server 的 socket 连接，启动 Connection 线程，监听 socket 读取 server 响应。</p>
+<p>call() 方法发送 RCP 请求。</p>
+<p>call() 方法调用 Call.wait() 在 Call 对象上等待 Server 响应信息。</p>
+<p>Connection 线程收到响应信息设置 Call 对象返回信息字段，并调用 Call.notify() 唤醒 call() 方法线程读取 Call 对象返回值。</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvYjljMjYwYTdiOTVjN2M2Yy5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="RPC-Server-解读"><a href="#RPC-Server-解读" class="headerlink" title="RPC Server 解读"></a>RPC Server 解读</h2><p>Server部分主要负责读取请求并将其反序列化，然后处理请求并将响应序列化，最后返回响应。为了提高性能，Server 采用 NIO Reactor 设计模式。服务器只有在指定 IO 事件发生时才会执行对应业务逻辑，避免 IO 上无谓的阻塞。首先看一下 Server 类的内部结构，如图3所示，其中有4个内部类主要线程类：Listener、Reader、Hander、Resonder。<img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvMDk0NTFlYjUxMDQ3MzMwOS5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZDlkOGExMGI0NTViZWI3Yi5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br>  Server 处理流程解读如下：</p>
+<p>整个 Server 只有一个 Listener 线程，Listener 对象中的 Selector 对象 acceptorSelector 负责监听来自客户端的 Socket 连接请求。acceptorSelector 在ServerSocketChannel 上注册 OP_ACCEPT 事件，等待客户端 Client.call() 中的 getConnection 触发该事件唤醒 Listener 线程，创建新的 SocketChannel 并创建 readers 线程池；Listener 会在 reader 线程池中选取一个线程，并在 Reader 的 readerSelector 上注册 OP_READ 事件。</p>
+<p>readerSelector 监听 OP_READ 事件，当客户端发送 RPC 请求，触发 readerSelector 唤醒 Reader 线程；Reader 线程从 SocketChannel 中读取数据封装成 Call 对象，然后放入共享队列 callQueue。</p>
+<p>最初，handlers 线程池都在 callQueue 上阻塞（BlockingQueue.take()），当有 Call 对象加入，其中一个 Handler 线程被唤醒。根据 Call 对象上的信息，调用 Server.call() 方法（类似 Client.call() ），反序列化并执行 RPC 请求对应的本地函数，最后将响应返回写入 SocketChannel。</p>
+<p>Responder 线程起着缓冲作用。当有大量响应或网络不佳时，Handler 不能将完整的响应返回客户端，会在 Responder 的 respondSelector 上注册 OP_WRITE 事件，当监听到写条件时，会唤醒 Responder 返回响应。</p>
+<p>整个 HadoopRPC 工作流程如图5所示。其中，动态代理与反射执行目标方法贯穿整个 Client 与 Server，Server 整体又采用 NIO Reactor 模式，使得整个 HadoopRPC 更加健壮。<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZGQxOWY0MmZlNTBiNmZiZC5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br>关于并发时的优化</p>
+<p>▍参与配置<br>Server 端仅存在一个 Listener 线程和 Responder 线程，而 Reader 线程和 Handler 线程却有多个，那个如何配置 Reader 与 Handler 线程个数呢？HadoopRPC 对外提供参数配置，使用常见的配置方式即在 etc/hadoop 下配置 xml 属性：</p>
+<p>ipc.server.read.threadpool.size：Reader线程数，默认1</p>
+<p>dfs.namenode.service.handler.count：Handler线程数，默认10</p>
+<p>ipc.server.handler.queue.size：每个 Handler 处理的最大 Call 队列长度，默认100。结合 Handler 线程数，则默认可处理的 callQueue 最大长度为 10*1000=1000</p>
+<p>▍CallQueue 与 FairCallQueue<br>共享队列 CallQueue 以先进先出（FIFO）方式提供请求，如果 99% 的请求来自一个用户，则 99% 的时间将会为一个用户服务。因此，恶意用户便可以通过每秒发出许多请求来影响 NameNode 性能。为了防止某个用户的 cleint 的大量请求导致 NameNode 无法响应，HadoopRPC 引入 FairCallQueue 来替代共享队列 CallQueue，请求多的用户将会被请求降级处理。CallQueue 和 FairCallQueue 对比图如图6、图7所示。<img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvN2U4MDJlYWI2ZmNjNzhlZS5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLml0cHViLm5ldC9ibG9nLzIwMTkvMDYvMjMvZjEzZTE5MWJjZjkzNzYyYi5qcGVn?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br>启用 FairCallQueue，同样是在配置文件中修改 Queue 的实现 callqueue.impl。其中，FairCallQueue 引入了优先级机制，具体分析如下。</p>
+<p>优先级</p>
+<p>共享队列 callQueue 导致 RPC 拥塞，主要原因是将 Call 对象放在一起处理。FairCallQueue 首先改进的是划分出优先级关系，每个优先级对应一个队列，比如 Queue0，Queue1，Queue2 …，然后定义一个规则，数字越小的，优先级越高。</p>
+<p>优先级确定</p>
+<p>如何确定哪些请求该放到哪些优先级队列中呢？比较智能的做法是根据用户的请求频率确定优先级。频率越高，分到优先级越低的队列。比如，在相同时限内，A用户请求50次，B用户请求5次，则B用户将放入优先级较高的队列。这就涉及到在一定时限内统计用户请求频率，FairCallQueue 进入了一种频率衰减算法，前面时段内的计数结果通过衰减因子在下一轮的计算中，占比逐步衰减，这种做法比完全清零统计要平滑得多。相关代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The decay RPC scheduler counts incoming requests in a map, then</span></span><br><span class="line"><span class="comment"> * decays the counts at a fixed time interval. The scheduler is optimized</span></span><br><span class="line"><span class="comment"> * for large periods (on the order of seconds), as it offloads work to the</span></span><br><span class="line"><span class="comment"> * decay sweep.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecayRpcScheduler</span> <span class="keyword">implements</span> <span class="title">RpcScheduler</span>, <span class="title">DecayRpcSchedulerMXBean</span> </span>&#123;...&#125;</span><br><span class="line">从注释可知，衰减调度将对请求进行间隔几秒钟的计数统计，用于平滑计数。</span><br></pre></td></tr></table></figure>
+<p>优先级权重</p>
+<p>为了防止低优先级队列“饥饿”，用轮询的方式从各个队列中取出一定的批次请求，再针对各个队列设置一个理论比重。FairCallQueue 采用加权轮询算法，相关代码及注释如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Determines which queue to start reading from, occasionally drawing from</span></span><br><span class="line"><span class="comment"> * low-priority queues in order to prevent starvation. Given the pull pattern</span></span><br><span class="line"><span class="comment"> * [9, 4, 1] for 3 queues:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The cycle is (a minimum of) 9+4+1=14 reads.</span></span><br><span class="line"><span class="comment"> * Queue 0 is read (at least) 9 times</span></span><br><span class="line"><span class="comment"> * Queue 1 is read (at least) 4 times</span></span><br><span class="line"><span class="comment"> * Queue 2 is read (at least) 1 time</span></span><br><span class="line"><span class="comment"> * Repeat</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * There may be more reads than the minimum due to race conditions. This is</span></span><br><span class="line"><span class="comment"> * allowed by design for performance reasons.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightedRoundRobinMultiplexer</span> <span class="keyword">implements</span> <span class="title">RpcMultiplexer</span> </span>&#123;...&#125;</span><br><span class="line">从注释可知，若 Q0、Q1、Q2 的比重为 <span class="number">9</span>:<span class="number">4</span>:<span class="number">1</span>，理想情况下在 <span class="number">15</span> 次请求中，Q0 队列处理 <span class="number">9</span> 次请求，Q1 队列处理 <span class="number">4</span> 次请求，Q2 队列处理 <span class="number">1</span> 次请求。</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * RPC服务端代码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyServer</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SERVER_PORT = <span class="number">12345</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SERVER_ADDRESS = <span class="string">&quot;localhost&quot;</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> Server server = RPC.getServer(<span class="keyword">new</span> MyBiz(), SERVER_ADDRESS,</span><br><span class="line">		SERVER_PORT, <span class="keyword">new</span> Configuration());</span><br><span class="line">		server.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>核心在于 RPC.getServer 方法，该方法有四个参数，第一个参数是被调用的 java对象，第二个参数是服务器的地址，第三个参数是服务器的端口。获得服务器对象后，启动<br>服务器。这样，服务器就在指定端口监听客户端的请求。<br>下面的代码是被调用的远程对象类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 被调用的远程对象类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBiz</span> <span class="keyword">implements</span> <span class="title">MyBizable</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> BIZ_VERSION = <span class="number">2345234L</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我被调用了&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;hello &quot;</span>+name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getProtocolVersion</span><span class="params">(String protocol, <span class="keyword">long</span> clientVersion)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> BIZ_VERSION;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>被调用的远程对象实现了接口 MyBizable，这里面有两个方法被实现，一个就是 hello方法，另一个是 getProtocalVersion 方法。这个 hello 方法内部有个输出语句。<br>下面的代码是远程调用类的接口定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 远程调用类的接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyBizable</span> <span class="keyword">extends</span> <span class="title">VersionedProtocol</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">hello</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个接口中的方法就是刚才的 Biz 中实现的方法。接口继承的 VersionedProtocal，是hadoop 的 RPC 的接口，所有的 RPC 通信必须实现这一接口，用于保证客户端和服务端的端口一致。服务端被调用的类必须继承这个接口 VersionedProtocal。<br>下面是客户端代码，这里使用的调用对象的接口：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端代码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClient</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> MyBizable proxy = (MyBizable)RPC.getProxy(MyBizable.class,</span><br><span class="line">		MyBiz.BIZ_VERSION, <span class="keyword">new</span> InetSocketAddress(MyServer.SERVER_ADDRESS,</span><br><span class="line">		MyServer.SERVER_PORT), <span class="keyword">new</span> Configuration());</span><br><span class="line">		<span class="comment">//调用接口中的方法</span></span><br><span class="line">		<span class="keyword">final</span> String result = proxy.hello(<span class="string">&quot;world&quot;</span>);</span><br><span class="line">		System.out.println(result);</span><br><span class="line">		<span class="comment">//本质是关闭网络连接</span></span><br><span class="line">		RPC.stopProxy(proxy);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码中核心在于 RPC.getProxy()，该方法有四个参数，第一个参数是被调用的接口类，第二个是客户端版本号，第三个是服务端地址。返回的代理对象，就是服务端对象的代理，内部就是使用 java.lang.Proxy 实现的。运行时，先启动服务端，再启动客户端。可以在服务端和客户端输出信息来打印自己想要的内容。<br>从上面的 RPC 调用中，可以看出：在客户端调用的业务类的方法是定义在业务类的接口中的。该接口实现了 VersionedProtocal 接口。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/51508795">原文链接</a></p>
+<p><a target="_blank" rel="noopener" href="http://blog.itpub.net/69908606/viewspace-2648472/">原文链接</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/06/04/Java%E4%B9%8B%E6%B3%9B%E5%9E%8B/" rel="prev" title="Java之泛型">
+      <i class="fa fa-chevron-left"></i> Java之泛型
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/06/05/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-11%E6%97%A0%E9%87%8D%E5%A4%8D%E5%AD%97%E7%AC%A6%E8%B5%B4%E4%BF%84%E6%9C%80%E9%95%BF%E5%AD%97%E4%B8%B2/" rel="next" title="每日一题@11无重复字符的最长字串">
+      每日一题@11无重复字符的最长字串 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS%E4%B9%8BRPC"><span class="nav-number">1.</span> <span class="nav-text">HDFS之RPC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">RPC工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HadoopRPC%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.</span> <span class="nav-text">HadoopRPC架构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC-Client%E8%A7%A3%E8%AF%BB"><span class="nav-number">4.</span> <span class="nav-text">RPC Client解读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC-Server-%E8%A7%A3%E8%AF%BB"><span class="nav-number">5.</span> <span class="nav-text">RPC Server 解读</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="John Doe"
+      src="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/yourname" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">
+   
+  </div>
+
+    <!-- 网站运行时间的设置 -->
+    <span id="timeDate">载入天数...</span>
+    <span id="times">载入时分秒...</span>  | It is building your life.
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("01/05/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+            if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+            mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+            snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
+            document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+    </script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
