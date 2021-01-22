@@ -31,7 +31,7 @@
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2020112821030276.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20201128211050171.png">
 <meta property="article:published_time" content="2020-11-28T13:13:00.000Z">
-<meta property="article:modified_time" content="2020-11-28T13:13:22.000Z">
+<meta property="article:modified_time" content="2021-01-22T10:29:27.279Z">
 <meta property="article:author" content="imarktsh">
 <meta property="article:tag" content="学习">
 <meta name="twitter:card" content="summary">
@@ -217,10 +217,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-11-28 21:13:00 / 修改时间：21:13:22" itemprop="dateCreated datePublished" datetime="2020-11-28T21:13:00+08:00">2020-11-28</time>
+              <time title="创建时间：2020-11-28 21:13:00" itemprop="dateCreated datePublished" datetime="2020-11-28T21:13:00+08:00">2020-11-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-22 18:29:27" itemprop="dateModified" datetime="2021-01-22T18:29:27+08:00">2021-01-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -297,7 +303,7 @@
 <p>3.释放锁　　　</p>
 <p>r.unlock()<br>必须做！何为必须做呢，要放在finally里面。以防止异常跳出了正常流程，导致灾难。这里补充一个小知识点，finally是可以信任的：经过测试，哪怕是发生了OutofMemoryError，finally块中的语句执行也能够得到保证。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ReentrantReadWriteLock</span><br><span class="line"></span><br><span class="line">可重入读写锁（读写锁的一个实现）　</span><br><span class="line"></span><br><span class="line">　ReentrantReadWriteLock lock = <span class="keyword">new</span> ReentrantReadWriteLock()</span><br><span class="line">　　ReadLock r = lock.readLock();</span><br><span class="line">　　WriteLock w = lock.writeLock();</span><br><span class="line">两者都有lock,unlock方法。写写，写读互斥；读读不互斥。可以实现并发读的高效线程安全代码</span><br></pre></td></tr></table></figure>
-<h2 id="4-容器类"><a href="#4-容器类" class="headerlink" title="4.容器类"></a>4.容器类</h2><p>这里就讨论比较常用的两个：</p>
+<h2 id="容器类"><a href="#容器类" class="headerlink" title="容器类"></a>容器类</h2><p>这里就讨论比较常用的两个：</p>
 <p>BlockingQueue<br>ConcurrentHashMap<br>BlockingQueue<br>阻塞队列。该类是java.util.concurrent包下的重要类，通过对Queue的学习可以得知，这个queue是单向队列，可以在队列头添加元素和在队尾删除或取出元素。类似于一个管　　道，特别适用于先进先出策略的一些应用场景。普通的queue接口主要实现有PriorityQueue（优先队列），有兴趣可以研究</p>
 <p>BlockingQueue在队列的基础上添加了多线程协作的功能：<br><img src="https://img-blog.csdnimg.cn/20201128211050171.png" alt="在这里插入图片描述"></p>
 <p>BlockingQueue</p>
@@ -389,7 +395,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="nav-number">1.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E4%B8%AA%E5%AF%B9%E8%B1%A1%E9%83%BD%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">每个对象都有的方法（机制）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-number">3.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BA%BF%E7%A8%8B%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">基本线程类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">高级多线程控制类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%AE%B9%E5%99%A8%E7%B1%BB"><span class="nav-number">6.</span> <span class="nav-text">4.容器类</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81"><span class="nav-number">1.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%8F%E4%B8%AA%E5%AF%B9%E8%B1%A1%E9%83%BD%E6%9C%89%E7%9A%84%E6%96%B9%E6%B3%95%EF%BC%88%E6%9C%BA%E5%88%B6%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">每个对象都有的方法（机制）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-number">3.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E7%BA%BF%E7%A8%8B%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">基本线程类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6%E7%B1%BB"><span class="nav-number">5.</span> <span class="nav-text">高级多线程控制类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E7%B1%BB"><span class="nav-number">6.</span> <span class="nav-text">容器类</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
