@@ -23,14 +23,14 @@
   <meta name="description" content="明天一定学">
 <meta property="og:type" content="website">
 <meta property="og:title" content="imarktsh">
-<meta property="og:url" content="http://onlyear.com/tags/Hadoop/index.html">
+<meta property="og:url" content="http://onlyear.com/tags/hadoop/index.html">
 <meta property="og:site_name" content="imarktsh">
 <meta property="og:description" content="明天一定学">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="imarktsh">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://onlyear.com/tags/Hadoop/">
+<link rel="canonical" href="http://onlyear.com/tags/hadoop/">
 
 
 <script id="page-configurations">
@@ -43,7 +43,7 @@
   };
 </script>
 
-  <title>标签: Hadoop | imarktsh</title>
+  <title>标签: hadoop | imarktsh</title>
   
 
 
@@ -190,7 +190,7 @@
   <div class="post-block">
     <div class="posts-collapse">
       <div class="collection-title">
-        <h2 class="collection-header">Hadoop
+        <h2 class="collection-header">hadoop
           <small>标签</small>
         </h2>
       </div>
@@ -205,75 +205,15 @@
 
       <div class="post-meta">
         <time itemprop="dateCreated"
-              datetime="2020-11-03T19:18:00+08:00"
-              content="2020-11-03">
-          11-03
+              datetime="2020-06-08T15:00:00+08:00"
+              content="2020-06-08">
+          06-08
         </time>
       </div>
 
       <div class="post-title">
-          <a class="post-title-link" href="/2020/11/03/Hadoop3-2%E5%AE%89%E8%A3%85/" itemprop="url">
-            <span itemprop="name">Hadoop3.2安装</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-06-07T10:28:00+08:00"
-              content="2020-06-07">
-          06-07
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/06/07/Hadoop-MR-%E5%8E%9F%E7%90%86/" itemprop="url">
-            <span itemprop="name">Hadoop MR 原理</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-06-04T19:03:00+08:00"
-              content="2020-06-04">
-          06-04
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/06/04/Hadoop-RPC/" itemprop="url">
-            <span itemprop="name">Hadoop RPC</span>
-          </a>
-      </div>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-06-03T21:36:00+08:00"
-              content="2020-06-03">
-          06-03
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/06/03/Hadoop-HDFS/" itemprop="url">
-            <span itemprop="name">Hadoop HDFS</span>
+          <a class="post-title-link" href="/2020/06/08/Hadoop-Yarn/" itemprop="url">
+            <span itemprop="name">Hadoop Yarn</span>
           </a>
       </div>
 
@@ -353,20 +293,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">142</span>
+          <span class="site-state-item-count">126</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -429,6 +369,90 @@
             mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
             seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
             snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
+            document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+    </script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+ snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
             document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
