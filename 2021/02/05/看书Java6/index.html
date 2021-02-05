@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/128128.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/3232.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/1616.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="对java程序员笔试解析 整理(6)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="看书Java6">
+<meta property="og:url" content="http://onlyear.com/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/index.html">
+<meta property="og:site_name" content="imarktsh">
+<meta property="og:description" content="对java程序员笔试解析 整理(6)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-05T12:51:00.000Z">
+<meta property="article:modified_time" content="2021-02-05T12:52:10.595Z">
+<meta property="article:author" content="imarktsh">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+
+<link rel="canonical" href="http://onlyear.com/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>看书Java6 | imarktsh</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">imarktsh</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+      <meta itemprop="name" content="imarktsh">
+      <meta itemprop="description" content="明天一定学">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="imarktsh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          看书Java6
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-05 20:51:00 / 修改时间：20:52:10" itemprop="dateCreated datePublished" datetime="2021-02-05T20:51:00+08:00">2021-02-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>对java程序员笔试解析 整理(6)</p>
+<a id="more"></a>
+<p><img src="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="第三章-数据库"><a href="#第三章-数据库" class="headerlink" title="第三章 数据库"></a>第三章 数据库</h2><p>1.数据库中的事务指什么<br>事务时数据库中一个单独的执行单元，在数据库中更改数据成功时，在食物中更改的数据便会提交，不在改变，否则事务就会取消或者回滚。<br>事务必须满足四个属性：原子性、一致性、隔离性和持久性即ACID<br>原子性：事务是一个不可分割的整体，即当修改数据时，要么全部执行要么不执行，不允许事务部分完成引起错误。<br>一致性：一个事务在执行前和执行后数据库数据必须保持一致性状态。例如银行转账，转帐前和转账后两个账户的金额之和应该保持不变。数据库的一致性状态由用户来负责，由并发控制实现。<br>隔离性：也称为独立性，当两个事务并发执行时，为了保证数据的安全性，将一个事务内部操作隔离起来，不被其他正在进行的事务看见。例如一对事务T1T2,对T1而言，T2要么在T1开始前已经结束，要么在T1完成后再开始。事务隔离级别有四种：不提交的读、提交的读、可重复的读和串行化。<br>持久性：也成称为永久性，事务完成以后DBMS保证他对数据库的修改是永久性的。</p>
+<p>2.索引<br>索引是对数据表中一列或多列的值进行排列的一种结构，使用索引可快速访问数据表中特定信息。数据库中索引可分为聚簇索引和非聚簇索引。<br>聚簇索引：表数据按照索引顺序来存储，索引项与表中记录物理顺序一致。对于聚簇索引，叶子结点即存储了真实数据行，不再有另外单独的数据页，一张表只能创建一个聚簇索引，聚簇索引一般采用B树来实现。<br>非聚簇索引：表数据存储顺序和索引顺序无关，叶结点索引字段值指向数据页的逻辑指针，一般也采用B树实现。<br>创建索引可以大大提高系统的性能，主要体现在以下几个方面：创建唯一性索引可以保证数据库表中每一行数据的唯一性；其次通过索引提高检索速度；可以减少查询分组和排序的时间。<br>为什么不对所有列建立索引呢，创建索引和维护索引需要耗费时间空间。<br>建立索引的原则：<br>定义主键的数据列一定要建立索引<br>定义有外键的数据列要建立索引<br>经常查询的数据列最好建立索引<br>经常用在where子句的数据列建立索引<br>查询涉及少的不要建立索引<br>经常存取修改的不要建立索引<br>对于符合索引按照字段再查询条件出现的频度建立索引。</p>
+<p>3.连接<br>内连接也称自然连接，只有两个表相匹配的字段才能在结果集中出现，返回结果集相配的数据，舍弃不匹配的数据。内连接可能会造成信息的丢失。<br>外连接分为左外连接、右外连接、全外连接。左外连接除显示符合连接条件的记录外还包含左表中的记录。右外连接同理、全外连接包含所有记录。</p>
+<p>4.视图<br>视图是从基本表中选取出来的数据组成的逻辑窗口，不同于表他是一个虚表。<br>在数据库中只存放定义而不存放数据，这些数据依然存放在原来的基本表中。主要作用简化数据查询语句；使用户可以多角度看数据；提高数据安全性；提供了一定的逻辑独立性。引入视图机制，用户可以将注意力放在关心的数据上而非全部数据，当数据来源于多张基本表时，并且搜索条件较为复杂时，需要编写的查询语句就会比较繁琐，此时定义视图可以使查询语句变得简单。它不能提高查询效率</p>
+<p>5.范式<br>1NF第一范式指数据库表每一列都是不可分割的数据项。简言之就是不重复的属性。例如姓名，电话号码（一个人可能由办公电话和移动电话），这时将其规划化为1NF姓名、办公电话、移动电话。<br>2NF第二范式实在第一范式的基础上建立起来的，要求数据库表的每个实例必须可以被唯一区分，为实现区分必须加上一个列以存储各个实例的唯一标志.例如：学号、课程、成绩、学分，组合关键字为（学号，课程），由于学分仅依赖于课程号，对组合关键字只是部分依赖，所有此种方式会导致数据冗余以及更新异常等。解决方法拆分为两个表学生表：学号、课程、分数 成绩表：课程、学分。<br>3NF第三范式如果关系模式R是第二范式，且每个非主属性都不传递依赖于R的候选键，则称R是第三范式模式。<br>BCNF构建在第三范式的基础上，如果关系模式R是第一范式，且每个属性都不传递依赖于R的候选键，则称R为BCNF<br>4NF第四范式。。。看不懂了<br>这么范式后面重看把，这书讲的也不清楚。</p>
+<p>6.数据库线程死锁的原理<br>死锁指两个或以上的进程在执行过程中，由于竞争资源或者彼此通信而造成的一种阻塞现象。产生死锁的原因一是系统资源不足，二是进程运行顺序不合适，三是资源分配不当。<br>产生死锁的四个必要条件：<br>互斥：资源独占一个资源每次只能被一个进程使用<br>请求与保持：部分分配占有请求，一个进程在申请资源的同时保持对原资源的占有<br>不可剥夺：不可抢占，资源申请者不能强行占有资源只能占有者自愿释放<br>循环等待：若干进程之间形成循环等待的关系<br>解决方法就是破坏这四个条件，<br>一次封锁法：将所有需要的资源一次加锁，否则不能执行<br>顺序封锁：预先对数据对象设置顺序，所有要使用的进程都按这个顺序加锁<br>银行家算法：保证进程处于安全进程序列</p>
+<p>7.锁<br>共享锁ShareLock，用于只读数据，共享锁非独占，允许多个并发事务读取。它具有以下性质，多个事务科封锁一个共享页，任何事务不能修改该页，该页读取完毕S锁立即释放。在sql中锁定第一页还可以对第二页进行修改操作。<br>排他锁ExclusiveLock也叫写锁，表示对数据进行写操作，如果一个事务对数据加排他锁，其他事务不能加任何锁，只能等待释放。<br>更新锁也叫U锁，在修改操作初始化阶段用来锁定要修改的资源，避免使用共享锁造成死锁想象。因为使用共享锁使要升级为写锁在执行写操作，但是如果两个事务同时申请写锁时，这些事务都不会释放共享锁造成死锁。更新锁用来预定写锁，它运行其他事务读，但不允许再施加写锁和更新锁，U锁直到事务结束释放。<br>悲观锁认为每次拿数据别人都会修改，所以每次拿数据都会加锁。<br>乐观锁认为每次别人都不会修改都不会加锁，拿数据时会使用版本号等看别人是否修改了，乐观锁适合多读的场景，可以提高吞吐量</p>
+<p>8.数据库连接池<br>数据库连接池是一种珍贵有限的资源：建立与数据库的连接是一个耗时的操作；数据库连接的个数有限；<br>数据库连接池负责分配管理并释放数据库连接，它允许应用程序重复使用现有连接，同时还负责释放最大空闲时间的数据库连接，避免因为没有释放数据库连接而导致的数据连接泄露。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/05/%E7%9C%8B%E4%B9%A6Java3/" rel="prev" title="看书Java3">
+      <i class="fa fa-chevron-left"></i> 看书Java3
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/05/%E7%9C%8B%E4%B9%A6Java5/" rel="next" title="看书Java5">
+      看书Java5 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">第三章 数据库</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="imarktsh"
+      src="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+  <p class="site-author-name" itemprop="name">imarktsh</p>
+  <div class="site-description" itemprop="description">明天一定学</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">133</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/" title="GitHub → https:&#x2F;&#x2F;github.com" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/" title="Weibo → https:&#x2F;&#x2F;weibo.com" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">imarktsh</span>
+</div>
+  <div class="powered-by">
+   
+  </div>
+
+    <!-- 网站运行时间的设置 -->
+    <span id="timeDate">载入天数...</span>
+    <span id="times">载入时分秒...</span>  | It is building your life.
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("01/05/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+            if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+            mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+            snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
+            document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+    </script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
