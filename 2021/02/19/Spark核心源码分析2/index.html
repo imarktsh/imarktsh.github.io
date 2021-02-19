@@ -20,22 +20,25 @@
     var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。">
+  <meta name="description" content="大数据科学丛书Spark核心源码分析与开发实战">
 <meta property="og:type" content="article">
-<meta property="og:title" content="每日一题@65二叉树中第二小的节点">
-<meta property="og:url" content="http://onlyear.com/2020/10/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-65%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%AC%AC%E4%BA%8C%E5%B0%8F%E7%9A%84%E8%8A%82%E7%82%B9/index.html">
+<meta property="og:title" content="Spark核心源码分析2">
+<meta property="og:url" content="http://onlyear.com/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/index.html">
 <meta property="og:site_name" content="imarktsh">
-<meta property="og:description" content="给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。">
+<meta property="og:description" content="大数据科学丛书Spark核心源码分析与开发实战">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img-blog.csdnimg.cn/20201016195445711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
-<meta property="article:published_time" content="2020-10-16T11:55:00.000Z">
-<meta property="article:modified_time" content="2020-10-16T11:55:26.000Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210219163342259.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-19T08:34:00.000Z">
+<meta property="article:modified_time" content="2021-02-19T08:35:26.979Z">
 <meta property="article:author" content="imarktsh">
-<meta property="article:tag" content="每日">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="Spark">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201016195445711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
 
-<link rel="canonical" href="http://onlyear.com/2020/10/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-65%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%AC%AC%E4%BA%8C%E5%B0%8F%E7%9A%84%E8%8A%82%E7%82%B9/">
+<link rel="canonical" href="http://onlyear.com/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/">
 
 
 <script id="page-configurations">
@@ -48,7 +51,7 @@
   };
 </script>
 
-  <title>每日一题@65二叉树中第二小的节点 | imarktsh</title>
+  <title>Spark核心源码分析2 | imarktsh</title>
   
 
 
@@ -193,7 +196,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2020/10/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-65%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E7%AC%AC%E4%BA%8C%E5%B0%8F%E7%9A%84%E8%8A%82%E7%82%B9/">
+    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
@@ -206,7 +209,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          每日一题@65二叉树中第二小的节点
+          Spark核心源码分析2
         </h1>
 
         <div class="post-meta">
@@ -217,7 +220,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-10-16 19:55:00 / 修改时间：19:55:26" itemprop="dateCreated datePublished" datetime="2020-10-16T19:55:00+08:00">2020-10-16</time>
+              <time title="创建时间：2021-02-19 16:34:00 / 修改时间：16:35:26" itemprop="dateCreated datePublished" datetime="2021-02-19T16:34:00+08:00">2021-02-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -225,7 +228,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
                 </span>
             </span>
 
@@ -247,16 +250,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。</p>
+        <p>大数据科学丛书<br>Spark核心源码分析与开发实战</p>
 <a id="more"></a>
-<p>给出这样的一个二叉树，你需要输出所有节点中的第二小的值。如果第二小的值不存在的话，输出 -1 。</p>
-<p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入: </span><br><span class="line">    <span class="number">2</span></span><br><span class="line">   / \</span><br><span class="line">  <span class="number">2</span>   <span class="number">5</span></span><br><span class="line">     / \</span><br><span class="line">    <span class="number">5</span>   <span class="number">7</span></span><br><span class="line"></span><br><span class="line">输出: <span class="number">5</span></span><br></pre></td></tr></table></figure>
-<p>说明: 最小的值是 2 ，第二小的值是 5 。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: </span><br><span class="line">    <span class="number">2</span></span><br><span class="line">   / \</span><br><span class="line">  <span class="number">2</span>   <span class="number">2</span></span><br><span class="line"></span><br><span class="line">输出: -<span class="number">1</span></span><br><span class="line">说明: 最小的值是 <span class="number">2</span>, 但是不存在第二小的值。</span><br></pre></td></tr></table></figure>
-<p>我咋就看不到题目呢<br>一看只需要把比根节点大的返回就行</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int val, TreeNode left, TreeNode right) &#123;</span></span><br><span class="line"><span class="comment"> *         this.val = val;</span></span><br><span class="line"><span class="comment"> *         this.left = left;</span></span><br><span class="line"><span class="comment"> *         this.right = right;</span></span><br><span class="line"><span class="comment"> *     &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findSecondMinimumValue</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> dfs(root,root.val);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode root,<span class="keyword">int</span> val)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="keyword">null</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(root.val &gt; val) <span class="keyword">return</span> root.val;</span><br><span class="line">        <span class="keyword">int</span> l = dfs(root.left,val);</span><br><span class="line">        <span class="keyword">int</span> r = dfs(root.right,val);</span><br><span class="line">        <span class="keyword">if</span>(l &gt; val &amp;&amp; r &gt; val) <span class="keyword">return</span> Math.min(l,r);</span><br><span class="line">        <span class="keyword">return</span> Math.max(l,r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/20201016195445711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="第4章-Spark的运行模式"><a href="#第4章-Spark的运行模式" class="headerlink" title="第4章 Spark的运行模式"></a>第4章 Spark的运行模式</h2><p>1.运行模式概览<br>standalone模式，即独立模式，通过它可以独立部署Spark集群，比如当我们只需要借助Spark进行大数据计算时，此模式是最佳模式。但当我们需要多种计算框架比如MR时，就需要引入外部资源管理系统YARN和Mesos对资源进行调度。Spark一开始就支持Mesos，yarn资源Container是不可动态伸缩的，一旦启动就不可变。<br>术语：<br>Application：用户构建的Spark应用程序，包括驱动程序和集群上运行的多个Executor代码<br>Driver：运行Application中的main()函数并创建SparkContext的进程，SparkContext负责与集群进行通信，进行资源的申请任务的分配和监控等。<br>Executor：在工作节点中为Spark应用所启动的进行，它可以运行task也可以在内存或磁盘中保存数据。<br>Worker：集群中任何可以运行Spark应用程序的节点slave配置的worker节点或者NodeManager节点。<br>Task：可以发给Executor执行的任务单元，是运行Spark应用的基本单元。<br>Job：包含多个Task的并行计算，一般由Spark的action触发产生，一个Application可能有多个Job。<br>Stage：每个Job会因为依赖关系拆分为多个task集合，命名为Stage<br>DAGScheduler：面向Stage的任务调度器，负责接收Spark应用程序提交的Job，根据RDD的依赖关系划分为Stage，并提交Stage给TaskScheduler<br>TaskScheduler：面向Task的任务调度器，接受DAGScheduler提交的TaskSets，然后把一个个的Task提交到Worker节点运行。<br>RDD：Spark的编程模型，它提供了丰富的操作算子，主要分为transformation和action算子。它表示已被分区，被序列化的，不可变的，有容错机制的，能够并行操作的数据集合。</p>
+<p>2.Spark基本工作流程<br>（1)任何Spark的应用程序包含Driver和Executor，首先在Driver初始化SparkContext，是通往集群的唯一路径，SparkContext里包含DAGScheduler和TaskScheduler两个调度器类，创建的同时一起创建。<br>（2)SparkContext初始化完成后，首先根据Spark的相关设置向Cluster Manager申请所需资源，然后在worker节点初始化相应的Executor。Driver通过Spark中的RDD代码进行解析，生成相应的RDD图，描述了RDD相关信息及彼此之间的依赖关系。<br>（3)RDD图构建完毕后，Driver将提交给DAGSchduler进行解析。DAGScheduler在解析过程中遇见action算子后逆向解析，根据RDD之间的依赖关系是否存在shuffle等将RDD图解析为一系列具有先后依赖关系的Stage。如果两个RDD之间存在宽依赖关系则拆分为两个Stage执行，且只有前一个Stage执行完毕才会执行后一个Stage。<br>（4)DAGScheduler将划分的一系列Stage按照stage先后顺序依次提交给底层调度器TaskScheduler去执行<br>（5)TaskScheduler接受到Stage任务后，将会在集群环境中构建一个TaskSetManager实例来管理Stage的生命周期<br>（6)TaskSetManager将会把相关计算代码资源发送到对应的Executor上，并在Executor启动线程池执行。执行过程中会采用算法进行优化，提高计算效率，出现计算错误丢失也需要进行报告。<br>（7)在Task执行的过程中有部分程序涉及到IO操作，在每个Executor中由相应的BolckManager进行管理，相关信息将会在Driver中的Blocktracker进行交互和同步。<br>（8)在TaskThreads执行的过程中，如果存在运行错误、或其他影响问题导致的失败、将会默认重试3次，均失败后将上报TaskScheduler，或者再上报给DAGScheduler，根据各个Worker节点运行情况重新提交别的Executor执行。<br>（9)TaskThreads执行完毕后，将执行结果反馈给TaskScheduler,TaskScheduler再反馈给DAGScheduler，DAGScheduler将根据是否还存在待执行的Stage，循环提交给TaskScheduler执行。<br>（10)待所有Stage都执行完毕后，将会达到应用程序目的，或者输出到文件或者显示在屏幕。Driver本次运行过程结束，等待用户指令或结束。<br>（11)用户显式关闭SparkContext后，整个过程结束相关资源被释放。</p>
+<p>3.Local模式<br>local最大的用处就是在单机上调试我们写的Spark应用程序。写法为local[N] N为线程数。<br>内部实现原理：1SparkContext对象创建的时候会在其内部调用自己的TaskScheduler()方法初始化TaskSchedulerImpl调度器，同时根据运行模式参数来匹配所需要选择的运行模式，然后生成LocalBackend的对象。并把backend当作参数传递给TaskSchedulerImpl的initialize方法。<br>2这时候TaskScheduler调用submitTasks方法提交任务的时候，它内部的backend是Loaclbackend对象，backend调用reviveoffers方法进行资源申请。<br>3在Localbackend调用reviveoffers方法后，会发送一个ReviveOffers消息给自己的内部类LocalActor接受并处理该消息。<br>4localActor通过自己的receiveWithLogging方法接收到ReviveOffers消息，并结合Scala语言消息匹配处理。<br>5localbanckend根据可以CPU核心数设定在生成资源返回给TaskSchedulerImpl使用，最后通过launchTask方法把Task发送到线程池运行。</p>
+<p>4.Stand alone模式</p>
+<p>5.YARN-Cluster模式<br>（1）Spark YARN Client 通过ApplicationClientProtocol协议向Yarn中的ResourceManager提交应用程序，其中包括ApplicationMaster程序，启动ApplicationMaster命令以及需要在Executor中运行的程序等。<br>（2）ResourceManager收到请求后与对应的Node Manager通信，为该应用程序分配第一个Container作为App Master。<br>（3）ResourceManager要求NodeManger在这个Container中启动启动应用程序的AppMaster，其中ApplicationMaster中包含SparkContext等的初始化。<br>（4）AppMaster首先向ResourceManager注册，这样用户可以直接通过ResourceManager查看程序运行状态。<br>（5）然后ApplicationMaster通过轮询方式通过RPC协议为各个任务申请资源，并监视他们的运行状态直到结束，其中Application的请求分配资源是通过YarnAllocationHandle来完成。<br>（6）一旦ApplicationMaster申请到资源，也就是Container后，通过ContainerManterProtocol协议与对应NodeManager通信，要求他在获得Container中启动CoarseGrainedExecutorBackend，CoarseGrainedExecutorBackend启动后会向ApplicationMaster注册并申请Task。<br>（7）ApplicationMaster的SparkContext分配Task给CoarseGrainedExecutorBackend执行，CoarseGrainedExecutorBackend运行Task并通过某个自定义RPC协议向ApplicationMaster报告自己的状态和任务进度，以让ApplicationMaster掌握各个任务状态，从而可以在失败时重新启动任务。<br>（8）应用程序运行完成后，ApplicationMaster向Resourcemanager申请注销并关闭自己。<br><img src="https://img-blog.csdnimg.cn/20210219163342259.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
 
@@ -266,7 +267,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag"># 每日</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+              <a href="/tags/Spark/" rel="tag"># Spark</a>
           </div>
 
         
@@ -275,13 +278,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/10/15/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-64%E8%B7%AF%E5%BE%84%E6%80%BB%E5%92%8C-II/" rel="prev" title="每日一题@64路径总和 II">
-      <i class="fa fa-chevron-left"></i> 每日一题@64路径总和 II
+    <a href="/2021/02/11/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%901/" rel="prev" title="Spark核心源码分析1">
+      <i class="fa fa-chevron-left"></i> Spark核心源码分析1
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/10/16/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-66%E6%9C%80%E9%95%BF%E8%BF%9E%E7%BB%AD%E9%80%92%E5%A2%9E%E5%BA%8F%E5%88%97/" rel="next" title="每日一题@66最长连续递增序列">
-      每日一题@66最长连续递增序列 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -340,6 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC4%E7%AB%A0-Spark%E7%9A%84%E8%BF%90%E8%A1%8C%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">第4章 Spark的运行模式</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
