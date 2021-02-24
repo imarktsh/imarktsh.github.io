@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/128128.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/3232.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/1616.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="大数据电信客服3B站链接数据分析部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据电信客服3">
+<meta property="og:url" content="http://onlyear.com/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/index.html">
+<meta property="og:site_name" content="imarktsh">
+<meta property="og:description" content="大数据电信客服3B站链接数据分析部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210224140254310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2021-02-24T06:04:00.000Z">
+<meta property="article:modified_time" content="2021-02-24T06:05:34.867Z">
+<meta property="article:author" content="imarktsh">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210224140254310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+
+<link rel="canonical" href="http://onlyear.com/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>大数据电信客服3 | imarktsh</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">imarktsh</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+      <meta itemprop="name" content="imarktsh">
+      <meta itemprop="description" content="明天一定学">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="imarktsh">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据电信客服3
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-24 14:04:00 / 修改时间：14:05:34" itemprop="dateCreated datePublished" datetime="2021-02-24T14:04:00+08:00">2021-02-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>大数据电信客服3<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17t411W7wZ?spm_id_from=333.788.b_636f6d6d656e74.19">B站链接</a><br>数据分析部分</p>
+<a id="more"></a>
+<h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><p>先把视频看完了<br>使用MapReduce项目一直缺少依赖<br>然后就用Spark自己写</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">注意他妈的Hbase2<span class="number">.0</span>把hbase-mapreduce模块单独拿出来</span><br><span class="line">需要添加一下依赖才能运行</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.2.6&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-common&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.2.6&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-mapreduce&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.2.6&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>对这部分首先学习了hbase的增删改查</p>
+<p>学会之后就使用Spark从hbase里面读取数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.ct.analysis;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.ct.analysis.tool.ConCall;</span><br><span class="line"><span class="keyword">import</span> com.twitter.chill.Base64;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.io.ImmutableBytesWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.protobuf.ProtobufUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.protobuf.generated.ClientProtos;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.SparkSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableInputFormat;</span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"><span class="keyword">import</span> scala.Tuple5;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 分析数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnalysisData</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SparkSession ss = SparkSession</span><br><span class="line">                .builder()</span><br><span class="line">                <span class="comment">//.config(&quot;spark.default.parallelism&quot;, 200)</span></span><br><span class="line">                .appName(<span class="string">&quot;RF&quot;</span>)</span><br><span class="line">                .master(<span class="string">&quot;local[*]&quot;</span>)</span><br><span class="line">                .getOrCreate();<span class="comment">//</span></span><br><span class="line">        <span class="comment">//错误级别日志</span></span><br><span class="line">        ss.sparkContext().setLogLevel(<span class="string">&quot;ERROR&quot;</span>);</span><br><span class="line">        JavaSparkContext sc = JavaSparkContext</span><br><span class="line">                .fromSparkContext(ss.sparkContext());</span><br><span class="line">        <span class="comment">//建立连接</span></span><br><span class="line">        Configuration conf = HBaseConfiguration.create();</span><br><span class="line">        Connection conn = ConnectionFactory.createConnection(conf);</span><br><span class="line">        TableName tableName = TableName.valueOf(<span class="string">&quot;test3&quot;</span>);</span><br><span class="line">        conf.set(TableInputFormat.INPUT_TABLE, <span class="string">&quot;ct:calllog&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Admin admin = conn.getAdmin();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//表信息</span></span><br><span class="line">        <span class="keyword">final</span> String FAMILY = <span class="string">&quot;caller&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME1 = <span class="string">&quot;call1&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME2 = <span class="string">&quot;call2&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME3 = <span class="string">&quot;calltime&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME4 = <span class="string">&quot;duration&quot;</span>;</span><br><span class="line">        String COLUMN_NAME5 = <span class="string">&quot;flg&quot;</span>;</span><br><span class="line">        <span class="comment">//添加scan</span></span><br><span class="line">        Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">        scan.addFamily(Bytes.toBytes(FAMILY));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME1));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME2));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME3));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME4));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME5));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//添加scan</span></span><br><span class="line">        ClientProtos.Scan proto = ProtobufUtil.toScan(scan);</span><br><span class="line">        String ScanToString = Base64.encodeBytes(proto.toByteArray());</span><br><span class="line">        conf.set(TableInputFormat.SCAN, ScanToString);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读HBase数据转化成RDD</span></span><br><span class="line">        <span class="comment">//ImmutableBytesWritable就是一种数据类型,可以转为String</span></span><br><span class="line">        JavaPairRDD&lt;ImmutableBytesWritable, Result&gt; hbaseRDD =</span><br><span class="line">                sc.newAPIHadoopRDD(conf, TableInputFormat.class,</span><br><span class="line">                        ImmutableBytesWritable.class,</span><br><span class="line">                        Result.class);</span><br><span class="line">        hbaseRDD.cache();<span class="comment">// 对myRDD进行缓存</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 拿到数据 拿全</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaRDD&lt;Tuple5&gt; dataRDD = hbaseRDD.map(</span><br><span class="line">                <span class="keyword">new</span> Function&lt;Tuple2&lt;ImmutableBytesWritable, Result&gt;, Tuple5&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Tuple5 <span class="title">call</span><span class="params">(Tuple2&lt;ImmutableBytesWritable, Result&gt; tuple2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">                Result result = tuple2._2;</span><br><span class="line">                String rowKey = Bytes.toString(result.getRow());</span><br><span class="line">                String call1 = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME1)));</span><br><span class="line">                String call2 = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME2)));</span><br><span class="line">                String callTime = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME3)));</span><br><span class="line">                String duration = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME4)));</span><br><span class="line">                ConCall cell = <span class="keyword">new</span> ConCall(call1,call2);</span><br><span class="line">                <span class="comment">//System.out.println( call1 + &quot;-&gt;&quot; + call2);</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Tuple5&lt;&gt;(rowKey, call1, call2, callTime, duration);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 将电话号码作为key 时间为value</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; pairRDD = dataRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple5, String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Tuple2&lt;String, Integer&gt; <span class="title">call</span><span class="params">(Tuple5 tuple5)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                String call1 = (String) tuple5._2();</span><br><span class="line">                String call2 = (String) tuple5._3();</span><br><span class="line">                String duration = (String) tuple5._5();</span><br><span class="line">                String key = call1 + <span class="string">&quot;|&quot;</span> + call2;</span><br><span class="line">                <span class="comment">//int duration2 = Integer.parseInt(duration);</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(key, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 计算key的通话时长</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; resTupleRDD = pairRDD.reduceByKey(</span><br><span class="line">                <span class="keyword">new</span> Function2&lt;Integer, Integer, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">(Integer integer, Integer integer2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> integer + integer2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//映射为&lt;Integer,电话&gt;</span></span><br><span class="line">        JavaPairRDD&lt;Integer, String&gt; resPairRDD = resTupleRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple2&lt;String, Integer&gt;, Integer, String&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> Tuple2&lt;Integer, String&gt;</span><br><span class="line">                    call(Tuple2&lt;String, Integer&gt; tuple) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(tuple._2, tuple._1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">        JavaPairRDD&lt;Integer, String&gt; sortPairRDD = resPairRDD.sortByKey(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//再换回来 &lt;电话，通话时间Integer&gt;</span></span><br><span class="line">        <span class="comment">//映射为&lt;Integer,电话&gt;</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; sortResPairRDD = sortPairRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple2&lt;Integer, String&gt;, String, Integer&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> Tuple2&lt;String, Integer&gt;</span><br><span class="line">                    call(Tuple2&lt;Integer, String&gt; tuple) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(tuple._2, tuple._1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 打印</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">        sortResPairRDD.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Integer&gt; tuple2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                String key = tuple2._1;</span><br><span class="line">                <span class="keyword">int</span> duration = tuple2._2;</span><br><span class="line">                <span class="comment">//System.out.println(key + &quot;::: 通话时间 ::&quot; + duration );</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        List&lt;Tuple2&lt;String, Integer&gt;&gt; resTop10 = sortResPairRDD.take(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">for</span> (Tuple2&lt;String, Integer&gt; tuple2 : resTop10) &#123;</span><br><span class="line">            String key = tuple2._1;</span><br><span class="line">            <span class="keyword">int</span> duration = tuple2._2;</span><br><span class="line">            System.out.println(key + <span class="string">&quot;::: 通话时间 ::&quot;</span> + duration );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> count = sortResPairRDD.count();</span><br><span class="line">        System.out.println(<span class="string">&quot;数据总条数：&quot;</span> + count);</span><br><span class="line"></span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>只要把数据从Hbase读出来变成RDD就可以很轻松的操作进行各种转换<br>在这里实现了取通话记录的Top(10)</p>
+<p><img src="https://img-blog.csdnimg.cn/20210224140254310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>项目完结！</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D2/" rel="prev" title="大数据电信客服2">
+      <i class="fa fa-chevron-left"></i> 大数据电信客服2
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">数据分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="imarktsh"
+      src="https://img-blog.csdnimg.cn/2020053010414625.jpg">
+  <p class="site-author-name" itemprop="name">imarktsh</p>
+  <div class="site-description" itemprop="description">明天一定学</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">141</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/" title="GitHub → https:&#x2F;&#x2F;github.com" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/" title="Weibo → https:&#x2F;&#x2F;weibo.com" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">imarktsh</span>
+</div>
+  <div class="powered-by">
+   
+  </div>
+
+    <!-- 网站运行时间的设置 -->
+    <span id="timeDate">载入天数...</span>
+    <span id="times">载入时分秒...</span>  | It is building your life.
+    <script>
+        var now = new Date();
+        function createtime() {
+            var grt= new Date("01/05/2020 00:00:00");//此处修改你的建站时间或者网站上线时间
+            now.setTime(now.getTime()+250);
+            days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+            hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+            if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+            mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+            seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+            snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+            document.getElementById("timeDate").innerHTML = "已运行 "+dnum+" 天 ";
+            document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+    }
+    setInterval("createtime()",250);
+    </script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
