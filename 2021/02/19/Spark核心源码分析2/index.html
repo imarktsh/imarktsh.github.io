@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Spark核心源码分析2 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="大数据科学丛书Spark核心源码分析与开发实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark核心源码分析2">
+<meta property="og:url" content="http://example.com/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="大数据科学丛书Spark核心源码分析与开发实战">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210219163342259.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-19T08:34:00.000Z">
+<meta property="article:modified_time" content="2021-02-19T08:35:26.979Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="Spark">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Spark核心源码分析2" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/" class="article-date">
+  <time class="dt-published" datetime="2021-02-19T08:34:00.000Z" itemprop="datePublished">2021-02-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Spark核心源码分析2
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>大数据科学丛书<br>Spark核心源码分析与开发实战</p>
+<span id="more"></span>
+<p><img src="https://img-blog.csdnimg.cn/20210210225505780.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="第4章-Spark的运行模式"><a href="#第4章-Spark的运行模式" class="headerlink" title="第4章 Spark的运行模式"></a>第4章 Spark的运行模式</h2><p>1.运行模式概览<br>standalone模式，即独立模式，通过它可以独立部署Spark集群，比如当我们只需要借助Spark进行大数据计算时，此模式是最佳模式。但当我们需要多种计算框架比如MR时，就需要引入外部资源管理系统YARN和Mesos对资源进行调度。Spark一开始就支持Mesos，yarn资源Container是不可动态伸缩的，一旦启动就不可变。<br>术语：<br>Application：用户构建的Spark应用程序，包括驱动程序和集群上运行的多个Executor代码<br>Driver：运行Application中的main()函数并创建SparkContext的进程，SparkContext负责与集群进行通信，进行资源的申请任务的分配和监控等。<br>Executor：在工作节点中为Spark应用所启动的进行，它可以运行task也可以在内存或磁盘中保存数据。<br>Worker：集群中任何可以运行Spark应用程序的节点slave配置的worker节点或者NodeManager节点。<br>Task：可以发给Executor执行的任务单元，是运行Spark应用的基本单元。<br>Job：包含多个Task的并行计算，一般由Spark的action触发产生，一个Application可能有多个Job。<br>Stage：每个Job会因为依赖关系拆分为多个task集合，命名为Stage<br>DAGScheduler：面向Stage的任务调度器，负责接收Spark应用程序提交的Job，根据RDD的依赖关系划分为Stage，并提交Stage给TaskScheduler<br>TaskScheduler：面向Task的任务调度器，接受DAGScheduler提交的TaskSets，然后把一个个的Task提交到Worker节点运行。<br>RDD：Spark的编程模型，它提供了丰富的操作算子，主要分为transformation和action算子。它表示已被分区，被序列化的，不可变的，有容错机制的，能够并行操作的数据集合。</p>
+<p>2.Spark基本工作流程<br>（1)任何Spark的应用程序包含Driver和Executor，首先在Driver初始化SparkContext，是通往集群的唯一路径，SparkContext里包含DAGScheduler和TaskScheduler两个调度器类，创建的同时一起创建。<br>（2)SparkContext初始化完成后，首先根据Spark的相关设置向Cluster Manager申请所需资源，然后在worker节点初始化相应的Executor。Driver通过Spark中的RDD代码进行解析，生成相应的RDD图，描述了RDD相关信息及彼此之间的依赖关系。<br>（3)RDD图构建完毕后，Driver将提交给DAGSchduler进行解析。DAGScheduler在解析过程中遇见action算子后逆向解析，根据RDD之间的依赖关系是否存在shuffle等将RDD图解析为一系列具有先后依赖关系的Stage。如果两个RDD之间存在宽依赖关系则拆分为两个Stage执行，且只有前一个Stage执行完毕才会执行后一个Stage。<br>（4)DAGScheduler将划分的一系列Stage按照stage先后顺序依次提交给底层调度器TaskScheduler去执行<br>（5)TaskScheduler接受到Stage任务后，将会在集群环境中构建一个TaskSetManager实例来管理Stage的生命周期<br>（6)TaskSetManager将会把相关计算代码资源发送到对应的Executor上，并在Executor启动线程池执行。执行过程中会采用算法进行优化，提高计算效率，出现计算错误丢失也需要进行报告。<br>（7)在Task执行的过程中有部分程序涉及到IO操作，在每个Executor中由相应的BolckManager进行管理，相关信息将会在Driver中的Blocktracker进行交互和同步。<br>（8)在TaskThreads执行的过程中，如果存在运行错误、或其他影响问题导致的失败、将会默认重试3次，均失败后将上报TaskScheduler，或者再上报给DAGScheduler，根据各个Worker节点运行情况重新提交别的Executor执行。<br>（9)TaskThreads执行完毕后，将执行结果反馈给TaskScheduler,TaskScheduler再反馈给DAGScheduler，DAGScheduler将根据是否还存在待执行的Stage，循环提交给TaskScheduler执行。<br>（10)待所有Stage都执行完毕后，将会达到应用程序目的，或者输出到文件或者显示在屏幕。Driver本次运行过程结束，等待用户指令或结束。<br>（11)用户显式关闭SparkContext后，整个过程结束相关资源被释放。</p>
+<p>3.Local模式<br>local最大的用处就是在单机上调试我们写的Spark应用程序。写法为local[N] N为线程数。<br>内部实现原理：1SparkContext对象创建的时候会在其内部调用自己的TaskScheduler()方法初始化TaskSchedulerImpl调度器，同时根据运行模式参数来匹配所需要选择的运行模式，然后生成LocalBackend的对象。并把backend当作参数传递给TaskSchedulerImpl的initialize方法。<br>2这时候TaskScheduler调用submitTasks方法提交任务的时候，它内部的backend是Loaclbackend对象，backend调用reviveoffers方法进行资源申请。<br>3在Localbackend调用reviveoffers方法后，会发送一个ReviveOffers消息给自己的内部类LocalActor接受并处理该消息。<br>4localActor通过自己的receiveWithLogging方法接收到ReviveOffers消息，并结合Scala语言消息匹配处理。<br>5localbanckend根据可以CPU核心数设定在生成资源返回给TaskSchedulerImpl使用，最后通过launchTask方法把Task发送到线程池运行。</p>
+<p>4.Stand alone模式</p>
+<p>5.YARN-Cluster模式<br>（1）Spark YARN Client 通过ApplicationClientProtocol协议向Yarn中的ResourceManager提交应用程序，其中包括ApplicationMaster程序，启动ApplicationMaster命令以及需要在Executor中运行的程序等。<br>（2）ResourceManager收到请求后与对应的Node Manager通信，为该应用程序分配第一个Container作为App Master。<br>（3）ResourceManager要求NodeManger在这个Container中启动启动应用程序的AppMaster，其中ApplicationMaster中包含SparkContext等的初始化。<br>（4）AppMaster首先向ResourceManager注册，这样用户可以直接通过ResourceManager查看程序运行状态。<br>（5）然后ApplicationMaster通过轮询方式通过RPC协议为各个任务申请资源，并监视他们的运行状态直到结束，其中Application的请求分配资源是通过YarnAllocationHandle来完成。<br>（6）一旦ApplicationMaster申请到资源，也就是Container后，通过ContainerManterProtocol协议与对应NodeManager通信，要求他在获得Container中启动CoarseGrainedExecutorBackend，CoarseGrainedExecutorBackend启动后会向ApplicationMaster注册并申请Task。<br>（7）ApplicationMaster的SparkContext分配Task给CoarseGrainedExecutorBackend执行，CoarseGrainedExecutorBackend运行Task并通过某个自定义RPC协议向ApplicationMaster报告自己的状态和任务进度，以让ApplicationMaster掌握各个任务状态，从而可以在失败时重新启动任务。<br>（8）应用程序运行完成后，ApplicationMaster向Resourcemanager申请注销并关闭自己。<br><img src="https://img-blog.csdnimg.cn/20210219163342259.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/19/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902/" data-id="ckuvclveq002jr9jfcntc1vik" data-title="Spark核心源码分析2" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/02/20/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          大数据电信客服
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/11/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%901/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Spark核心源码分析1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

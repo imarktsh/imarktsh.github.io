@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>机器学习之决策树 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="决策树是一种机器学习的方法决策树是一种树形结构，其中每个内部节点表示一个属性上的判断，每个分支代表一个判断结果的输出，最后每个叶节点代表一种分类结果。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习之决策树">
+<meta property="og:url" content="http://example.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="决策树是一种机器学习的方法决策树是一种树形结构，其中每个内部节点表示一个属性上的判断，每个分支代表一个判断结果的输出，最后每个叶节点代表一种分类结果。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200728155824705.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200728155845722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-07-28T08:44:00.000Z">
+<meta property="article:modified_time" content="2020-07-28T08:47:20.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200728155824705.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-机器学习之决策树" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/" class="article-date">
+  <time class="dt-published" datetime="2020-07-28T08:44:00.000Z" itemprop="datePublished">2020-07-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      机器学习之决策树
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="决策树是一种机器学习的方法"><a href="#决策树是一种机器学习的方法" class="headerlink" title="决策树是一种机器学习的方法"></a>决策树是一种机器学习的方法</h1><p>决策树是一种树形结构，其中每个内部节点表示一个属性上的判断，每个分支代表一个判断结果的输出，最后每个叶节点代表一种分类结果。</p>
+<span id="more"></span>
+
+<p> 从根节点开始一步步走到叶子节点（决策）<br> 所有数据最终都会落到叶子节点，既可以做分类也可以做回归</p>
+<ul>
+<li><strong>根节点</strong></li>
+<li><strong>非叶子节点与分支</strong></li>
+<li><strong>叶子节点（最终的决策结果）</strong></li>
+</ul>
+<p>这里通过一个简单的例子来说明决策树的构成思路：</p>
+<p>给出如下的一组数据，一共有十个样本（学生数量），每个样本有分数，出勤率，回答问题次数，作业提交率四个属性，最后判断这些学生是否是好学生。最后一列给出了人工分类结果。<br><img src="https://img-blog.csdnimg.cn/20200728155824705.png" alt="在这里插入图片描述"><br>然后用这一组附带分类结果的样本可以训练出多种多样的决策树，这里为了简化过程，我们假设决策树为二叉树，且类似于下图：<br><img src="https://img-blog.csdnimg.cn/20200728155845722.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="决策树的训练与测试"><a href="#决策树的训练与测试" class="headerlink" title="决策树的训练与测试"></a>决策树的训练与测试</h2><ol>
+<li>训练阶段：从给定的训练集构造出来一颗树（从根节点开始选择特征）</li>
+<li>测试阶段：根据构造出来的树模型从根节点开始用测试集测试</li>
+<li>难点在于如何构造一个树，特征分类的选择问题</li>
+</ol>
+<p>所以决策树的生成主要分以下两步，这两步通常通过学习已经知道分类结果的样本来实现。</p>
+<ol>
+<li>节点的分裂：一般当一个节点所代表的属性无法给出判断时，则选择将这一节点分成2个</li>
+</ol>
+<p>子节点（如不是二叉树的情况会分成n个子节点）</p>
+<ol start="2">
+<li>阈值的确定：选择适当的阈值使得分类错误率最小 （Training Error）。</li>
+</ol>
+<h2 id="决策树算法："><a href="#决策树算法：" class="headerlink" title="决策树算法："></a>决策树算法：</h2><h4 id="ID3算法："><a href="#ID3算法：" class="headerlink" title="ID3算法："></a>ID3算法：</h4><p>  信息增益，例如像ID这样的特征，若ID为0-14这14个数，每个ID的熵都为0，此时的熵为0，则意味着此时的信息增益是最大的，然而ID只是一个编号，对于解决问题没有帮助。这就是这个算法的问题，有的特征本身非常稀疏，里面的属性很多，但是每个属性里面的样本数很小，这样就容易计算出很小的熵值，信息增益就会计算得很大，但这是无意义的。</p>
+<h4 id="C4-5："><a href="#C4-5：" class="headerlink" title="C4.5："></a>C4.5：</h4><pre><code>   信息增益率，在信息增益的基础上，考虑自身的熵值，即信息增益比上自身的熵值，若本身的熵值就很大，那么在信息增益比上本身的熵值后，信息增益率就会很小，不会产生ID3算法的误解。通过对ID3的学习，可以知道ID3存在一个问题，那就是越细小的分割分类错误率越小，所以ID3会越分越细，比如以第一个属性为例：设阈值小于70可将样本分为2组，但是分错了1个。如果设阈值小于70，再加上阈值等于95，那么分错率降到了0，但是这种分割显然只对训练数据有用，对于新的数据没有意义，这就是所说的过度学习（Overfitting）。
+</code></pre>
+<p>分割太细了，训练数据的分类可以达到0错误率，但是因为新的数据和训练数据不同，所以面对新的数据分错率反倒上升了。决策树是通过分析训练数据，得到数据的统计信息，而不是专为训练数据量身定做。</p>
+<p>就比如给男人做衣服，叫来10个人做参考，做出一件10个人都能穿的衣服，然后叫来另外5个和前面10个人身高差不多的，这件衣服也能穿。但是当你为10个人每人做一件正好合身的衣服，那么这10件衣服除了那个量身定做的人，别人都穿不了。</p>
+<p>所以为了避免分割太细，c4.5对ID3进行了改进，C4.5中，优化项要除以分割太细的代价，这个比值叫做信息增益率，显然分割太细分母增加，信息增益率会降低。除此之外，其他的原理和ID3相同。</p>
+<h4 id="CART："><a href="#CART：" class="headerlink" title="CART："></a>CART：</h4><pre><code>   使用GINI系数来当做衡量标准
+   分类回归树
+</code></pre>
+<p>CART是一个二叉树，也是回归树，同时也是分类树，CART的构成简单明了。</p>
+<p>CART只能将<strong>一个父节点分为2个子节点</strong>。CART用GINI指数来决定如何分裂：</p>
+<p><strong>GINI指数</strong>：总体内包含的类别越杂乱，GINI指数就越大（跟熵的概念很相似）。</p>
+<p>a. 比如出勤率大于70%这个条件将训练数据分成两组：大于70%里面有两类：【好学生】和【不是好学生】，而小于等于70%里也有两类：【好学生】和【不是好学生】。</p>
+<p>b. 如果用分数小于70分来分：则小于70分只有【不是好学生】一类，而大于等于70分有【好学生】和【不是好学生】两类。</p>
+<p>比较a和b，发现b的凌乱程度比a要小，即GINI指数b比a小，所以选择b的方案。以此为例，将所有条件列出来，选择GINI指数最小的方案，这个和熵的概念很类似。</p>
+<p>CART还是一个回归树，回归解析用来决定分布是否终止。理想地说每一个叶节点里都只有一个类别时分类应该停止，但是很多数据并不容易完全划分，或者完全划分需要很多次分裂，必然造成很长的运行时间，所以CART可以对每个叶节点里的数据分析其均值方差，当方差小于一定值可以终止分裂，以换取计算成本的降低。</p>
+<p>CART和ID3一样，存在偏向细小分割，即过度学习（过度拟合的问题），为了解决这一问题，对特别长的树进行剪枝处理，直接剪掉。</p>
+<p>以上的决策树训练的时候，一般会采取Cross-Validation法：比如一共有10组数据：</p>
+<p>第一次. 1到9做训练数据， 10做测试数据</p>
+<p>第二次. 2到10做训练数据，1做测试数据</p>
+<p>第三次. 1，3到10做训练数据，2做测试数据，以此类推</p>
+<p>做10次，然后大平均错误率。这样称为 10 folds Cross-Validation。</p>
+<p>比如 3 folds Cross-Validation 指的是数据分3份，2份做训练，1份做测试。</p>
+<h2 id="剪枝"><a href="#剪枝" class="headerlink" title="剪枝"></a>剪枝</h2><p>使用决策树有时会出现“过拟合”的情况，为了解决过拟合的，故引入剪枝的策略，剪去多余的“枝干”，减低过拟合发生的风险。有两种剪枝策略：</p>
+<ul>
+<li>预剪枝 ：其中的核心思想就是，在每一次实际对结点进行进一步划分之前，先采用验证集的数据来验证如果划分是否能提高划分的准确性。如果不能，就把结点标记为叶结点并退出进一步划分；如果可以就继续递归生成节点。</li>
+<li>后剪枝 ： 后剪枝则是先从训练集生成一颗完整的决策树，然后自底向上地对非叶结点进行考察，若将该结点对应的子树替换为叶结点能带来泛化性能提升，则将该子树替换为叶结点。</li>
+</ul>
+<h2 id="两种剪枝策略对比"><a href="#两种剪枝策略对比" class="headerlink" title="两种剪枝策略对比"></a>两种剪枝策略对比</h2><ul>
+<li>后剪枝决策树通常比预剪枝决策树保留了更多的分支；</li>
+<li>后剪枝决策树的欠拟合风险很小，泛化性能往往优于预剪枝决策树；</li>
+<li>后剪枝决策树训练时间开销比未剪枝决策树和预剪枝决策树都要大的多。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%86%B3%E7%AD%96%E6%A0%91/" data-id="ckuvclvfc0048r9jfgf7z80uc" data-title="机器学习之决策树" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/28/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          机器学习之随机森林
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/24/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-24%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">每日一题@24斐波那契数</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

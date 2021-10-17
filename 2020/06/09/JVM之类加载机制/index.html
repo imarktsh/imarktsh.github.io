@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>JVM之类加载机制 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Java 类加载机制Java 虚拟机的启动是通过引导类加载器 ( Bootstrap Class Loader ) 创建一个初始类  (Initial Class ) 来完成，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM之类加载机制">
+<meta property="og:url" content="http://example.com/2020/06/09/JVM%E4%B9%8B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Java 类加载机制Java 虚拟机的启动是通过引导类加载器 ( Bootstrap Class Loader ) 创建一个初始类  (Initial Class ) 来完成，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200609124410528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200609124505885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200609125639324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200609130004796.png">
+<meta property="article:published_time" content="2020-06-09T05:08:00.000Z">
+<meta property="article:modified_time" content="2020-09-28T03:58:52.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200609124410528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-JVM之类加载机制" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/06/09/JVM%E4%B9%8B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" class="article-date">
+  <time class="dt-published" datetime="2020-06-09T05:08:00.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      JVM之类加载机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="Java-类加载机制"><a href="#Java-类加载机制" class="headerlink" title="Java 类加载机制"></a>Java 类加载机制</h2><p>Java 虚拟机的启动是通过引导类加载器 ( Bootstrap Class Loader ) 创建一个初始类  (Initial Class ) 来完成，<span id="more"></span>这个类是由虚拟机的具体实现指定。紧接着，Java虚拟机链接这个初始类，初始化并调用它的 public void main(String[])方法。之后的整个执行过程都是由对此方法的调用开始。执行 main 方法中的 Java 虚拟机指令可能会导致 Java 虚拟机链接另外的一些类或接口，也可能会调用另外的方法。<br>可能在某种 Java 虚拟机的实现上，初始类会作为命令行参数被提供给虚拟机。当然，虚拟机实现也可以利用一个初始类让类加载器依次加载整个应用。初始类当然也可以选择组合上述的方式来工作。</p>
+<p>Class文件由类装载器装载后，在JVM中将形成一份描述Class结构的元信息对象，通过该元信息对象可以获知Class的结构信息：如构造函数，属性和方法等，Java允许用户借由这个Class相关的元信息对象间接调用Class对象的功能。</p>
+<p>虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验，转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。</p>
+<p>什么是类的加载</p>
+<p>类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个java.lang.Class对象，用来封装类在方法区内的数据结构。类的加载的最终产品是位于堆区中的Class对象，Class对象封装了类在方法区内的数据结构，并且向Java程序员提供了访问方法区内的数据结构的接口。<br>类加载器并不需要等到某个类被“首次主动使用”时再加载它，JVM规范允许类加载器在预料某个类将要被使用时就预先加载它，如果在预先加载的过程中遇到了.class文件缺失或存在错误，类加载器必须在程序首次主动使用该类时才报告错误（LinkageError错误）如果这个类一直没有被程序主动使用，那么类加载器就不会报告错误。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爸爸的岁数:&quot;</span> + Son.factor);  <span class="comment">//入口1</span></span><br><span class="line">        <span class="comment">// new Son();  //入口 2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grandpa</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爷爷在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Grandpa</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爷爷~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Father</span> <span class="keyword">extends</span> <span class="title">Grandpa</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爸爸在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> factor = <span class="number">25</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Father</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爸爸~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;儿子在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Son</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是儿子~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">入口<span class="number">1</span> 的结果：</span><br><span class="line"></span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">爸爸的岁数:<span class="number">25</span></span><br><span class="line">入口<span class="number">2</span> 的结果</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">儿子在静态代码块</span><br><span class="line">我是爷爷~</span><br><span class="line">我是爸爸~</span><br><span class="line">我是儿子~</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+<p>如果以前没有遇到这种问题，现在要你解答肯定是很难的。该题考察的就是你对 Java 类加载机制的理解。如果你对 Java 加载机制不理解，那么你是无法解答这道题目的。</p>
+<p>对比上面两个结果，可以发现，入口1 都是静态代码的初始化，入口2 既涉及到静态代码的初始化，也涉及到类的初始化。到此大家肯定就知道对于静态代码和非静态代码的初始化逻辑是有区别的。</p>
+<p>这篇文章，将对 Java 类加载机制的进行讲解，让你以后遇到类似问题不在犯难。</p>
+<h2 id="类的加载过程"><a href="#类的加载过程" class="headerlink" title="类的加载过程"></a>类的加载过程</h2><p>当 Java 虚拟机将 Java 源码编译为字节码之后，虚拟机便可以将字节码读取进内存，从而进行解析、运行等整个过程，这个过程我们叫：Java 虚拟机的类加载机制。JVM 虚拟机执行 class 字节码的过程可以分为七个阶段：加载、验证、准备、解析、初始化、使用、卸载。其中加载、检验、准备、初始化和卸载这个五个阶段的顺序是固定的，而解析则未必。为了支持动态绑定，解析这个过程可以发生在初始化阶段之后。<img src="https://img-blog.csdnimg.cn/20200609124410528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h3><p>什么情况下需要开始类加载的第一个阶段：加载。 JAVA虚拟机规范并没有进行强制约束，交给虚拟机的具体实现自由把握。</p>
+<p>加载阶段是“类加载”过程中的一个阶段，这个阶段通常也被称作“装载”，在加载阶段，虚拟机主要完成以下3件事情：</p>
+<ol>
+<li>通过 <strong>“类全名”</strong> 来获取定义此类的二进制字节流</li>
+<li>将<strong>字节流所代表的静态存储结构转换为方法区的运行时数据结构</strong></li>
+<li>在 java 堆中生成一个代表这个类的 <strong>java.lang.Class</strong><br>对象，作为方法区这些数据的访问入口（所以我们能够通过低调用类.getClass() ）</li>
+</ol>
+<p>注意这里字节流不一定非得要从一个 Class 文件获取，这里既可以从 ZIP 包中读取（比如从 jar 包和 war 包中读取），也可以在运行时计算生成（动态代理），也可以由其它文件生成（比如将 JSP 文件转换成对应的 Class 类）。加载的信息存储在 JVM 的方法区。</p>
+<p>对于数组类来说，它并没有对应的字节流，而是由 Java 虚拟机直接生成的。对于其它的类来说，Java 虚拟机则需要借助类加载器来完成查找字节流的过程。</p>
+<p>如果上面那么多记不住： 请一定记住这句： <strong>加载阶段也就是查找获取类的二进制数据（磁盘或者网络）动作，将类的数据（Class 的信息：类的定义或者结构）放入方法区 （内存）。</strong></p>
+<p>一图说明：<br><img src="https://img-blog.csdnimg.cn/20200609124505885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>验证的主要作用就是确保被<strong>加载的类的正确性</strong>。也是连接阶段的第一步。说白了也就是我们加载好的 .class 文件不能对我们的虚拟机有危害，所以先检测验证一下。他主要是完成四个阶段的验证：</p>
+<ol>
+<li><strong>文件格式的验证</strong>：验证 .class 文件字节流是否符合 class<br>文件的格式的规范，并且能够被当前版本的虚拟机处理。这里面主要对魔数、主版本号、常量池等等的校验（魔数、主版本号都是 .class<br>文件里面包含的数据信息、在这里可以不用理解）。</li>
+<li><strong>元数据验证</strong>：主要是对字节码描述的信息进行语义分析，以保证其描述的信息符合 java<br>语言规范的要求，比如说验证这个类是不是有父类，类中的字段方法是不是和父类冲突等等。</li>
+<li><strong>字节码验证：</strong>这是整个验证过程最复杂的阶段，主要是通过数据流和控制流分析，确定程序语义是合法的、符合逻辑的。在元数据验证阶段对数据类型做出验证后，这个阶段主要对类的方法做出分析，保证类的方法在运行时不会做出威海虚拟机安全的事。</li>
+<li><strong>符号引用验证</strong>：它是验证的最后一个阶段，发生在虚拟机将符号引用转化为直接引用的时候。主要是对类自身以外的信息进行校验。目的是确保解析动作能够完成。</li>
+</ol>
+<p>对整个类加载机制而言，验证阶段是一个很重要但是非必需的阶段，如果我们的代码能够确保没有问题，那么我们就没有必要去验证，毕竟验证需要花费一定的的时间。当然我们可以使用 -Xverfity:none 来关闭大部分的验证。 </p>
+<h3 id="准备（重点）"><a href="#准备（重点）" class="headerlink" title="准备（重点）"></a>准备（重点）</h3><p>当完成字节码文件的校验之后，JVM 便会开始为类变量分配内存并初始化。这里需要注意两个关键点，即内存分配的对象以及初始化的类型。</p>
+<p>内存分配的对象。Java 中的变量有<strong>「类变量」和「类成员变量」</strong>两种类型，「类变量」指的是被 static 修饰的变量，而其他所有类型的变量都属于「类成员变量」。在准备阶段，JVM 只会为「类变量」分配内存，而不会为「类成员变量」分配内存。「类成员变量」的内存分配需要等到初始化阶段才开始。<br>例如下面的代码在准备阶段，只会为 factor 属性分配内存，而不会为 website 属性分配内存。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> factor = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">public</span> String website = <span class="string">&quot;www.cnblogs.com/chanshuyi&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>初始化的类型。在准备阶段，JVM 会为类变量分配内存，并为其初始化。但是这里的初始化指的是为变量赋予 Java 语言中该数据类型的零值，而不是用户代码里初始化的值。<br>例如下面的代码在准备阶段之后，sector 的值将是 0，而不是 3。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> sector = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>但如果一个变量是常量（被 static final 修饰）的话，那么在准备阶段，属性便会被赋予用户希望的值。例如下面的代码在准备阶段之后，number 的值将是 3，而不是 0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> number = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>之所以 static final 会直接被复制，而 static 变量会被赋予零值。其实我们稍微思考一下就能想明白了。</p>
+<p>两个语句的区别是一个有 final 关键字修饰，另外一个没有。而 final 关键字在 Java 中代表不可改变的意思，意思就是说 number 的值一旦赋值就不会在改变了。既然一旦赋值就不会再改变，那么就必须一开始就给其赋予用户想要的值，因此被 final 修饰的类变量在准备阶段就会被赋予想要的值。而没有被 final 修饰的类变量，其可能在初始化阶段或者运行阶段发生变化，所以就没有必要在准备阶段对它赋予用户想要的值。 </p>
+<h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段是虚拟机常量池内的符号引用替换为直接引用的过程。</p>
+<p><strong>符号引用：</strong>符号引用是一组符号来描述所引用的目标对象，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标对象并不一定已经加载到内存中。Java 虚拟机明确在 Class 文件格式中定义的符号引用的字面量形式。</p>
+<p><strong>直接引用</strong>：直接引用可以是直接指向目标对象的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机内存布局实现相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同，如果有了直接引用，那引用的目标必定已经在内存中存在。</p>
+<p>在解析的阶段，解析动作主要针对7类符号引用进行，它们的名称以及对于常量池中的常量类型和解析报错信息如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">| 解析动作 | 符号引用 | 解析可能的报错 | | ---------- | ------------------------------- | -----------------------------------------------------------</span><br><span class="line"></span><br><span class="line">| | 类或接口 | CONSTANTClassInfo | java.land.IllegalAccessError</span><br><span class="line"></span><br><span class="line">| | 字段 | CONSTANTFieldrefInfo | java.land.IllegalAccessError 或 java.land.NoSuchFieldError</span><br><span class="line"></span><br><span class="line">| | 类方法 | CONSTANTMethodefInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError</span><br><span class="line"></span><br><span class="line">| | 接口方法 | CONSTANTInterfaceMethoderInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError</span><br><span class="line"></span><br><span class="line">| | 方法类型 | CONSTANTMethodTypeInfo |</span><br><span class="line"></span><br><span class="line">| | 方法句柄 | CONSTANTMethodhandlerInfo |</span><br><span class="line"></span><br><span class="line">| | 调用限定符 | CONSTANTInvokeDynamicInfo | </span><br></pre></td></tr></table></figure>
+
+<p>解析的整个阶段在虚拟机中还是比较复杂的，远比上面介绍的复杂的多，但是很多特别细节的东西我们可以暂时先忽略，先有个大概的认识和了解之后有时间在慢慢深入了。</p>
+<h3 id="初始化（重点）"><a href="#初始化（重点）" class="headerlink" title="初始化（重点）"></a>初始化（重点）</h3><p>类什么时候才被初始化：</p>
+<ul>
+<li>1）创建类的实例，也就是new一个对象</li>
+<li>2）访问某个类或接口的静态变量，或者对该静态变量赋值</li>
+<li>3）调用类的静态方法</li>
+<li>4）反射（Class.forName(“com.lyj.load”)）</li>
+<li>5）初始化一个类的子类（会首先初始化子类的父类）</li>
+<li>6）JVM启动时标明的启动类，即文件名和类名相同的那个类 只有这6中情况才会导致类的类的初始化。</li>
+</ul>
+<p>类的初始化步骤 / JVM初始化步骤：</p>
+<ul>
+<li>1）如果这个类还没有被加载和链接，那先进行加载和链接</li>
+<li>2）假如这个类存在直接父类，并且这个类还没有被初始化（注意：在一个类加载器中，类只能初始化一次），那就初始化直接的父类（不适用于接口）</li>
+<li>3 ) 假如类中存在初始化语句（如static变量和static块），那就依次执行这些初始化语句。</li>
+</ul>
+<p>类初始阶段是类加载过程的最后一步，在上面提到的类加载过程中，除了加载阶段用户应用程序可以通过自定义类加载器参与之外，其余的动作全部由虚拟机主导和控制。初始化阶段，是真正开始执行类中定义的 Java 程序代码（或者说是字节码）。</p>
+<p>在准备阶段，变量已经赋值过一次系统要求的初始值（零值），而在初始化阶段，则根据程序员通过程序制定的主观计划去初始化类变量和其他资源。（或者从另一个角度表达：初始化阶段是执行类构造器 <clinit>() 方法的过程。）</p>
+<p>在这个阶段，JVM 会根据语句执行顺序对类对象进行初始化，一般来说当 JVM 遇到下面 5 种情况的时候会触发初始化：</p>
+<p>遇到 new、getstatic、putstatic、invokestatic 这四条字节码指令时，如果类没有进行过初始化，则需要先触发其初始化。生成这4条指令的最常见的 Java 代码场景是：使<strong>用new 关键字实例化对象的时候、读取或设置一个类的静态字段（被 final 修饰、已在编译器把结果放入常量池的静态字段除外）的时候，以及调用一个类的静态方法的时候。</strong></p>
+<p>使用 <strong>java.lang.reflect 包</strong>的方法对类进行反射调用的时候，如果类没有进行过初始化，则需要先触发其初始化。</p>
+<p>当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+<p>当虚拟机启动时，用户需要指定一个要执行的主类（包含 main() 方法的那个类），虚拟机会先初始化这个主类。</p>
+<p>当使用 JDK1.7 动态语言支持时，如果一个 java.lang.invoke.MethodHandle 实例最后的解析结果 <code>REF_getstatic，REF_putstatic，REF_invokeStatic</code> 的方法句柄，并且这个方法句柄所对应的类没有进行初始化，则需要先出触发其初始化。</p>
+<p>看到上面几个条件你可能会晕了，但是不要紧，不需要背，知道一下就好，后面用到的时候回到找一下就可以了。 </p>
+<p>注意<strong>这里的初始化，并不是说创造的类的实例，而是执行了类构造器，简单来说就是只对静态变量，静态代码块进行初始化。对于构造函数只有在创建实例的时候才会执行。</strong></p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>当 JVM 完成初始化阶段之后，JVM 便开始从入口方法开始执行用户的程序代码。这个阶段也只是了解一下就可以。</p>
+<h3 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h3><p>当用户程序代码执行完毕后，JVM 便开始销毁创建的 Class 对象，最后负责运行的 JVM 也退出内存。这个阶段也只是了解一下就可以。</p>
+<h3 id="引子题目解答"><a href="#引子题目解答" class="headerlink" title="引子题目解答"></a>引子题目解答</h3><p>还记得前面的题目嘛，下面开始分析：</p>
+<p>入口1<br>也许会有人问为什么没有输出「儿子在静态代码块」这个字符串？</p>
+<p>这是因为对于静态字段，<strong>只有直接定义这个字段的类才会被初始化</strong>（执行静态代码块）。因此通过其子类来引用父类中定义的静态字段，只会触发父类的初始化而不会触发子类的初始化。</p>
+<p>对面上面的这个例子，我们可以从入口开始分析一路分析下去：</p>
+<p>首先程序到 main 方法这里，使用标准化输出 Son 类中的 factor 类成员变量，但是 Son 类中并没有定义这个类成员变量。于是往父类去找，我们在 Father 类中找到了对应的类成员变量，于是触发了 <strong>Father 的初始化。</strong></p>
+<p>但根据我们上面说到的初始化的 5 种情况中的第 3 种（当初始化一个类的时候，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化）。我们需要先初始化 Father 类的父类，也就是先初始化 <strong>Grandpa 类再初始化 Father</strong> 类。于是我们先初始化 Grandpa 类输出：「爷爷在静态代码块」，再初始化 Father 类输出：「爸爸在静态代码块」。</p>
+<p>最后，所有父类都初始化完成之后，Son 类才能调用父类的静态变量，从而输出：「爸爸的岁数：25」。</p>
+<p>入口2<br>这里采用 <strong>new</strong> 进行初始化，所以先进行父类得初始化。<strong>先是执行静态变量初始化。子类创建对象的同时会先创造父类的对象，因此必须先调用父类的构造方法。</strong></p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>把类加载阶段的 “通过一个类的全限定名来获取描述此类的二进制字节流” 这个动作交给虚拟机之外的类加载器来完成。这样的好处在于，我们可以自行实现类加载器来加载其他格式的类，只要是二进制字节流就行，这就大大增强了加载器灵活性。<br><strong>1）Bootstrap ClassLoader</strong> 负责加载$JAVA_HOME中 jre/lib/rt.jar 里所有的class或Xbootclassoath选项指定的jar包。由C++实现，不是ClassLoader子类。</p>
+<p><strong>2）Extension ClassLoader</strong> 负责加载java平台中扩展功能的一些jar包，包括$JAVA_HOME中jre/lib/*.jar 或 -Djava.ext.dirs指定目录下的jar包。</p>
+<p><strong>3）App ClassLoader</strong> 负责加载classpath中指定的jar包及 Djava.class.path 所指定目录下的类和jar包。</p>
+<p><strong>4）Custom ClassLoader</strong> 通过java.lang.ClassLoader的子类自定义加载class，属于应用程序根据自身需要自定义的ClassLoader，如tomcat、jboss都会根据j2ee规范自行实现ClassLoader。</p>
+<p>加载过程中会先检查类是否被已加载，检查顺序是自底向上，从Custom ClassLoader到BootStrap ClassLoader逐层检查，只要某个classloader已加载，就视为已加载此类，保证此类只所有ClassLoader加载一次。而加载的顺序是自顶向下，也就是由上层来逐层尝试加载此类。</p>
+<p>系统自带的类加载器分为三种：</p>
+<ol>
+<li>启动类加载器。其它的类加载器都是 java.lang.ClassLoader 的子类，启动类加载器是由 C++ 实现的，没有对应的<br>Java 对象，因此在 Java 中只能用 null 代替。启动类加载器加载最为基础，最为重要的类，如 JRE 的 lib 目录下<br>jar 包中的类；扩展类加载器的父类是启动类加载器，它负责加载相对次要，但又通用的类，如 JRE 的 lib/ext<br>目录下jar包中的类</li>
+<li>扩展类加载器。Java核心类库提供，负责加载java的扩展库（加载 JAVA_HOME/jre/ext/*.jar<br>中的类），开发者可以直接使用扩展类加载器。</li>
+<li>应用程序类加载器。Java核心类库提供。应用类加载器的父类加载器则是扩展类加载器，它负责加载应用程序路径下的类。开发者可以直接使用这个类加载器，若应用程序中没有定义过自己的类加载器，java<br>应用的类都是由它来完成加载的。</li>
+</ol>
+<p>具体关系如下：<img src="https://img-blog.csdnimg.cn/20200609125639324.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>双亲委派机制工作过程：</strong><br>如果一个类加载器收到了类加载器的请求，它首先不会自己去尝试加载这个类，而是把这个请<strong>求委派给父加载器去完成</strong>。每个层次的类加载器都是如此，因此所有的加载请求最终都会传送到 <strong>Bootstrap 类加载器</strong>(启动类加载器)中，只有父类加载反馈自己无法加载这个请求(它的搜索范围中没有找到所需的类)时，子加载器才会尝试自己去加载。</p>
+<p>双亲委派模型的优点：<strong>java类随着它的加载器一起具备了一种带有优先级的层次关系.</strong></p>
+<p>例如类 <strong>java.lang.Object 它存放在 rt.jart</strong> 之中，无论哪一个类加载器都要加载这个类.最终都是双亲委派模型最顶端的 Bootstrap 类加载器去加载.因此Object类在程序的各种类加载器环境中都是同一个类.相反.如果没有使用双亲委派模型.由各个类加载器自行去加载的话.如果用户编写了一个称为 “java.lang.Object” 的类，并存放在程序的 ClassPath 中。那系统中将会出现多个不同的Object类，java类型体系中最基础的行为也就无法保证，应用程序也将会一片混乱。</p>
+<p>这里也可以用代码验证下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ClassLoader loader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        System.out.println(loader);  </span><br><span class="line">        System.out.println(loader.getParent());  </span><br><span class="line">        System.out.println(loader.getParent().getParent());  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>输出结果为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sun.misc.Launcher$AppClassLoader@2a139a55</span><br><span class="line">sun.misc.Launcher$ExtClassLoader@<span class="number">7852e922</span></span><br><span class="line"><span class="keyword">null</span></span><br><span class="line">跟前面的描述是一致的。启动类加载器是由 C++ 实现的，没有对应的</span><br><span class="line"> Java 对象，因此在 Java 中只能用 <span class="keyword">null</span> 代替。</span><br></pre></td></tr></table></figure>
+<p><strong>结束生命周期</strong><br>在如下几种情况下，Java虚拟机将结束生命周期</p>
+<ul>
+<li>1、执行了System.exit()方法</li>
+<li>2、程序正常执行结束</li>
+<li>3、程序在执行过程中遇到了异常或错误而异常终止</li>
+<li>4、由于操作系统出现错误而导致Java虚拟机进程终止</li>
+</ul>
+<h3 id="自定义类加载器"><a href="#自定义类加载器" class="headerlink" title="自定义类加载器"></a>自定义类加载器</h3><p><strong>为什么要自定义ClassLoader</strong></p>
+<p>因为系统的 ClassLoader 只会加载指定目录下的 class 文件,如果你想加载自己的 class 文件，那么就可以自定义一个 <strong>ClassLoader.</strong></p>
+<p>而且我们可以根据自己的需求，对 class 文件进行加密和解密。</p>
+<p><strong>如何自定义ClassLoader</strong></p>
+<p>新建一个类继承自 java.lang.ClassLoader 重写它的 findClass 方法。将 class 字节码数组转换为 Class 类的实例。调用 loadClass 方法加载即可</p>
+<p>代码实战：<br>先是定义一个自定义类加载器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 指定路径</span></span><br><span class="line">    <span class="keyword">private</span> String path ;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">(String classPath)</span></span>&#123;</span><br><span class="line">        path=classPath;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写findClass方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name 是我们这个类的全路径</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassNotFoundException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        Class log = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 获取该class文件字节码数组</span></span><br><span class="line">        <span class="keyword">byte</span>[] classData = getData();</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (classData != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 将class的字节码数组转换成Class类的实例</span></span><br><span class="line">            log = defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> log;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将class文件转化为字节码数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] getData() &#123;</span><br><span class="line"> </span><br><span class="line">        File file = <span class="keyword">new</span> File(path);</span><br><span class="line">        <span class="keyword">if</span> (file.exists())&#123;</span><br><span class="line">            FileInputStream in = <span class="keyword">null</span>;</span><br><span class="line">            ByteArrayOutputStream out = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                in = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">                out = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"> </span><br><span class="line">                <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">                <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> ((size = in.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                    out.write(buffer, <span class="number">0</span>, size);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    in.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line"> </span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> out.toByteArray();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以再 getData 里面做很多事情 ，比如加密解密之类的 都是可以的。</p>
+<p>接着创建一个试验 class :</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;load Log class successfully from log &quot;</span> );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>执行命令行 javac Log.java 生成我们的 Log.class 文件:</p>
+<p>最后就是进行加载：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         <span class="comment">// 这个类class的路径,自己复制自己电脑的路径</span></span><br><span class="line">        String classPath = <span class="string">&quot;/Users/yourname/Documents/workspace-sts-3.9.6.RELEASE/HelloWorld/src/Log.class&quot;</span>;</span><br><span class="line"> </span><br><span class="line">        MyClassLoader myClassLoader = <span class="keyword">new</span> MyClassLoader(classPath);</span><br><span class="line">        <span class="comment">// 类的全称，对应包名</span></span><br><span class="line">        String packageNamePath = <span class="string">&quot;com.hello.test.Log&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 加载Log这个class文件</span></span><br><span class="line">            Class&lt;?&gt; Log = myClassLoader.loadClass(packageNamePath);</span><br><span class="line">            System.out.println(<span class="string">&quot;类加载器是:&quot;</span> + Log.getClassLoader());</span><br><span class="line">            <span class="comment">// 利用反射获取main方法</span></span><br><span class="line">            Method method = Log.getDeclaredMethod(<span class="string">&quot;main&quot;</span>, String[].class);</span><br><span class="line">            Object object = Log.newInstance();</span><br><span class="line">            String[] arg = &#123;<span class="string">&quot;ad&quot;</span>&#125;;</span><br><span class="line">            method.invoke(object, (Object) arg);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出结果如下：<br><img src="https://img-blog.csdnimg.cn/20200609130004796.png" alt="在这里插入图片描述"></p>
+<p>可以看到是委托父类进行加载的。 到此，关于类加载器的内容就说完了。</p>
+<p>最后我们再来看一道升级过后的题目：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> amount1 = <span class="number">112</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Book book = <span class="keyword">new</span> Book();  <span class="comment">// 入口1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        staticFunction();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Book() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;, amount=&quot;</span> + amount + <span class="string">&quot;, amount1=&quot;</span> + amount1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">staticFunction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态方法&quot;</span>);</span><br><span class="line">　　　　 System.out.println(<span class="string">&quot;amount=&quot;</span> + amount + <span class="string">&quot;,amount1=&quot;</span> + amount1);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> price = <span class="number">110</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> amount = <span class="number">112</span>;</span><br><span class="line">    <span class="comment">// static Book book = new Book(); // 入口2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 入口1 的结果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">书的普通代码块</span><br><span class="line">书的构造方法</span><br><span class="line">price=<span class="number">110</span>, amount=<span class="number">0</span>, amount1=<span class="number">112</span></span><br><span class="line">书的静态代码块</span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
+
+<p>入口2 的结果</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">书的静态代码块</span><br><span class="line">书的普通代码块</span><br><span class="line">书的构造方法</span><br><span class="line">price=<span class="number">110</span>, amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
+
+<p> 入口1 分析</p>
+<p>在上面两个例子中，因为 main 方法所在类并没有多余的代码，我们都直接忽略了 main 方法所在类的初始化。</p>
+<p>但在这个例子中，main 方法所在类有许多代码，我们就并不能直接忽略了。</p>
+<ol>
+<li>当 JVM 在准备阶段的时候，便会为类变量分配内存和进行初始化。此时，我们的 book 实例变量被初始化为<br>null，amount，amout1 变量被初始化为 0。</li>
+<li>当进入初始化阶段后，因为 Book<br>方法是程序的入口，根据我们上面说到的类初始化的五种情况的第四种（当虚拟机启动时，用户需要指定一个要执行的主类（包含 main()方法的那个类），虚拟机会先初始化这个主类）。所以 JVM 会初始化 Book 类，即执行类构造器 。</li>
+<li>JVM 对 Book 类进行初始化首先是执行类构造器（按顺序收集类中所有静态代码块和类变量赋值语句就组成了类构造器 ），</li>
+<li>后执行对象的构造器（按顺序收集成员变量赋值和普通代码块，最后收集对象构造器，最终组成对象构造器 ）。</li>
+</ol>
+<p>对于入口1，执行类构造器发现 book 实例是静态变量，于是就会执行普通代码块，再去执行 book 的构造函数。执行完后，重新回到执行类构造器的路上，对剩下的静态变量进行初始化。</p>
+<p> 入口2 分析<br>入口2 的变化就是将静态实例初始化移到了最后。从而保证优先执行类构造器，再去进行对象初始化过程。</p>
+<p>变例<br>假如把入口1，2 都注释掉，这回结果会怎么样：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">书的静态代码块</span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现，最终只有类构造器得到了执行。</p>
+<p>方法论<br>从上面几个例子可以看出，分析一个类的执行顺序大概可以按照如下步骤：</p>
+<ol>
+<li>确定类变量的初始值。在类加载的准备阶段，JVM 会为类变量初始化零值，这时候类变量会有一个初始的零值。如果是被 final<br>修饰的类变量，则直接会被初始成用户想要的值。</li>
+<li>初始化入口方法。当进入类加载的初始化阶段后，JVM 会寻找整个 main 方法入口，从而初始化 main<br>方法所在的整个类。当需要对一个类进行初始化时，会</li>
+<li>首先初始化类构造器（），之后初始化对象构造器（）。初始化类构造器。JVM 会按顺序收集类变量的赋值语句、静态代码块，最终组成类构造器由 JVM 执行。</li>
+<li>初始化对象构造器。JVM 会按照收集成员变量的赋值语句、普通代码块，最后收集构造方法，将它们组成对象构造器，最终由 JVM 执行。</li>
+</ol>
+<p>如果在初始化 main 方法所在类的时候遇到了其他类的初始化，那么就先加载对应的类，加载完成之后返回。如此反复循环，最终返回 main 方法所在类。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25228545">Java类加载机制</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/huansky/p/12084204.html">Java 类加载机制详解</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/06/09/JVM%E4%B9%8B%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/" data-id="ckuvclve1000vr9jf8q058z8s" data-title="JVM之类加载机制" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/14/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-16%E6%9C%80%E5%B0%8F%E6%A0%88/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          每日一题@16最小栈
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/09/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-15%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">每日一题@15环形链表</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

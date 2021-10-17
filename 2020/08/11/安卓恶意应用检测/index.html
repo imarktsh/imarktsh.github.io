@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>安卓恶意应用检测 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="找数据集发现了安卓恶意软件检测这个方向就找到了 看了下也不是很新 但是近几年发文章的人挺多 就这个了 反正也找不到我写啥">
+<meta property="og:type" content="article">
+<meta property="og:title" content="安卓恶意应用检测">
+<meta property="og:url" content="http://example.com/2020/08/11/%E5%AE%89%E5%8D%93%E6%81%B6%E6%84%8F%E5%BA%94%E7%94%A8%E6%A3%80%E6%B5%8B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="找数据集发现了安卓恶意软件检测这个方向就找到了 看了下也不是很新 但是近几年发文章的人挺多 就这个了 反正也找不到我写啥">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200811100758888.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200811102700686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200811104605787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200811110705119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200811112039256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-08-11T09:51:00.000Z">
+<meta property="article:modified_time" content="2020-08-11T09:52:06.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="论文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200811100758888.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-安卓恶意应用检测" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/08/11/%E5%AE%89%E5%8D%93%E6%81%B6%E6%84%8F%E5%BA%94%E7%94%A8%E6%A3%80%E6%B5%8B/" class="article-date">
+  <time class="dt-published" datetime="2020-08-11T09:51:00.000Z" itemprop="datePublished">2020-08-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      安卓恶意应用检测
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>找数据集发现了安卓恶意软件检测这个方向<br>就找到了 看了下也不是很新 但是近几年发文章的人挺多 就这个了 反正也找不到我写啥</p>
+<span id="more"></span>
+<p><img src="https://img-blog.csdnimg.cn/20200811100758888.png" alt="在这里插入图片描述"><br>这是几个安卓恶意软件数据集</p>
+<h3 id="入手"><a href="#入手" class="headerlink" title="入手"></a>入手</h3><p>先看几篇中文论文 别人怎么做的<br><img src="https://img-blog.csdnimg.cn/20200811102700686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>前两章讲恶意软件问题啥的先不管；</p>
+<p>第三章写恶意软件数据集 一类是恶意样本共享网站 二类是具有家族信息的常用数据集 这些数据集干嘛的有点不懂 分类太多了 跟我论文相关的数据集应该是包含特征值和标签的数据集 这样适合随机森林机器学习。</p>
+<p>第四章 基于特征码的恶意软件检测  基于特征码的恶意软件检测方法基本原理是利用每个软件特有的特征信息进行匹配, 即在已知恶意软件指定特征码的情况下, 通过与目标待检测软件的特征码进行匹配, 如果在已有的恶意软件特征码数据库中找到相同的特征码则将目标软件判定为恶意软件, 否则为良性软件.</p>
+<p>第五章 基于机器学习的恶意软件检测 基于机器学习的恶意软件检测方法的基本原理是通过程序分析等技术提取不同的特征描述待分析样本的不同行为, 然后每一个样本均用一个固定维度向量表示, 最后借助于现有的机器学习算法对已知标签的样本进行训练并构建分类器, 从而能够对未知样本进行预测判断<br>特征选择的方法 1是使用app使用的权限 2是它使用的api接口作为接口；除了经典的权限以及 API 特征之外, 许多研究工作 [15,71∼75] 发现 Android 的相关 Intent、字符串以及组件也可以作为恶意软件的有效特征 都可以作为特征<br>另一个方向 数据指的是与 app 应用程序本身代码无关的额外描述信息, 例如该 app 的下载量、功能描述、类别信息等. 该类信息可以从另外一个新的角度对现有的特征进行完善, 从而提升检测效果.<br>第六章 基于行为的检测方法 下一篇</p>
+<p><img src="https://img-blog.csdnimg.cn/20200811104605787.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>怎么感觉这个文章很水。。。<br>好像是用权限作为特征 训练样本 500左右 太少了</p>
+<p>Android malware detection based on image-based features and machine learning techniques 基于图像特征和机器学习技术的安卓恶意软件检测</p>
+<p> 本文提出了一种基于恶意代码分类的安卓系统恶意代码检测模型。该模型基于将 Android 应用程序源文件转换为灰度图像。从已构建的灰度图像数据集中提取了一些基于图像的局部特征和全局特征，包括4种不同类型的局部特征和3种不同类型的全局特征，并用于训练模型。据我们所知，这种类型的特性首次用于 Android 恶意软件检测领域。此外，利用视觉词语袋算法从每幅图像的局部特征描述子中构造出一个特征向量。这个 extracted local and global features have been used for training multiple machine learning classifiers including Random forest, k-nearest neighbors, Decision Tree, Bagging, AdaBoost and Gradient Boost. The proposed method obtained a very high classification accuracy reached 98.75% with a typical computational time does not exceed 0.018 s for each sample. The results of the proposed model outperformed the results of all compared state-of-art models in term of both classification accuracy and computational time. 提取的局部和全局特征用于训练多机器学习分类器，包括随机森林、 k- 最近邻、决策树、 Bagging、 AdaBoost 和梯度 Boost。该方法分类准确率达到98.75% ，每个样本的计算时间不超过0.018秒。该模型的分类精度和计算时间均优于现有模型的分类精度和计算时间<br> 用图像直接学习 可惜我没学图像处理 要不然就用了<br> <img src="https://img-blog.csdnimg.cn/20200811110705119.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>选取 Android 应用的权限、四大组件、API 调用以及程序的关键信息如动态代码、反射代码、本机代码、密码代码和应用程序数据库等属性特征，对特征属性进行优化选择，并生成对应的特征向量集合<br>重点特征选择 </p>
+<p>这个论文自己做数据集和反编译找特征 ，这我都不会安卓咋搞数据集。。。只能找搞好的数据集了</p>
+<p>10倍交叉验证技术（K-fold  Cross  Validation）[14]来评估分类器的性能。即将训练集划分为10 个相等并且没有交集的子集，在每次训练中将 1 个子集作为测试集，剩余的 9 个子集用作训练集，最后以 10 次训练结果平均值作为检测分类器最后的分类性能.</p>
+<p><img src="https://img-blog.csdnimg.cn/20200811112039256.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>提取了 Android应用程序的 API调用信息、申请权限信息、Source-Sink信息为特征，这些信息数量庞大，特征维数高达三四万维。为消除冗余特征和减少分类器构建时间，提出了使用 L1与离散二进制粒子群算法（BPSO）进行混合式特征选择<br>样本选择实验所用的恶意样本从 virusshare 下载，良性样本从 Google Play Store和小米应用市场下载。同时，为确保良性样本的绝对干净，将下载下来的良性样本都上传到 virustotal 扫描，选择无危险的样本为最终良性样本。最终是良性样本和恶意样本各449个<br>样本建立要自己编译<br>这三类信息的具体提取过程为：（1）使用“aapt dump permissions *.apk”命令获取permission 信息。（2）使用 backsmali 工具将.apk 文件逆向成一个个smali 文件，再扫描文件中使用了“invoke-virtual”语句调用的API以获取API信息。（3）使用 flowdroid 获取 source-sink 流，并用 python将其格式化。<br>感觉样本建立要不少时间<br>为啥英文论文只有个摘要看不见全文 下午再看了。</p>
+<p>Android恶意软件数据集<br>Android恶意软件数据集。</p>
+<ol>
+<li>Android恶意软件基因组计划<br>在此项目中，我们专注于Android平台，旨在对现有的Android恶意软件进行系统化或特征化。特别是，经过一年多的努力，我们已经成功收集了1200多个恶意软件样本，涵盖了大多数现有的Android恶意软件家族，从2010年8月首次亮相到2011年10月才出现。</li>
+</ol>
+<p>剖析Android恶意软件的出版物：表征和演变。 周亚金，江旭贤。第33届IEEE安全与隐私研讨会（Oakland 2012）的会议记录。2012年5月，加利福尼亚州旧金山</p>
+<p>主页（已停止共享数据集） <a target="_blank" rel="noopener" href="http://www.malgenomeproject.org/">http://www.malgenomeproject.org</a></p>
+<ol start="2">
+<li>M0Droid数据集<br>M0Droid基本上是android应用程序行为模式识别工具，用于识别android恶意软件并根据其行为对其进行分类。它利用内核级挂钩来捕获应用程序的所有系统调用请求，然后为应用程序的行为生成签名。</li>
+</ol>
+<p>出版物 Damshenas M，Dehghantanha A，Choo KKR等。M0droid：基于Android行为的恶意软件检测模型[J]。信息隐私与安全学报，2015，11（3）：141-157。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://cyberscientist.org/m0droid-dataset/">http://cyberscientist.org/m0droid-dataset/</a></p>
+<p>博客 <a target="_blank" rel="noopener" href="http://www.alid.info/blog/2015/2/4/android-malware-research-dataset">http://www.alid.info/blog/2015/2/4/android-malware-research-dataset</a></p>
+<ol start="3">
+<li>Drebin数据集<br>数据集包含来自179个不同恶意软件家族的5,560个应用程序。这些样本已在2010年8月至2012年10月期间收集，并由MobileSandbox项目提供给我们。您可以在论文中找到有关数据集的更多详细信息。</li>
+</ol>
+<p>出版物 Arp D，Spreitzenbarth M，Hubner M等。Drebin：有效且可解释地检测您口袋中的android恶意软件[C] //程序。NDSS第17届网络和分布式系统安全研讨会。14。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://user.informatik.uni-goettingen.de/~darp/drebin/">http://user.informatik.uni-goettingen.de/~darp/drebin/</a></p>
+<ol start="4">
+<li>基于ContagioDump的数据集</li>
+</ol>
+<p><em>数据集是在野外看到的基于Android的恶意软件的集合。该恶意软件片段于2011年10月26日下载。样本中包含的恶意软件总数为189。我已根据可用的主要行为将它们定性地分为几类。我从各种反病毒公司的恶意软件报告中获得了它们的主要行为，如果该恶意软件将下载单独的有效负载作为其主要功能，则将其归为Trojan类别。如果恶意软件执行了特权升级攻击，则它属于特权升级类别。如果恶意软件主要是从手机中窃取数据，则被归类为信息窃取。如果该恶意软件发送了高级SMS消息，则说明它是一种高级SMS传输了恶意软件。</em></p>
+<p>主页 <a target="_blank" rel="noopener" href="http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=datasets">http://cgi.cs.indiana.edu/~nhusted/dokuwiki/doku.php?id=datasets</a></p>
+<ol start="5">
+<li>AndroMalShare<br>AndroMalShare是一个致力于共享Android恶意软件样本的项目。它仅用于研究，不能用于商业用途。我们提供样本的统计信息，SandDroid扫描的每个恶意软件样本的详细报告以及反病毒产品的检测结果。您可以上传恶意软件样本以与他人共享，并且每个恶意软件样本都可以下载（仅注册用户）！</li>
+</ol>
+<p>主页 <a target="_blank" rel="noopener" href="http://sanddroid.xjtu.edu.cn:8080/#home">http://sanddroid.xjtu.edu.cn:8080/#home</a></p>
+<ol start="6">
+<li>Kharon恶意软件数据集<br>Kharon数据集是完全颠倒并记录下来的恶意软件的集合。构造该数据集是为了帮助我们评估研究实验。它的构造需要大量的工作来理解恶意代码，触发它，然后构造文档。该数据集现已可用于研究目的，我们希望它将帮助您进行自己的实验。</li>
+</ol>
+<p>出版物 CIDRE，EPI。Kharon数据集：显微镜下的Android恶意软件。从权威性安全性实验结果中学习（2016）：1。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://kharon.gforge.inria.fr/dataset/">http://kharon.gforge.inria.fr/dataset/</a></p>
+<ol start="7">
+<li>AMD项目<br>从2010年到2016年，AMD包含24,553个样本，分为71个恶意软件家族中的135个类别。该数据集提供了有关Android恶意软件当前现状的最新图片，并与社区公开共享。</li>
+</ol>
+<p>Li Y，Jang J，Hu X等人的出版物。通过恶意有效负载挖掘 [C] //国际攻击，入侵和防御研究研讨会，Android恶意软件得以集群。查尔斯·施普林格，湛，2017：192-214</p>
+<p>魏芬，李Y，罗伊·S等。当前Android恶意软件的深入研究 [C] //入侵和恶意软件检测以及漏洞评估国际会议。施普林格，湛，2017：252-276。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://amd.arguslab.org/">http://amd.arguslab.org</a></p>
+<ol start="8">
+<li>AAGM数据集<br>通过在半自动化的真实智能手机上安装Android应用程序来捕获AAGM数据集。该数据集由1900个应用程序生成。</li>
+</ol>
+<p>出版物 Arash Habibi Lashkari，Andi Fitriah A.Kadir，Hugo Gonzalez，Kenneth Fon Mbah和Ali A.Ghorbani致力于建立基于网络的Android恶意软件检测和特征化框架，在第15届隐私，安全和信任国际会议的进行中，太平洋标准时间，加拿大卡尔加里，2017年。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://www.unb.ca/cic/datasets/android-adware.html">http://www.unb.ca/cic/datasets/android-adware.html</a></p>
+<ol start="9">
+<li>Android PRAGuard数据集<br>由于出于研究目的而检索恶意软件是一项艰巨的任务，因此，我们决定发布混淆的恶意软件数据集。</li>
+</ol>
+<p>该数据集包含10479个样本，这些样本是通过使用七种不同的混淆技术对MalGenome和Contagio Minidump数据集进行混淆获得的。</p>
+<p>出版物 Davide Maiorca，Davide Ariu，Igino Corona，Marco Aresu和Giorgio Giacinto。隐形攻击：深入了解混淆对Android恶意软件的影响。在计算机与安全，第一卷。51，第16-31页，2015年。</p>
+<p>主页 <a target="_blank" rel="noopener" href="http://pralab.diee.unica.it/en/AndroidPRAGuardDataset">http://pralab.diee.unica.it/en/AndroidPRAGuardDataset</a></p>
+<ol start="10">
+<li>AndroZoo<br>AndroZoo是一个不断增长的Android应用程序集合，它从包括官方Google Play应用程序市场在内的多个来源收集来的数据，目前包含5,781,781个不同的APK，数十种不同的AntiVirus产品已经（或将要对其进行分析）以了解哪些应用程序被检测为恶意软件。我们提供此数据集有助于正在进行的研究工作，并在Android Apps上启用新的潜在研究主题。通过将数据集发布给研究社区，我们还旨在鼓励我们的研究人员进行可重复的实验。</li>
+</ol>
+<p>出版物 K.Allix，TF Bissyande，J.Klein和Y.Le Traon。AndroZoo：为研究社区收集了数百万个Android应用程序。采矿软件存储库（MSR）2016。</p>
+<p>主页 <a target="_blank" rel="noopener" href="https://androzoo.uni.lu/">https://androzoo.uni.lu/</a></p>
+<p>做到不好写的一条路了，安卓恶意软件检测没有或者我找不到处理好的特征数据集 现在要做就要下载apk文件 反编译然后提取特征筛选 处理成能用的数据集 然后在训练 。下载都成问题了。慢慢做</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/08/11/%E5%AE%89%E5%8D%93%E6%81%B6%E6%84%8F%E5%BA%94%E7%94%A8%E6%A3%80%E6%B5%8B/" data-id="ckuvclvf9003xr9jfeypjes2e" data-title="安卓恶意应用检测" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/07/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-25%E5%A4%96%E8%A7%82%E6%95%B0%E5%88%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          每日一题@25外观数列
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/29/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%B7%B1%E5%BA%A6%E6%A3%AE%E6%9E%97/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">机器学习之深度森林</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

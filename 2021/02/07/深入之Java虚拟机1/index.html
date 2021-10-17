@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>深入之Java虚拟机1 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="深入理解Java虚拟机第二版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入之Java虚拟机1">
+<meta property="og:url" content="http://example.com/2021/02/07/%E6%B7%B1%E5%85%A5%E4%B9%8BJava%E8%99%9A%E6%8B%9F%E6%9C%BA1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深入理解Java虚拟机第二版">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210206105300587.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-07T08:15:00.000Z">
+<meta property="article:modified_time" content="2021-02-07T08:15:55.519Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210206105300587.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-深入之Java虚拟机1" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/07/%E6%B7%B1%E5%85%A5%E4%B9%8BJava%E8%99%9A%E6%8B%9F%E6%9C%BA1/" class="article-date">
+  <time class="dt-published" datetime="2021-02-07T08:15:00.000Z" itemprop="datePublished">2021-02-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      深入之Java虚拟机1
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>深入理解Java虚拟机第二版</p>
+<span id="more"></span>
+<p><img src="https://img-blog.csdnimg.cn/20210206105300587.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="第一章-Java"><a href="#第一章-Java" class="headerlink" title="第一章 Java"></a>第一章 Java</h2><p>Java发展史虚拟机 实战编译自己的虚拟机</p>
+<h2 id="第二章-Java内存区域与内存溢出异常"><a href="#第二章-Java内存区域与内存溢出异常" class="headerlink" title="第二章 Java内存区域与内存溢出异常"></a>第二章 Java内存区域与内存溢出异常</h2><p>1.运行时数据区域<br>包括一下几个：</p>
+<p>程序计数器：一块较小的内存空间，它可以看作当前线程所执行字节码的行号指示器。分支跳转循环异常都是依赖这个计数器完成。每个线程都需要一个独立的程序计数器，各线程之间互不影响，独立存储，为线程私有内存。</p>
+<p>Java虚拟机栈：线程私有的，生命周期与线程相同。描述为Java方法执行的内存模型：每个方法执行的同时会创建一个<strong>栈帧</strong>用于存储局部变量表、操作数栈、动态连接、方法出口等信息。每个方法从调用直至执行完成的过程就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+<p>本地方法栈：Native Method Stack 与虚拟机栈发挥的作用非常相似，他们之间的区别是虚拟机栈为虚拟机执行Java方法服务，而本地方法栈为虚拟机使用的Native方法服务。</p>
+<p>Java堆：对于大多数应用来说Java虚拟机所管理的内存最大的一块。Java堆被所有线程所共享的内存区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例，几乎所有对象实例以及数组都在堆上分配内存。<br>Java堆是垃圾回收主要区域，具体回收以后介绍。Java堆可以在物理不连续的内存空间，只要逻辑上联系即可，如果堆中没有内存分配实例，并且堆也无法拓展时，将会抛出OutOfMemoryError</p>
+<p>方法区：与Java堆一样是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。 错称永久区<br>方法区无法满足内存分配需求时，将会抛出OutOfMemoryError</p>
+<p>运行时常量池：是方法区的一部分。Class文件除了有类版本字段方法等描述信息外还有常量池。用于存放编译期生成的各种字面量和符号引用，这部分信息将在类加载后进入方法区的运行时常量池存放。</p>
+<p>直接内存：直接内存并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范定义的内存区域，它可以使用本地函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuff对象作为这块内存的引用进行操作，这样能在一些场景中显著提高性能，因为避免在堆中和Native堆中来回复制数据。内存区域总和大于物理内存时，也会报OutOfMemoryError异常</p>
+<p>2.对象的创建<br> 虚拟机遇到new指令时，首先去检查这个指令的参数是否能在常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已被加载、解析和初始化过。如果没有则必须先执行类的加载过程。<br> 类加载检查通过后，接下来虚拟机将为新生对象分配内存。 分配内存等同于把一块确定大小的内存从Java堆中划分出来。Java堆是完整的话，用过的内存放在一边，空闲内存放在一边，中间放置一个指针作为分界点指示器，这种分配方式成为指针碰撞。如果Java堆内存并不完整，虚拟机必须维护一个列表，上面记录哪块内存是可用的，分配内存的时候在列表中找到一块足够大的空间划分给对象，这种分配方式叫做空闲列表。分配内存也有可能出现并发问题，虚拟机采用CAS配上失败重试方式保证更新操作原子性；另一种方式是把内存分配动作按照线程划分在不同空间进行，即每个线程在Java堆中预先分配一小块内存，称为本地分配缓冲。只有本地线程分配缓冲用完了才需要同步锁定。<br> 内存分配完了，虚拟机需要把分配的内存空间都初始化为零值。<br> 接下来虚拟机要对对象进行必要的设置，例如对象是那个类的实例，对象hash码，GC分代信息灯光，这些信息存放在对象的对象头中。<br> 上面的工作都做完之后，从虚拟机的视角来看，一个新的对象就已经产生了。</p>
+<p>3.对象的内存布局<br>在HotSpot虚拟机中，对象在内存中的存储布局可分为三块区域：对象头、实例数据和对其填充。<br>对象头：包含两部分信息，第一部分用于存储对象自身的运行时数据。另一部分是类型指针，即对象指向他类元数据的指针。</p>
+<p>4.对象的访问定位<br>目前主流访问方式有两种使用句柄和直接指针<br>使用句柄访问的话，Java堆中将会划分一块内存来作为句柄池，reference中存储的就是对象句柄地址，而句柄中包含对象实例数据与类型数据各自具体地址信息<br>使用直接指针访问，Java堆对象的布局中必须考虑如何返回放置访问类型数据的相关信息，而reference中存储的就是对象地址<br>两种方式各有优势<br>使用句柄最大的好吃就是reference中存储的句柄地址是稳定的，当对象被移动之后改变句柄中实例数据指针，而reference不需要改变<br>使用直接指针访问最大的好处就是速度更快，他节省了一次指针定位时间。目前Sun HotSpot采用的是直接指针方式。</p>
+<h2 id="第三章-垃圾收集器与内存分配策略"><a href="#第三章-垃圾收集器与内存分配策略" class="headerlink" title="第三章 垃圾收集器与内存分配策略"></a>第三章 垃圾收集器与内存分配策略</h2><p>5.对象已死<br>引用计数法：给对象添加一个引用计数器，每当有地方引用他，计数器就加一；当引用失效时引用就减一；任何时刻计数器为0这个对象就不能被使用了。实现简单，判定效率高。相互循环引用问题，objA.instance = objB/objB.instance=objA;<br>他们的引用计数都不为0但是GC无法回收它们。</p>
+<p>可达性分析算法：基本思想是通过一系列称为GC roots的对象作为起点，从这些起点开始向下搜索，搜索走过的路径称为引用链，当一个对象没有引用链相连时，则证明此对象是不可用的。</p>
+<p>6.引用<br>Java将引用分为四种<br>强引用：程序代码中普遍存在，只要强引用存在就不会被回收。Object obj=new Object<br>软引用：用来描述一些还有用但非必需的对象。系统会在发生内存溢出异常之前将这些对象回收。如果二次回收还是不够才会抛出内存溢出异常。Soft Reference来实现软引用<br>弱引用：也是用来描述非必需的对象，但他比软引用更弱一下，只能存活到下一次GC之前。WeakReference类来实现弱引用<br>虚引用：也称幽灵引用，它是最弱的引用关系。一个对象是否存在虚引用完全不会对其生存时间构成影响，也无法通过虚引用来取得一个对象实例。设置虚引用的唯一目的就是在这个对象被GC的时候收到一个系统通知。PhantomReference类来实现虚引用</p>
+<p>7.标记清除算法<br>MarkSweep算法：首先标记所有需要回收的对象，在标记完成统一回收被标记对象<br>不如：效率问题标记清除效率不高；产生内存碎片</p>
+<p>8.标记复制算法<br>为了解决效率问题，他将一块内存划分为大小相等的两块，每次使用其中一块。当其中一块使用完就将还活着的对象复制到另一块，再把已使用的一次清理掉<br>代价：内存缩小为原来一半</p>
+<p>9.标记整理算法<br>标记过程相同，后续不是直接对可回收对象进行清理，而是所有存活对象向一端移动，然后直接清理掉端边界以外的内存。适用于老年代，对象存活多，没有额外空间担保</p>
+<p>10.分代收集算法<br>98的对象都是朝生夕死，HotSpot虚拟机默认Eden和Servivor大小比例为8：1，也就是每次新生代可用内存为90%，当Servivor空间不够用时，需要依赖其他内存进行担保分配。没有足够空间直接进入老年代</p>
+<p>11.HotSpot算法实现<br>枚举根节点可达性分析需要逐个检查里面的引用，必然会消耗很多时间，另外可达性对执行时间的敏感还体现在GC停顿上，，因为这项工作必须在一个能确保一致性的快照中进行。<br>在目前主流的虚拟机中用的都是准确式GC，当系统停顿下来之后并不需要一个不漏检查引用，虚拟机应当有办法知道哪些地方存放对象的引用。使用一组称为OopMap的数据结构。<br>安全点：如果为每一条指令都生成OopMap那将需要大量额外空间，因此只是在特定位置记录这些位置，这些位置称为安全点。即程序执行只有在安全点才能暂停。<br>主动式中断思想是当GC需要中断时，不直接对线程操作，仅仅简单地设置一个标志，各个线程执行主动去轮询这个标志，发现中断标志为真就自己中断挂起。</p>
+<p>12.Serial收集器<br>Serial收集器是最基本发展最悠久的收集器。这个收集器是单线程收集器，但它的单线程只会使用一个CPU或一条线程去完成垃圾收集器。他在进行垃圾回收时必须暂停其他所有线程直到他收集结束。从jdk1.3到最新的jdk1.7HotSpot虚拟机开发团队为消除或减少工作线程因内存回收的停顿一直进行努力。但实际上，到目前为止他依然是虚拟机在client模式下的默认新生代收集器。 </p>
+<p>13.ParNew收集器<br>就是Serial收集器的多线程版本，其他行为完全一样。尽管他与Serial收集器相比电话并没有太多创新，但他却是许多运行在Server模式下的虚拟机中首选新生代收集器，其中有一个与性能无关的原因，目前只有它能与CMS收集器配合工作。</p>
+<p>14.Parallel Scavenge收集器<br>Parallel Scavenge收集器是Java虚拟机中垃圾收集器的一种。<br>又称为吞吐量优先收集器,和ParNew收集器类似，是一个新生代收集器。使用复制算法的并行多线程收集器。<br>而且是并行的多多线程收集器.java1.8默认的收集器.<br>特点:<br>Parallel Scavenge收集器的关注点与其他收集器不同， ParallelScavenge收集器的目标则是达到一个可控制的吞吐量（Throughput）<br>(吞吐量=运行用户代码时间/(运行用户代码时间+垃圾收集时间))<br>主要使用场景<br>主要适合在后台运算而不是太多交互的任务/<br>比如需要与用户交互的程序,良好的响应速度能提升用户的<br>体验;而高吞吐量则可以最高效率的利用CPU时间,尽快的完成程序的运算任务等</p>
+<p>15.Serial Old收集器<br>是Serial收集器的老年代版本，他同样是一个单线程收集器</p>
+<p>16.Parallel Old收集器<br>Parallel Old都是Parallel收集器的老年代版本</p>
+<p>17.CMS收集器<br>CMS收集器的GC周期由6个阶段组成。其中4个阶段(名字以Concurrent开始的)与实际的应用程序是并发执行的，而其他2个阶段需要暂停应用程序线程。</p>
+<p>初始标记：为了收集应用程序的对象引用需要暂停应用程序线程，该阶段完成后，应用程序线程再次启动。<br>并发标记：从第一阶段收集到的对象引用开始，遍历所有其他的对象引用。<br>并发预清理：改变当运行第二阶段时，由应用程序线程产生的对象引用，以更新第二阶段的结果。<br>重标记：由于第三阶段是并发的，对象引用可能会发生进一步改变。因此，应用程序线程会再一次被暂停以更新这些变化，并且在进行实际的清理之前确保一个正确的对象引用视图。这一阶段十分重要，因为必须避免收集到仍被引用的对象。<br>并发清理：所有不再被应用的对象将从堆里清除掉。<br>并发重置：收集器做一些收尾的工作，以便下一次GC周期能有一个干净的状态。<br>一个常见的误解是,CMS收集器运行是完全与应用程序并发的。我们已经看到，事实并非如此，即使“stop-the-world”阶段相对于并发阶段的时间很短。</p>
+<p>应该指出，尽管CMS收集器为老年代垃圾回收提供了几乎完全并发的解决方案，然而年轻代仍然通过“stop-the-world”方法来进行收集。对于交互式应用，停顿也是可接受的，背后的原理是年轻带的垃圾回收时间通常是相当短的。</p>
+<p>18.G1收集器<br>G1收集器是一款在server端运行的垃圾收集器，专门针对于拥有多核处理器和大内存的机器，在JDK 7u4版本发行时被正式推出，在JDK9中更被指定为官方GC收集器。它满足高吞吐量的同时满足GC停顿的时间尽可能短。G1收集器专门针对以下应用场景设计</p>
+<p>可以像CMS收集器一样可以和应用并发运行<br>压缩空闲的内存碎片，却不需要冗长的GC停顿<br>对GC停顿可以做更好的预测<br>不想牺牲大量的吞吐量性能<br>不需要更大的Java Heap</p>
+<p>不深入了，项目没做几个不看理论了，下次再深入。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/07/%E6%B7%B1%E5%85%A5%E4%B9%8BJava%E8%99%9A%E6%8B%9F%E6%9C%BA1/" data-id="ckuvclvhz00c5r9jfg9k0cgzt" data-title="深入之Java虚拟机1" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/02/11/Spark%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%901/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Spark核心源码分析1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/05/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-76%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E5%8D%95%E8%AF%8D/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">每日一题@76最后一个单词</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

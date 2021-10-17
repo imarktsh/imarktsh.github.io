@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hadoop Yarn | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Hadoop Yarn 是什么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop Yarn">
+<meta property="og:url" content="http://example.com/2020/06/08/Hadoop-Yarn/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hadoop Yarn 是什么">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200608144221843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2020-06-08T07:00:00.000Z">
+<meta property="article:modified_time" content="2020-06-08T07:00:42.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="大数据">
+<meta property="article:tag" content="hadoop">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200608144221843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Hadoop-Yarn" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/06/08/Hadoop-Yarn/" class="article-date">
+  <time class="dt-published" datetime="2020-06-08T07:00:00.000Z" itemprop="datePublished">2020-06-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Hadoop Yarn
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="Hadoop-Yarn-是什么"><a href="#Hadoop-Yarn-是什么" class="headerlink" title="Hadoop Yarn 是什么"></a>Hadoop Yarn 是什么</h2><span id="more"></span>
+<p>在古老的 Hadoop1.0 中，MapReduce 的 JobTracker 负责了太多的工作，包括资源调度，管理众多的 TaskTracker 等工作。这自然是不合理的，于是 Hadoop 在 1.0 到 2.0 的升级过程中，便将 JobTracker 的资源调度工作独立了出来，而这一改动，直接让 Hadoop 成为大数据中最稳固的那一块基石。，而这个独立出来的资源管理框架，就是 Yarn 。</p>
+<p>在详细介绍 Yarn 之前，我们先简单聊聊 Yarn ，Yarn 的全称是 <strong>Yet Another Resource Negotiator</strong>，意思是“另一种资源调度器”，这种命名和“有间客栈”这种可谓是异曲同工之妙。这里多说一句，以前 Java 有一个项目编译工具，叫做 Ant，他的命名也是类似的，叫做 “Another Neat Tool”的缩写，翻译过来是”另一种整理工具“。</p>
+<p>既然都叫做资源调度器了，那么自然，它的功能也是负责资源管理和调度的，接下来，我们就深入到 Yarn 这个东西内部一探究竟吧。<br>Apache Hadoop YARN 是开源 Hadoop 分布式处理框架中的资源管理和作业调度技术。作为 Apache Hadoop 的核心组件之一，YARN 负责将系统资源分配给在 Hadoop 集群中运行的各种应用程序，并调度要在不同集群节点上执行的任务。</p>
+<p>YARN 的基本思想是将资源管理和作业调度/监视的功能分解为单独的 daemon(守护进程)，其拥有一个全局 ResourceManager(RM) 和每个应用程序的 ApplicationMaster(AM)。应用程序可以是单个作业，也可以是作业的 DAG。</p>
+<p>ResourceManager和 NodeManager构成了数据计算框架。 ResourceManager 是在系统中的所有应用程序之间仲裁资源的最终权限。NodeManager 是每台机器框架代理，负责 Containers，监视其资源使用情况（CPU，内存，磁盘，网络）并将其报告给 ResourceManager。</p>
+<p>每个应用程序 ApplicationMaster 实际上是一个框架特定的库，其任务是协调来自 ResourceManager 的资源，并与 NodeManager 一起执行和监视任务。</p>
+<p>在 YARN 体系结构中，ResourceManager 作为守护程序运行，作为架构中的全局的 master 角色，通常在专用计算机上运行，它在各种竞争应用程序之间仲裁可用的群集资源。ResourceManager 跟踪群集上可用的活动节点和资源的数量，并协调用户提交的应用程序应获取哪些资源以及事件。ResourceManager 是具有此信息的单个进程，因此它可以以共享，安全和多租户的方式进行调度决策（例如，根据应用程序优先级，队列容量，ACL，数据位置等）。</p>
+<p>当用户提交应用程序时，将启动名为 ApplicationMaster 的轻量级进程实例，以协调应用程序中所有任务的执行。这包括监视任务，重新启动失败的任务，推测性地运行慢速任务以及计算应用程序计数器的总值。ApplicationMaster 和属于其应用程序的任务在 NodeManagers 控制的资源容器中运行。</p>
+<p>NodeManager 有许多动态创建的资源容器。容器的大小取决于它包含的资源量，例如内存、CPU、磁盘和网络IO。目前，仅支持内存和CPU。节点上的容器数是配置参数和用于守护程序及OS的资源之外的节点资源总量（例如总CPU和总内存）的乘积。</p>
+<p>ApplicationMaster 可以在容器内运行任何类型的任务。例如，MapReduce ApplicationMaster 请求容器启动 map 或 reduce 任务，而 Giraph ApplicationMaster 请求容器运行 Giraph 任务。您还可以实现运行特定任务的自定义 ApplicationMaster</p>
+<p>在 YARN 中，MapReduce 简单地降级为分布式应用程序的角色（但仍然是非常流行且有用的），现在称为MRv2。</p>
+<p>此外，YARN 通过 ReservationSystem 支持资源预留的概念，ReservationSystem 允许用户通过配置文件来指定资源的时间和时间约束（例如，截止日期）的，并保留资源以确保重要作业的可预测执行。ReservationSystem 可跟踪资源超时，执行预留的准入控制，并动态指示基础调度程序确保预留已满。</p>
+<h2 id="YARN-基本服务组件"><a href="#YARN-基本服务组件" class="headerlink" title="YARN 基本服务组件"></a>YARN 基本服务组件</h2><p><img src="https://img-blog.csdnimg.cn/20200608144221843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>YARN 总体上是 master/slave 结构，在整个资源管理框架中，<strong>ResourceManager 为 master</strong>，<strong>NodeManager 是 slave</strong>。</p>
+<p>YARN的基本组成结构，YARN 主要由 <strong>ResourceManager、NodeManager、ApplicationMaster</strong> 和 <strong>Container 等几个组件构成</strong>。</p>
+<p><strong>ResourceManager</strong>是Master上一个独立运行的进程，负责集群统一的资源管理、调度、分配等等；</p>
+<h2 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h2><p>我们先来说说上图中最中央的那个 <strong>ResourceManager（RM）</strong>。从名字上我们就能知道这个组件是负责资源管理的，整个系统有且只有一个 RM ，来负责资源的调度。它也包含了两个主要的组件：定时调用器(Scheduler)以及应用管理器(ApplicationManager)。</p>
+<ol>
+<li>**定时调度器(Scheduler)**：从本质上来说，定时调度器就是一种策略，或者说一种算法。当 Client<br>提交一个任务的时候，它会根据所需要的资源以及当前集群的资源状况进行分配。注意，它只负责向应用程序分配资源，并不做监控以及应用程序的状态跟踪。</li>
+<li>**应用管理器(ApplicationManager)**：同样，听名字就能大概知道它是干嘛的。应用管理器就是负责管理 Client<br>用户提交的应用。上面不是说到定时调度器（Scheduler）不对用户提交的程序监控嘛，其实啊，监控应用的工作正是由应用管理器（ApplicationManager）完成的。M是一个全局的资源管理器，集群只有一个，负责整个系统的资源管理和分配，包括处理客户端请求、启动/监控 ApplicationMaster、监控 NodeManager、资源的分配与调度。它主要由两个组件构成：调度器（Scheduler）和应用程序管理器（Applications Manager，ASM）。</li>
+</ol>
+<p>（1） 调度器</p>
+<p>调度器根据容量、队列等限制条件（如每个队列分配一定的资源，最多执行一定数量的作业等），将系统中的资源分配给各个正在运行的应用程序。需要注意的是，该调度器是一个“纯调度器”，它从事任何与具体应用程序相关的工作，比如不负责监控或者跟踪应用的执行状态等，也不负责重新启动因应用执行失败或者硬件故障而产生的失败任务，这些均交由应用程序相关的ApplicationMaster完成。</p>
+<p>调度器仅根据各个应用程序的资源需求进行资源分配，而资源分配单位用一个抽象概念“资源容器”（Resource Container，简称Container）表示，Container是一个动态资源分配单位，它将内存、CPU、磁盘、网络等资源封装在一起，从而限定每个任务使用的资源量。</p>
+<p>（2） 应用程序管理器</p>
+<p>应用程序管理器主要负责管理整个系统中所有应用程序，接收job的提交请求，为应用分配第一个 Container 来运行 ApplicationMaster，包括应用程序提交、与调度器协商资源以启动 ApplicationMaster、监控 ApplicationMaster 运行状态并在失败时重新启动它等。</p>
+<h2 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h2><p>NodeManager 是 ResourceManager 在每台机器的上代理，负责容器的管理，并监控他们的资源使用情况（cpu，内存，磁盘及网络等），以及向 ResourceManager/Scheduler 提供这些资源使用报告。<br><strong>NodeManager</strong>是Slave上一个独立运行的进程，负责上报节点的状态；</p>
+<p>NodeManager 是一个 slave 服务：它负责接收 ResourceManager 的资源分配请求，分配具体的 Container 给应用。同时，它还负责监控并报告 Container 使用信息给 ResourceManager。通过和ResourceManager 配合，NodeManager 负责整个 Hadoop 集群中的资源分配工作。</p>
+<p>功能：</p>
+<ul>
+<li>NodeManager 本节点上的资源使用情况和各个 Container 的运行状态（cpu和内存等资源）</li>
+<li>接收及处理来自 ResourceManager 的命令请求，分配 Container 给应用的某个任务；</li>
+<li>定时地向RM汇报以确保整个集群平稳运行，RM 通过收集每个 NodeManager 的报告信息来追踪整个集群健康状态的，而NodeManager 负责监控自身的健康状态；</li>
+<li>处理来自 ApplicationMaster 的请求；</li>
+<li>管理着所在节点每个 Container 的生命周期；</li>
+<li>管理每个节点上的日志；</li>
+<li>执行 Yarn 上面应用的一些额外的服务，比如 MapReduce 的 shuffle 过程；</li>
+<li>当一个节点启动时，它会向 ResourceManager 进行注册并告知 ResourceManager<br>自己有多少资源可用。在运行期，通过 NodeManager 和 ResourceManager<br>协同工作，这些信息会不断被更新并保障整个集群发挥出最佳状态。</li>
+<li>NodeManager 只负责管理自身的 Container，它并不知道运行在它上面应用的信息。负责管理应用信息的组件是ApplicationMaster</li>
+</ul>
+<h2 id="ApplicationMaster"><a href="#ApplicationMaster" class="headerlink" title="ApplicationMaster"></a>ApplicationMaster</h2><p>每当 Client 提交一个 Application 时候，就会新建一个 ApplicationMaster 。由这个 ApplicationMaster 去与 ResourceManager 申请容器资源，获得资源后会将要运行的程序发送到容器上启动，然后进行分布式计算。<strong>ApplicationMaster</strong>相当于这个Application的监护人和管理者，负责监控、管理这个Application的所有Attempt在cluster中各个节点上的具体运行，同时负责向Yarn ResourceManager申请资源、返还资源等；</p>
+<p>这里可能有些难以理解，为什么是把运行程序发送到容器上去运行？如果以传统的思路来看，是程序运行着不动，然后数据进进出出不停流转。但当数据量大的时候就没法这么玩了，因为海量数据移动成本太大，时间太长。但是中国有一句老话山不过来，我就过去。大数据分布式计算就是这种思想，既然大数据难以移动，那我就把容易移动的应用程序发布到各个节点进行计算呗，这就是大数据分布式计算的思路。管理 YARN 内运行的一个应用程序的每个实例。关于 job 或应用的管理都是由 ApplicationMaster 进程负责的，Yarn 允许我们以为自己的应用开发 ApplicationMaster。</p>
+<p>功能：</p>
+<ul>
+<li>数据切分；</li>
+<li>为应用程序申请资源并进一步分配给内部任务（TASK）；</li>
+<li>任务监控与容错；</li>
+</ul>
+<p>负责协调来自<strong>ResourceManager的资源</strong>，并通过NodeManager监视容易的执行和资源使用情况。<br>可以说，<strong>ApplicationMaster 与 ResourceManager 之间的通信</strong>是整个 Yarn 应用从提交到运行的最核心部分，是 Yarn 对整个集群进行动态资源管理的根本步骤，<strong>Yarn 的动态性，就是来源于多个Application 的 ApplicationMaster 动态地和 ResourceManager 进行沟通，不断地申请、释放、再申请、再释放资源的过程。</strong></p>
+<h2 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h2><p>Container 是 YARN 中的资源抽象，它封装了某个节点上的多维度资源，如内存、CPU、磁盘、网络等，当 AM 向 RM 申请资源时，RM 为 AM 返回的资源便是用 Container 表示的。YARN 会为每个任务分配一个 Container，且该任务只能使用该 Container 中描述的资源。</p>
+<p>Container 和集群节点的关系是：一个节点会运行多个 Container，但一个 Container 不会跨节点。任何一个 job 或 application 必须运行在一个或多个 Container 中，在 Yarn 框架中，ResourceManager 只负责告诉 ApplicationMaster 哪些 Containers 可以用，ApplicationMaster 还需要去找 NodeManager 请求分配具体的 Container。</p>
+<p>需要注意的是，<strong>Container 是一个动态资源划分单位</strong>是根据应用程序的需求动态生成的。目前为止，<strong>YARN 仅支持 CPU 和内存两种资源</strong>，且使用了轻量级资源隔离机制 Cgroups 进行资源隔离。</p>
+<p>功能：</p>
+<ol>
+<li>对task环境的抽象；</li>
+<li>描述一系列信息；</li>
+<li>任务运行资源的集合（cpu、内存、io等）；</li>
+<li>任务运行环境</li>
+</ol>
+<p><strong>Container</strong>是yarn中分配资源的一个单位，包涵内存、CPU等等资源，YARN以Container为单位分配资源；<br>ResourceManager 负责对各个 NadeManager 上资源进行统一管理和调度。当用户提交一个应用程序时，需要提供一个用以跟踪和管理这个程序的 ApplicationMaster，它负责向 ResourceManager 申请资源，并要求 NodeManger 启动可以占用一定资源的任务。由于不同的 ApplicationMaster 被分布到不同的节点上，因此它们之间不会相互影响。</p>
+<h2 id="YARN-应用提交过程"><a href="#YARN-应用提交过程" class="headerlink" title="YARN 应用提交过程"></a>YARN 应用提交过程</h2><p>Application在Yarn中的执行过程，整个执行过程可以总结为三步：</p>
+<ol>
+<li>应用程序提交</li>
+<li>启动应用的ApplicationMaster实例</li>
+<li>ApplicationMaster 实例管理应用程序的执行</li>
+</ol>
+<p><strong>具体提交过程为：</strong></p>
+<ol>
+<li>客户端程序向 ResourceManager 提交应用并请求一个 ApplicationMaster 实例；</li>
+<li>ResourceManager 找到一个可以运行一个 <strong>Container 的 NodeManager</strong>，并在这个 Container<br>中<strong>启动 ApplicationMaster</strong> 实例；</li>
+<li><strong>ApplicationMaster 向 ResourceManager 进行注册</strong>，注册之后客户端就可以查询<br>ResourceManager 获得自己 ApplicationMaster 的详细信息，以后就可以和自己的<br>ApplicationMaster 直接交互了（这个时候，客户端主动和 ApplicationMaster 交流，应用先向<br>ApplicationMaster 发送一个满足自己需求的资源请求）；</li>
+<li>在平常的操作过程中，ApplicationMaster 根据 <strong>resource-request协议</strong> 向 ResourceManager<br>发送 resource-request请求；</li>
+<li>当 Container 被成功分配后，ApplicationMaster 通过向 NodeManager 发送<br><strong>container-launch-specification信</strong>息<br>来启动Container，<strong>container-launch-specification信息包含了能够让Container 和<br>ApplicationMaster 交流所需要的资料；</strong></li>
+<li>应用程序的代码以 <strong>task 形式在启动的 Container 中运</strong>行，并把运行的进度、状态等信息通过<br>application-specific协议 发送给ApplicationMaster；</li>
+<li>在应用程序运行期间，提交应用的客户端主动和 ApplicationMaster 交流获得应用的运行状态、进度更新等信息，交流协议也是application-specific协议；</li>
+<li>一旦应用程序执行完成并且所有相关工作也已经完成，ApplicationMaster 向 ResourceManager<br>取消注册然后关闭，用到所有的 Container 也归还给系统。</li>
+</ol>
+<h2 id="Resource-Request-及-Container"><a href="#Resource-Request-及-Container" class="headerlink" title="Resource Request 及 Container"></a>Resource Request 及 Container</h2><p>Yarn的设计目标就是允许我们的各种应用以共享、安全、多租户的形式使用整个集群。并且，为了保证集群资源调度和数据访问的高效性，Yarn还必须能够感知整个集群拓扑结构。</p>
+<p>为了实现这些目标，ResourceManager的调度器Scheduler为应用程序的资源请求定义了一些灵活的协议，通过它就可以对运行在集群中的各个应用做更好的调度，因此，这就诞生了Resource Request和Container。</p>
+<p>一个应用先向ApplicationMaster发送一个满足自己需求的资源请求，然后ApplicationMaster把这个资源请求以resource-request的形式发送给ResourceManager的Scheduler，Scheduler再在这个原始的resource-request中返回分配到的资源描述Container。</p>
+<p>每个ResourceRequest可看做一个可序列化Java对象，包含的字段信息如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;resource-name, priority, resource-requirement, number-of-containers&gt;</span><br><span class="line">- resource-name：资源名称，现阶段指的是资源所在的host和rack，后期可能还会支持虚拟机或者更复杂的网络结构</span><br><span class="line">- priority：资源的优先级</span><br><span class="line">- resource-requirement：资源的具体需求，现阶段指内存和cpu需求的数量</span><br><span class="line">- number-of-containers：满足需求的Container的集合</span><br></pre></td></tr></table></figure>
+
+<p>ApplicationMaster在得到这些Containers后，还需要与分配Container所在机器上的NodeManager交互来启动Container并运行相关任务。当然Container的分配是需要认证的，以防止ApplicationMaster自己去请求集群资源。</p>
+<h2 id="为什么会有-Yarn-？"><a href="#为什么会有-Yarn-？" class="headerlink" title="为什么会有 Yarn ？"></a>为什么会有 Yarn ？</h2><p>上面说了这么多，最后我们来聊聊为什么会有 Yarn 吧。</p>
+<p>直接的原因呢，就是因为 Hadoop1.0 中架构的缺陷，在 MapReduce 中，<strong>jobTracker</strong> 担负起了太多的责任了，接收任务是它，资源调度是它，监控 TaskTracker 运行情况还是它。这样实现的好处是比较简单，但相对的，就容易出现一些问题，比如常见的单点故障问题。</p>
+<p>要解决这些问题，只能将 jobTracker 进行拆分，将其中部分功能拆解出来。彼时业内已经有了一部分的资源管理框架，比如 mesos，于是照着这个思路，就开发出了 Yarn。这里多说个冷知识，其实 Spark 早期是为了推广 mesos 而产生的，这也是它名字的由来，不过后来反正是 Spark 火起来了。。。</p>
+<p>闲话不多说，其实 Hadoop 能有今天这个地位，Yarn 可以说是功不可没。因为有了 Yarn ，更多计算框架可以接入到 Hdfs 中，而不单单是 MapReduce，到现在我们都知道，MapReduce 早已经被 Spark 等计算框架赶超，而 Hdfs 却依然屹立不倒。究其原因，正式因为 Yarn 的包容，使得其他计算框架能专注于计算性能的提升。Hdfs 可能不是最优秀的大数据存储系统，但却是应用最广泛的大数据存储系统，Yarn 功不可没。</p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f50e85bdb9ce">链接</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/06/08/Hadoop-Yarn/" data-id="ckuvclvdm0009r9jf5rmtb5j9" data-title="Hadoop Yarn" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/09/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-15%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          每日一题@15环形链表
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/06/08/Java%E4%B9%8BI-O/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java之I/O</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

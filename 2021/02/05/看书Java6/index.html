@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>看书Java6 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="对java程序员笔试解析 整理(6)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="看书Java6">
+<meta property="og:url" content="http://example.com/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="对java程序员笔试解析 整理(6)">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="article:published_time" content="2021-02-05T12:51:00.000Z">
+<meta property="article:modified_time" content="2021-02-05T12:52:10.595Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-看书Java6" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/" class="article-date">
+  <time class="dt-published" datetime="2021-02-05T12:51:00.000Z" itemprop="datePublished">2021-02-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/java/">java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      看书Java6
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>对java程序员笔试解析 整理(6)</p>
+<span id="more"></span>
+<p><img src="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
+<h2 id="第三章-数据库"><a href="#第三章-数据库" class="headerlink" title="第三章 数据库"></a>第三章 数据库</h2><p>1.数据库中的事务指什么<br>事务时数据库中一个单独的执行单元，在数据库中更改数据成功时，在食物中更改的数据便会提交，不在改变，否则事务就会取消或者回滚。<br>事务必须满足四个属性：原子性、一致性、隔离性和持久性即ACID<br>原子性：事务是一个不可分割的整体，即当修改数据时，要么全部执行要么不执行，不允许事务部分完成引起错误。<br>一致性：一个事务在执行前和执行后数据库数据必须保持一致性状态。例如银行转账，转帐前和转账后两个账户的金额之和应该保持不变。数据库的一致性状态由用户来负责，由并发控制实现。<br>隔离性：也称为独立性，当两个事务并发执行时，为了保证数据的安全性，将一个事务内部操作隔离起来，不被其他正在进行的事务看见。例如一对事务T1T2,对T1而言，T2要么在T1开始前已经结束，要么在T1完成后再开始。事务隔离级别有四种：不提交的读、提交的读、可重复的读和串行化。<br>持久性：也成称为永久性，事务完成以后DBMS保证他对数据库的修改是永久性的。</p>
+<p>2.索引<br>索引是对数据表中一列或多列的值进行排列的一种结构，使用索引可快速访问数据表中特定信息。数据库中索引可分为聚簇索引和非聚簇索引。<br>聚簇索引：表数据按照索引顺序来存储，索引项与表中记录物理顺序一致。对于聚簇索引，叶子结点即存储了真实数据行，不再有另外单独的数据页，一张表只能创建一个聚簇索引，聚簇索引一般采用B树来实现。<br>非聚簇索引：表数据存储顺序和索引顺序无关，叶结点索引字段值指向数据页的逻辑指针，一般也采用B树实现。<br>创建索引可以大大提高系统的性能，主要体现在以下几个方面：创建唯一性索引可以保证数据库表中每一行数据的唯一性；其次通过索引提高检索速度；可以减少查询分组和排序的时间。<br>为什么不对所有列建立索引呢，创建索引和维护索引需要耗费时间空间。<br>建立索引的原则：<br>定义主键的数据列一定要建立索引<br>定义有外键的数据列要建立索引<br>经常查询的数据列最好建立索引<br>经常用在where子句的数据列建立索引<br>查询涉及少的不要建立索引<br>经常存取修改的不要建立索引<br>对于符合索引按照字段再查询条件出现的频度建立索引。</p>
+<p>3.连接<br>内连接也称自然连接，只有两个表相匹配的字段才能在结果集中出现，返回结果集相配的数据，舍弃不匹配的数据。内连接可能会造成信息的丢失。<br>外连接分为左外连接、右外连接、全外连接。左外连接除显示符合连接条件的记录外还包含左表中的记录。右外连接同理、全外连接包含所有记录。</p>
+<p>4.视图<br>视图是从基本表中选取出来的数据组成的逻辑窗口，不同于表他是一个虚表。<br>在数据库中只存放定义而不存放数据，这些数据依然存放在原来的基本表中。主要作用简化数据查询语句；使用户可以多角度看数据；提高数据安全性；提供了一定的逻辑独立性。引入视图机制，用户可以将注意力放在关心的数据上而非全部数据，当数据来源于多张基本表时，并且搜索条件较为复杂时，需要编写的查询语句就会比较繁琐，此时定义视图可以使查询语句变得简单。它不能提高查询效率</p>
+<p>5.范式<br>1NF第一范式指数据库表每一列都是不可分割的数据项。简言之就是不重复的属性。例如姓名，电话号码（一个人可能由办公电话和移动电话），这时将其规划化为1NF姓名、办公电话、移动电话。<br>2NF第二范式实在第一范式的基础上建立起来的，要求数据库表的每个实例必须可以被唯一区分，为实现区分必须加上一个列以存储各个实例的唯一标志.例如：学号、课程、成绩、学分，组合关键字为（学号，课程），由于学分仅依赖于课程号，对组合关键字只是部分依赖，所有此种方式会导致数据冗余以及更新异常等。解决方法拆分为两个表学生表：学号、课程、分数 成绩表：课程、学分。<br>3NF第三范式如果关系模式R是第二范式，且每个非主属性都不传递依赖于R的候选键，则称R是第三范式模式。<br>BCNF构建在第三范式的基础上，如果关系模式R是第一范式，且每个属性都不传递依赖于R的候选键，则称R为BCNF<br>4NF第四范式。。。看不懂了<br>这么范式后面重看把，这书讲的也不清楚。</p>
+<p>6.数据库线程死锁的原理<br>死锁指两个或以上的进程在执行过程中，由于竞争资源或者彼此通信而造成的一种阻塞现象。产生死锁的原因一是系统资源不足，二是进程运行顺序不合适，三是资源分配不当。<br>产生死锁的四个必要条件：<br>互斥：资源独占一个资源每次只能被一个进程使用<br>请求与保持：部分分配占有请求，一个进程在申请资源的同时保持对原资源的占有<br>不可剥夺：不可抢占，资源申请者不能强行占有资源只能占有者自愿释放<br>循环等待：若干进程之间形成循环等待的关系<br>解决方法就是破坏这四个条件，<br>一次封锁法：将所有需要的资源一次加锁，否则不能执行<br>顺序封锁：预先对数据对象设置顺序，所有要使用的进程都按这个顺序加锁<br>银行家算法：保证进程处于安全进程序列</p>
+<p>7.锁<br>共享锁ShareLock，用于只读数据，共享锁非独占，允许多个并发事务读取。它具有以下性质，多个事务科封锁一个共享页，任何事务不能修改该页，该页读取完毕S锁立即释放。在sql中锁定第一页还可以对第二页进行修改操作。<br>排他锁ExclusiveLock也叫写锁，表示对数据进行写操作，如果一个事务对数据加排他锁，其他事务不能加任何锁，只能等待释放。<br>更新锁也叫U锁，在修改操作初始化阶段用来锁定要修改的资源，避免使用共享锁造成死锁想象。因为使用共享锁使要升级为写锁在执行写操作，但是如果两个事务同时申请写锁时，这些事务都不会释放共享锁造成死锁。更新锁用来预定写锁，它运行其他事务读，但不允许再施加写锁和更新锁，U锁直到事务结束释放。<br>悲观锁认为每次拿数据别人都会修改，所以每次拿数据都会加锁。<br>乐观锁认为每次别人都不会修改都不会加锁，拿数据时会使用版本号等看别人是否修改了，乐观锁适合多读的场景，可以提高吞吐量</p>
+<p>8.数据库连接池<br>数据库连接池是一种珍贵有限的资源：建立与数据库的连接是一个耗时的操作；数据库连接的个数有限；<br>数据库连接池负责分配管理并释放数据库连接，它允许应用程序重复使用现有连接，同时还负责释放最大空闲时间的数据库连接，避免因为没有释放数据库连接而导致的数据连接泄露。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/02/05/%E7%9C%8B%E4%B9%A6Java6/" data-id="ckuvclvi800ctr9jfepa0dxol" data-title="看书Java6" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/02/05/%E7%9C%8B%E4%B9%A6Java5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          看书Java5
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/02/05/%E7%9C%8B%E4%B9%A6Java3/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">看书Java3</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

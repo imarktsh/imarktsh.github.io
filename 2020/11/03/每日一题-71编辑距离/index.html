@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>每日一题@71编辑距离 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="困难题 给爷死给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="每日一题@71编辑距离">
+<meta property="og:url" content="http://example.com/2020/11/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-71%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="困难题 给爷死给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201103201304299.png#pic_center">
+<meta property="article:published_time" content="2020-11-03T12:13:00.000Z">
+<meta property="article:modified_time" content="2020-11-03T12:14:14.000Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="每日一题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201103201304299.png#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-每日一题-71编辑距离" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2020/11/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-71%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/" class="article-date">
+  <time class="dt-published" datetime="2020-11-03T12:13:00.000Z" itemprop="datePublished">2020-11-03</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      每日一题@71编辑距离
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>困难题 给爷死<br>给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。</p>
+<span id="more"></span>
+<p>你可以对一个单词进行如下三种操作：</p>
+<ul>
+<li>插入一个字符</li>
+<li>删除一个字符</li>
+<li>替换一个字符</li>
+</ul>
+<p>示例 1：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：word1 = <span class="string">&quot;horse&quot;</span>, word2 = <span class="string">&quot;ros&quot;</span></span><br><span class="line">输出：<span class="number">3</span></span><br><span class="line">解释：</span><br><span class="line">horse -&gt; rorse (将 <span class="string">&#x27;h&#x27;</span> 替换为 <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">rorse -&gt; rose (删除 <span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">rose -&gt; ros (删除 <span class="string">&#x27;e&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>示例 2：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入：word1 = <span class="string">&quot;intention&quot;</span>, word2 = <span class="string">&quot;execution&quot;</span></span><br><span class="line">输出：<span class="number">5</span></span><br><span class="line">解释：</span><br><span class="line">intention -&gt; inention (删除 <span class="string">&#x27;t&#x27;</span>)</span><br><span class="line">inention -&gt; enention (将 <span class="string">&#x27;i&#x27;</span> 替换为 <span class="string">&#x27;e&#x27;</span>)</span><br><span class="line">enention -&gt; exention (将 <span class="string">&#x27;n&#x27;</span> 替换为 <span class="string">&#x27;x&#x27;</span>)</span><br><span class="line">exention -&gt; exection (将 <span class="string">&#x27;n&#x27;</span> 替换为 <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">exection -&gt; execution (插入 <span class="string">&#x27;u&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>动态规划典型题 显然我不会<br>先看评论</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">我们有word1和word2，我们定义dp[i][j]的含义为：word1的前i个字符和word2的前j个字符的编辑距离。意思就是word1的前i个字符，变成word2的前j个字符，最少需要这么多步。</span><br><span class="line"></span><br><span class="line">例如word1 = <span class="string">&quot;horse&quot;</span>, word2 = <span class="string">&quot;ros&quot;</span>，那么dp[<span class="number">3</span>][<span class="number">2</span>]=X就表示<span class="string">&quot;hor&quot;</span>和“ro”的编辑距离，即把<span class="string">&quot;hor&quot;</span>变成“ro”最少需要X步。</span><br><span class="line"></span><br><span class="line">如果下标为零则表示空串，比如：dp[<span class="number">0</span>][<span class="number">2</span>]就表示空串<span class="string">&quot;&quot;</span>和“ro”的编辑距离</span><br><span class="line"></span><br><span class="line">定理一：如果其中一个字符串是空串，那么编辑距离是另一个字符串的长度。比如空串“”和“ro”的编辑距离是<span class="number">2</span>（做两次“插入”操作）。再比如<span class="string">&quot;hor&quot;</span>和空串“”的编辑距离是<span class="number">3</span>（做三次“删除”操作）。</span><br><span class="line"></span><br><span class="line">定理二：当i&gt;<span class="number">0</span>,j&gt;<span class="number">0</span>时（即两个串都不空时）dp[i][j]=<span class="built_in">min</span>(dp[i-<span class="number">1</span>][j]+<span class="number">1</span>,dp[i][j-<span class="number">1</span>]+<span class="number">1</span>,dp[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="built_in">int</span>(word1[i]!=word2[j]))。</span><br><span class="line"></span><br><span class="line">啥意思呢？举个例子，word1 = <span class="string">&quot;abcde&quot;</span>, word2 = <span class="string">&quot;fgh&quot;</span>,我们现在算这俩字符串的编辑距离，就是找从word1，最少多少步，能变成word2？那就有三种方式：</span><br><span class="line"></span><br><span class="line">知道<span class="string">&quot;abcd&quot;</span>变成<span class="string">&quot;fgh&quot;</span>多少步（假设X步），那么从<span class="string">&quot;abcde&quot;</span>到<span class="string">&quot;fgh&quot;</span>就是<span class="string">&quot;abcde&quot;</span>-&gt;<span class="string">&quot;abcd&quot;</span>-&gt;<span class="string">&quot;fgh&quot;</span>。（一次删除，加X步，总共X+<span class="number">1</span>步）</span><br><span class="line">知道<span class="string">&quot;abcde&quot;</span>变成“fg”多少步（假设Y步），那么从<span class="string">&quot;abcde&quot;</span>到<span class="string">&quot;fgh&quot;</span>就是<span class="string">&quot;abcde&quot;</span>-&gt;<span class="string">&quot;fg&quot;</span>-&gt;<span class="string">&quot;fgh&quot;</span>。（先Y步，再一次添加，加X步，总共Y+<span class="number">1</span>步）</span><br><span class="line">知道<span class="string">&quot;abcd&quot;</span>变成“fg”多少步（假设Z步），那么从<span class="string">&quot;abcde&quot;</span>到<span class="string">&quot;fgh&quot;</span>就是<span class="string">&quot;abcde&quot;</span>-&gt;<span class="string">&quot;fge&quot;</span>-&gt;<span class="string">&quot;fgh&quot;</span>。（先不管最后一个字符，把前面的先变好，用了Z步，然后把最后一个字符给替换了。这里如果最后一个字符碰巧就一样，那就不用替换，省了一步）</span><br><span class="line">以上三种方式算出来选最少的，就是答案。所以我们再看看定理二：</span><br><span class="line"></span><br><span class="line">dp[i][j]=<span class="built_in">min</span>(dp[i-<span class="number">1</span>][j]+<span class="number">1</span>,dp[i][j+<span class="number">1</span>]+<span class="number">1</span>,dp[i][j]+<span class="built_in">int</span>(word1[i]!=word2[j]))</span><br><span class="line">dp[i-<span class="number">1</span>][j]：情况一</span><br><span class="line">dp[i][j-<span class="number">1</span>]+<span class="number">1</span>：情况二</span><br><span class="line">dp[i-<span class="number">1</span>][j-<span class="number">1</span>]+<span class="built_in">int</span>(word1[i]!=word2[j])：情况三</span><br><span class="line">有了定理二的递推公式，你就建立一个二维数组，考虑好空串的情况，总会写出来</span><br><span class="line"></span><br><span class="line">-------------------------------------</span><br><span class="line"></span><br><span class="line">进阶</span><br><span class="line"></span><br><span class="line">-------------------------------------</span><br><span class="line"></span><br><span class="line">先把二维数组的方法做出来，要还没做出来呢，先别往下看。</span><br><span class="line"></span><br><span class="line">由定理二可知，dp[i][j]只和dp[i-<span class="number">1</span>][j],dp[i][j-<span class="number">1</span>],dp[i-<span class="number">1</span>][j-<span class="number">1</span>]三个量有关，即二维数组中，当前元素的左边，上边，左上角三个元素。</span><br><span class="line"></span><br><span class="line">那我们不用这么大的二维数组存啊！我们就用一维数组，表示原来二维数组中的一行，然后我们就反复覆盖里面的值。dp[i-<span class="number">1</span>][j]就是我当前左边的元素，dp[i][j-<span class="number">1</span>]是没覆盖前我这里的值，dp[i-<span class="number">1</span>][j-<span class="number">1</span>]好像找不见了？那我们就单独用一个变量存着它，我们把它叫lu（left up），则代码为：</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minDistance</span>(<span class="params">self, word1: <span class="built_in">str</span>, word2: <span class="built_in">str</span></span>) -&gt; <span class="built_in">int</span>:</span></span><br><span class="line">        m=<span class="built_in">len</span>(word1)</span><br><span class="line">        n=<span class="built_in">len</span>(word2)</span><br><span class="line">        dp=<span class="built_in">list</span>(<span class="built_in">range</span>(n+<span class="number">1</span>))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">            lu=dp[<span class="number">0</span>]</span><br><span class="line">            dp[<span class="number">0</span>]=i+<span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">                dp[j+<span class="number">1</span>],lu=<span class="built_in">min</span>(dp[j]+<span class="number">1</span>,dp[j+<span class="number">1</span>]+<span class="number">1</span>,lu+<span class="built_in">int</span>(word1[i]!=word2[j])),dp[j+<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>]</span><br><span class="line">时间复杂度 ：O(mn)，其中 m 为 word1 的长度，n 为 word2 的长度</span><br><span class="line"></span><br><span class="line">空间复杂度 ：O(n)</span><br></pre></td></tr></table></figure>
+<p>好 看看懂之后手算两次 可以敲出来了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="class">    <span class="title">public</span> <span class="title">int</span> <span class="title">minDistance</span>(<span class="params">String word1, String word2</span>) &#123;</span></span><br><span class="line"><span class="class">        <span class="title">int</span> <span class="title">m</span> = <span class="title">word1</span>.<span class="title">length</span>();</span></span><br><span class="line"><span class="class">        <span class="title">int</span> <span class="title">n</span> = <span class="title">word2</span>.<span class="title">length</span>();</span></span><br><span class="line"><span class="class">        //是否有空字符串</span></span><br><span class="line"><span class="class">        <span class="title">if</span>(<span class="params">m * n == <span class="number">0</span></span>) <span class="title">return</span> <span class="title">m</span> + <span class="title">n</span>;</span></span><br><span class="line"><span class="class">       //动态规划</span></span><br><span class="line"><span class="class">        <span class="title">int</span>[][] <span class="title">dp</span> = <span class="title">new</span> <span class="title">int</span>[<span class="title">m</span>+1][<span class="title">n</span>+1];</span></span><br><span class="line"><span class="class">        //初始化表格</span></span><br><span class="line"><span class="class">        <span class="title">for</span> (<span class="params"><span class="built_in">int</span> i = <span class="number">0</span>; i &lt; m+<span class="number">1</span>; i++</span>) &#123;</span></span><br><span class="line"><span class="class">            <span class="title">dp</span>[<span class="title">i</span>][0] = <span class="title">i</span>;</span></span><br><span class="line"><span class="class">        &#125;</span></span><br><span class="line"><span class="class">        <span class="title">for</span> (<span class="params"><span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n+<span class="number">1</span>; i++</span>) &#123;</span></span><br><span class="line"><span class="class">            <span class="title">dp</span>[0][<span class="title">i</span>] = <span class="title">i</span>;</span></span><br><span class="line"><span class="class">        &#125;</span></span><br><span class="line"><span class="class">        //<span class="title">for</span>循环填表</span></span><br><span class="line"><span class="class">        <span class="title">for</span> (<span class="params"><span class="built_in">int</span> i = <span class="number">1</span>; i &lt; m + <span class="number">1</span>; i++</span>) &#123;</span></span><br><span class="line"><span class="class">            <span class="title">for</span> (<span class="params"><span class="built_in">int</span> j = <span class="number">1</span>; j &lt; n+<span class="number">1</span>; j++</span>) &#123;</span></span><br><span class="line"><span class="class">                <span class="title">int</span> <span class="title">left</span> = <span class="title">dp</span>[<span class="title">i</span>-1][<span class="title">j</span>] + 1;</span></span><br><span class="line"><span class="class">                <span class="title">int</span> <span class="title">down</span> = <span class="title">dp</span>[<span class="title">i</span>][<span class="title">j</span>-1] + 1;</span></span><br><span class="line"><span class="class">                <span class="title">int</span> <span class="title">left_d</span> = <span class="title">dp</span>[<span class="title">i</span>-1][<span class="title">j</span>-1];</span></span><br><span class="line"><span class="class">                <span class="title">if</span>(<span class="params">word1.charAt(<span class="params">i-<span class="number">1</span></span>) != word2.charAt(<span class="params">j-<span class="number">1</span></span>)</span>) <span class="title">left_d</span> += 1;</span></span><br><span class="line"><span class="class">                <span class="title">dp</span>[<span class="title">i</span>][<span class="title">j</span>] = <span class="title">Math</span>.<span class="title">min</span>(<span class="params">left,Math.<span class="built_in">min</span>(<span class="params">down,left_d</span>)</span>);</span></span><br><span class="line"><span class="class">            &#125;</span></span><br><span class="line"><span class="class">        &#125;</span></span><br><span class="line"><span class="class">        <span class="title">return</span> <span class="title">dp</span>[<span class="title">m</span>][<span class="title">n</span>];</span></span><br><span class="line"><span class="class">    &#125;</span></span><br><span class="line"><span class="class">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20201103201304299.png#pic_center" alt="在这里插入图片描述"><br>过两天再做一次 动态规划这块必须拿下！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/11/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-71%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/" data-id="ckuvclvhl00azr9jffpm89c13" data-title="每日一题@71编辑距离" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/11/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-72%E4%BA%8C%E5%8F%89%E6%A0%91%E5%B1%82%E6%AC%A1%E9%81%8D%E5%8E%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          每日一题@72二叉树层次遍历
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/03/Hadoop3-2%E5%AE%89%E8%A3%85/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hadoop3.2安装</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/HBase/" rel="tag">HBase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hadoop/" rel="tag">Hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spark/" rel="tag">Spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/YouTube/" rel="tag">YouTube</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hdfs/" rel="tag">hdfs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/main%E5%87%BD%E6%95%B0/" rel="tag">main函数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spark/" rel="tag">spark</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" rel="tag">回溯法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag">大数据</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" rel="tag">排序算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5/" rel="tag">每日</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" rel="tag">每日一题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" rel="tag">计算机网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/HBase/" style="font-size: 10px;">HBase</a> <a href="/tags/Hadoop/" style="font-size: 14.29px;">Hadoop</a> <a href="/tags/JVM/" style="font-size: 12.86px;">JVM</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Spark/" style="font-size: 12.86px;">Spark</a> <a href="/tags/YouTube/" style="font-size: 10px;">YouTube</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/hdfs/" style="font-size: 10px;">hdfs</a> <a href="/tags/java/" style="font-size: 17.14px;">java</a> <a href="/tags/main%E5%87%BD%E6%95%B0/" style="font-size: 10px;">main函数</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/spark/" style="font-size: 10px;">spark</a> <a href="/tags/%E5%9B%9E%E6%BA%AF%E6%B3%95/" style="font-size: 10px;">回溯法</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 18.57px;">大数据</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 15.71px;">学习</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 10px;">排序</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 10px;">排序算法</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 12.86px;">机器学习</a> <a href="/tags/%E6%AF%8F%E6%97%A5/" style="font-size: 20px;">每日</a> <a href="/tags/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" style="font-size: 10px;">每日一题</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 11.43px;">注解</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">笔记</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 10px;">计算机网络</a> <a href="/tags/%E8%AE%BA%E6%96%87/" style="font-size: 10px;">论文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/02/">February 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">每日一题@79区域和检索 - 数组不可变</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">每日一题@78单词搜索</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">看书Apache Spark 1</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">Linux命令</a>
+          </li>
+        
+          <li>
+            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">每日一题@77不同路径 II</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
