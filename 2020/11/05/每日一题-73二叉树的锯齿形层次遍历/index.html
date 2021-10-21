@@ -224,9 +224,60 @@
         <p>给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。</p>
 <span id="more"></span>
 <p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">给定二叉树 [<span class="number">3</span>,<span class="number">9</span>,<span class="number">20</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="number">15</span>,<span class="number">7</span>],</span><br><span class="line"></span><br><span class="line">    <span class="number">3</span></span><br><span class="line">   / \</span><br><span class="line">  <span class="number">9</span>  <span class="number">20</span></span><br><span class="line">    /  \</span><br><span class="line">   <span class="number">15</span>   <span class="number">7</span></span><br><span class="line">返回锯齿形层次遍历如下：</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">  [<span class="number">3</span>],</span><br><span class="line">  [<span class="number">20</span>,<span class="number">9</span>],</span><br><span class="line">  [<span class="number">15</span>,<span class="number">7</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<pre><code class="java">给定二叉树 [3,9,20,null,null,15,7],
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) &#123;</span><br><span class="line">        <span class="comment">//结果</span></span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="keyword">null</span>) <span class="keyword">return</span>  res;</span><br><span class="line">        Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        queue.add(root);</span><br><span class="line">        <span class="comment">//锯齿就是左右横跳，第奇数层左 偶数层右 判断一下 然后调用函数反转就可</span></span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="comment">//队列不为空循环</span></span><br><span class="line">        <span class="keyword">while</span> (!queue.isEmpty())&#123;</span><br><span class="line">            List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            <span class="keyword">int</span> len = queue.size();</span><br><span class="line">            <span class="comment">//循环队列当前层的元素</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; len; j++) &#123;</span><br><span class="line">                TreeNode pos = queue.poll();</span><br><span class="line">                list.add(pos.val);</span><br><span class="line">                <span class="comment">//把下一层入队</span></span><br><span class="line">                <span class="keyword">if</span>(pos.left != <span class="keyword">null</span>) queue.add(pos.left);</span><br><span class="line">                <span class="keyword">if</span>(pos.right != <span class="keyword">null</span>) queue.add(pos.right);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//横跳</span></span><br><span class="line">            <span class="keyword">if</span>(count % <span class="number">2</span> == <span class="number">0</span>) Collections.reverse(list);</span><br><span class="line">            count += <span class="number">1</span>;</span><br><span class="line">            res.add(list);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回锯齿形层次遍历如下：
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+</code></pre>
+<pre><code class="java">/**
+ * Definition for a binary tree node.
+ * public class TreeNode &#123;
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) &#123; val = x; &#125;
+ * &#125;
+ */
+class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; zigzagLevelOrder(TreeNode root) &#123;
+        //结果
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        if(root == null) return  res;
+        Queue&lt;TreeNode&gt; queue = new LinkedList&lt;&gt;();
+        queue.add(root);
+        //锯齿就是左右横跳，第奇数层左 偶数层右 判断一下 然后调用函数反转就可
+        int count = 1;
+        //队列不为空循环
+        while (!queue.isEmpty())&#123;
+            List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+            int len = queue.size();
+            //循环队列当前层的元素
+            for (int j = 0; j &lt; len; j++) &#123;
+                TreeNode pos = queue.poll();
+                list.add(pos.val);
+                //把下一层入队
+                if(pos.left != null) queue.add(pos.left);
+                if(pos.right != null) queue.add(pos.right);
+            &#125;
+            //横跳
+            if(count % 2 == 0) Collections.reverse(list);
+            count += 1;
+            res.add(list);
+        &#125;
+        return res;
+    &#125;
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201105205858796.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>六级真的好难过 ，查分357，明天开始English吧</p>
 
     </div>

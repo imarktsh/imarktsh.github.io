@@ -227,10 +227,26 @@
 
 <p>说明：</p>
 <p>所有数字（包括目标数）都是正整数。<br>解集不能包含重复的组合。 </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">1</span>:</span><br><span class="line"></span><br><span class="line">输入: candidates = [<span class="number">10</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">7</span>,<span class="number">6</span>,<span class="number">1</span>,<span class="number">5</span>], target = <span class="number">8</span>,</span><br><span class="line">所求解集为:</span><br><span class="line">[</span><br><span class="line">  [<span class="number">1</span>, <span class="number">7</span>],</span><br><span class="line">  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">5</span>],</span><br><span class="line">  [<span class="number">2</span>, <span class="number">6</span>],</span><br><span class="line">  [<span class="number">1</span>, <span class="number">1</span>, <span class="number">6</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<pre><code class="java">示例 1:
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">2</span>:</span><br><span class="line"></span><br><span class="line">输入: candidates = [<span class="number">2</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>], target = <span class="number">5</span>,</span><br><span class="line">所求解集为:</span><br><span class="line">[</span><br><span class="line">  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">  [<span class="number">5</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+</code></pre>
+<pre><code class="java">示例 2:
 
+输入: candidates = [2,5,2,1,2], target = 5,
+所求解集为:
+[
+  [1,2,2],
+  [5]
+]
+</code></pre>
 <p>这道题与上一问的区别在于：</p>
 <ul>
 <li>第 39 题：candidates 中的数字可以无限制重复被选取；</li>
@@ -242,9 +258,43 @@
 <li>使用 哈希表 天然的去重功能，但是编码相对复杂；</li>
 <li>这里我们使用和第 39 题和第 15 题（三数之和）类似的思路：不重复就需要按 顺序 搜索， 在搜索的过程中检测分支是否会出现重复结果 注意：这里的顺序不仅仅指数组 candidates 有序，还指按照一定顺序搜索结果。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 小剪枝：同一层相同数值的结点，从第 2 个开始，候选数更少，结果一定发生重复，因此跳过，用 continue</span></span><br><span class="line">抄的代码 还不知道为啥 递归真的难</span><br><span class="line">           <span class="keyword">if</span> (i &gt; begin &amp;&amp; candidates[i] == candidates[i - <span class="number">1</span>]) &#123;</span><br><span class="line">               <span class="keyword">continue</span>;</span><br><span class="line">           &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> // 小剪枝：同一层相同数值的结点，从第 2 个开始，候选数更少，结果一定发生重复，因此跳过，用 continue
+ 抄的代码 还不知道为啥 递归真的难
+            if (i &gt; begin &amp;&amp; candidates[i] == candidates[i - 1]) &#123;
+                continue;
+            &#125;
+</code></pre>
 <p>去重之后就可以通过了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; combinationSum2(<span class="keyword">int</span>[] candidates, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Arrays.sort(candidates);</span><br><span class="line">        <span class="keyword">if</span>(candidates.length == <span class="number">0</span>) <span class="keyword">return</span> res;</span><br><span class="line">        Deque&lt;Integer&gt; path = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">        dfs(candidates,<span class="number">0</span>,target,path,res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] candidates, <span class="keyword">int</span> began,<span class="keyword">int</span> target,Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(target == <span class="number">0</span>) &#123;  </span><br><span class="line">            res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(path));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = began;i &lt; candidates.length; i ++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; began &amp;&amp; candidates[i] == candidates[i - <span class="number">1</span>]) &#123;  <span class="comment">// 剪枝 + 处理 “重复结果问题”</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(target - candidates[i] &lt; <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">            path.add(candidates[i]);</span><br><span class="line">            dfs(candidates, i+<span class="number">1</span>,target-candidates[i],path,res);</span><br><span class="line">            path.removeLast();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public List&lt;List&lt;Integer&gt;&gt; combinationSum2(int[] candidates, int target) &#123;
+        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
+        Arrays.sort(candidates);
+        if(candidates.length == 0) return res;
+        Deque&lt;Integer&gt; path = new ArrayDeque&lt;&gt;();
+        dfs(candidates,0,target,path,res);
+        return res;
+    &#125;
+
+    private void dfs(int[] candidates, int began,int target,Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)&#123;
+        if(target == 0) &#123;  
+            res.add(new ArrayList&lt;&gt;(path));
+            return;
+        &#125;
+
+
+        for(int i = began;i &lt; candidates.length; i ++)&#123;
+            if (i &gt; began &amp;&amp; candidates[i] == candidates[i - 1]) &#123;  // 剪枝 + 处理 “重复结果问题”
+                continue;
+            &#125;
+            if(target - candidates[i] &lt; 0) break;
+            path.add(candidates[i]);
+            dfs(candidates, i+1,target-candidates[i],path,res);
+            path.removeLast();
+        &#125;
+
+    &#125;
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200910165307500.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

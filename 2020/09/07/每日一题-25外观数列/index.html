@@ -226,22 +226,52 @@
 <span id="more"></span>
 
 <p>「外观数列」是一个整数序列，从数字 1 开始，序列中的每一项都是对前一项的描述。前五项如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>     <span class="number">1</span></span><br><span class="line"><span class="number">2.</span>     <span class="number">11</span></span><br><span class="line"><span class="number">3.</span>     <span class="number">21</span></span><br><span class="line"><span class="number">4.</span>     <span class="number">1211</span></span><br><span class="line"><span class="number">5.</span>     <span class="number">111221</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">1.     1
+2.     11
+3.     21
+4.     1211
+5.     111221
+</code></pre>
 <p>第一项是数字 1</p>
 <p>描述前一项，这个数是 1 即 “一个 1 ”，记作 11</p>
 <p>描述前一项，这个数是 11 即 “两个 1 ” ，记作 21</p>
 <p>描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211</p>
 <p>描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">1</span></span><br><span class="line">输出: <span class="string">&quot;1&quot;</span></span><br><span class="line">解释：这是一个基本样例。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: 1
+输出: &quot;1&quot;
+解释：这是一个基本样例。
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">4</span></span><br><span class="line">输出: <span class="string">&quot;1211&quot;</span></span><br><span class="line">解释：当 n = <span class="number">3</span> 时，序列是 <span class="string">&quot;21&quot;</span>，其中我们有 <span class="string">&quot;2&quot;</span> 和 <span class="string">&quot;1&quot;</span> 两组，<span class="string">&quot;2&quot;</span> 可以读作 <span class="string">&quot;12&quot;</span>，也就是出现频次 = <span class="number">1</span> 而 值 = <span class="number">2</span>；</span><br><span class="line">类似 <span class="string">&quot;1&quot;</span> 可以读作 <span class="string">&quot;11&quot;</span>。所以答案是 <span class="string">&quot;12&quot;</span> 和 <span class="string">&quot;11&quot;</span> 组合在一起，也就是 <span class="string">&quot;1211&quot;</span>。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: 4
+输出: &quot;1211&quot;
+解释：当 n = 3 时，序列是 &quot;21&quot;，其中我们有 &quot;2&quot; 和 &quot;1&quot; 两组，&quot;2&quot; 可以读作 &quot;12&quot;，也就是出现频次 = 1 而 值 = 2；
+类似 &quot;1&quot; 可以读作 &quot;11&quot;。所以答案是 &quot;12&quot; 和 &quot;11&quot; 组合在一起，也就是 &quot;1211&quot;。
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/count-and-say">https://leetcode-cn.com/problems/count-and-say</a></p>
 <p>题目读懂了 还是要看评论才会写。。<br>主要思想就是遍历前一个字符串，使用count计字符出现多少次，然后将count和字符加入到String，遍历n次就得到外观数列的第n项。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">countAndSay</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">     String str = <span class="string">&quot;1&quot;</span>;</span><br><span class="line">     <span class="keyword">if</span>(n == <span class="number">1</span>) <span class="keyword">return</span> str;</span><br><span class="line">     <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i ++)&#123;<span class="comment">//循环找后一个描述 感觉可以改递归</span></span><br><span class="line">         StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">         <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">         <span class="keyword">char</span> pre = str.charAt(<span class="number">0</span>);</span><br><span class="line">         <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; str.length(); j ++)&#123;<span class="comment">//往后找字符</span></span><br><span class="line">             <span class="keyword">char</span> back = str.charAt(j);</span><br><span class="line">             <span class="keyword">if</span>(pre == back) count ++;</span><br><span class="line">             <span class="keyword">else</span> &#123;</span><br><span class="line">                 sb.append(count).append(pre);<span class="comment">//添加字符串描述</span></span><br><span class="line">                 pre = back;</span><br><span class="line">                 count = <span class="number">1</span>; <span class="comment">//计数归一</span></span><br><span class="line">             &#125; </span><br><span class="line">         &#125;</span><br><span class="line">         sb.append(count).append(pre);<span class="comment">//将最后一位加上去</span></span><br><span class="line">         str = sb.toString();<span class="comment">//最后结果转化为字符串</span></span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> str;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">   public String countAndSay(int n) &#123;
+        String str = &quot;1&quot;;
+        if(n == 1) return str;
+        for(int i = 2; i &lt;= n; i ++)&#123;//循环找后一个描述 感觉可以改递归
+            StringBuilder sb = new StringBuilder();
+            int count = 1;
+            char pre = str.charAt(0);
+            for(int j = 1; j &lt; str.length(); j ++)&#123;//往后找字符
+                char back = str.charAt(j);
+                if(pre == back) count ++;
+                else &#123;
+                    sb.append(count).append(pre);//添加字符串描述
+                    pre = back;
+                    count = 1; //计数归一
+                &#125; 
+            &#125;
+            sb.append(count).append(pre);//将最后一位加上去
+            str = sb.toString();//最后结果转化为字符串
+        &#125;
+        return str;
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200905210841734.png#pic_center" alt="在这里插入图片描述"><br>优化不谈了</p>
 
     </div>

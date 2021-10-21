@@ -224,12 +224,215 @@
         <p>大数据电信客服3<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17t411W7wZ?spm_id_from=333.788.b_636f6d6d656e74.19">B站链接</a><br>数据分析部分</p>
 <span id="more"></span>
 <h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><p>先把视频看完了<br>使用MapReduce项目一直缺少依赖<br>然后就用Spark自己写</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">注意他妈的Hbase2<span class="number">.0</span>把hbase-mapreduce模块单独拿出来</span><br><span class="line">需要添加一下依赖才能运行</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="number">2.2</span><span class="number">.6</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-common&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="number">2.2</span><span class="number">.6</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;hbase-mapreduce&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;<span class="number">2.2</span><span class="number">.6</span>&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">注意他妈的Hbase2.0把hbase-mapreduce模块单独拿出来
+需要添加一下依赖才能运行
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+            &lt;version&gt;2.2.6&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-common&lt;/artifactId&gt;
+            &lt;version&gt;2.2.6&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+            &lt;artifactId&gt;hbase-mapreduce&lt;/artifactId&gt;
+            &lt;version&gt;2.2.6&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
 <p>对这部分首先学习了hbase的增删改查</p>
 <p>学会之后就使用Spark从hbase里面读取数据</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.ct.analysis;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.ct.analysis.tool.ConCall;</span><br><span class="line"><span class="keyword">import</span> com.twitter.chill.Base64;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.HBaseConfiguration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.TableName;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.client.*;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.io.ImmutableBytesWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.protobuf.ProtobufUtil;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.protobuf.generated.ClientProtos;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.util.Bytes;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.Function2;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.PairFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.function.VoidFunction;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.SparkSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.hbase.mapreduce.TableInputFormat;</span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"><span class="keyword">import</span> scala.Tuple5;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 分析数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnalysisData</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span>  <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SparkSession ss = SparkSession</span><br><span class="line">                .builder()</span><br><span class="line">                <span class="comment">//.config(&quot;spark.default.parallelism&quot;, 200)</span></span><br><span class="line">                .appName(<span class="string">&quot;RF&quot;</span>)</span><br><span class="line">                .master(<span class="string">&quot;local[*]&quot;</span>)</span><br><span class="line">                .getOrCreate();<span class="comment">//</span></span><br><span class="line">        <span class="comment">//错误级别日志</span></span><br><span class="line">        ss.sparkContext().setLogLevel(<span class="string">&quot;ERROR&quot;</span>);</span><br><span class="line">        JavaSparkContext sc = JavaSparkContext</span><br><span class="line">                .fromSparkContext(ss.sparkContext());</span><br><span class="line">        <span class="comment">//建立连接</span></span><br><span class="line">        Configuration conf = HBaseConfiguration.create();</span><br><span class="line">        Connection conn = ConnectionFactory.createConnection(conf);</span><br><span class="line">        TableName tableName = TableName.valueOf(<span class="string">&quot;test3&quot;</span>);</span><br><span class="line">        conf.set(TableInputFormat.INPUT_TABLE, <span class="string">&quot;ct:calllog&quot;</span>);</span><br><span class="line"></span><br><span class="line">        Admin admin = conn.getAdmin();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//表信息</span></span><br><span class="line">        <span class="keyword">final</span> String FAMILY = <span class="string">&quot;caller&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME1 = <span class="string">&quot;call1&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME2 = <span class="string">&quot;call2&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME3 = <span class="string">&quot;calltime&quot;</span>;</span><br><span class="line">        <span class="keyword">final</span> String COLUMN_NAME4 = <span class="string">&quot;duration&quot;</span>;</span><br><span class="line">        String COLUMN_NAME5 = <span class="string">&quot;flg&quot;</span>;</span><br><span class="line">        <span class="comment">//添加scan</span></span><br><span class="line">        Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">        scan.addFamily(Bytes.toBytes(FAMILY));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME1));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME2));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME3));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME4));</span><br><span class="line">        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME5));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//添加scan</span></span><br><span class="line">        ClientProtos.Scan proto = ProtobufUtil.toScan(scan);</span><br><span class="line">        String ScanToString = Base64.encodeBytes(proto.toByteArray());</span><br><span class="line">        conf.set(TableInputFormat.SCAN, ScanToString);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//读HBase数据转化成RDD</span></span><br><span class="line">        <span class="comment">//ImmutableBytesWritable就是一种数据类型,可以转为String</span></span><br><span class="line">        JavaPairRDD&lt;ImmutableBytesWritable, Result&gt; hbaseRDD =</span><br><span class="line">                sc.newAPIHadoopRDD(conf, TableInputFormat.class,</span><br><span class="line">                        ImmutableBytesWritable.class,</span><br><span class="line">                        Result.class);</span><br><span class="line">        hbaseRDD.cache();<span class="comment">// 对myRDD进行缓存</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 拿到数据 拿全</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaRDD&lt;Tuple5&gt; dataRDD = hbaseRDD.map(</span><br><span class="line">                <span class="keyword">new</span> Function&lt;Tuple2&lt;ImmutableBytesWritable, Result&gt;, Tuple5&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Tuple5 <span class="title">call</span><span class="params">(Tuple2&lt;ImmutableBytesWritable, Result&gt; tuple2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">                Result result = tuple2._2;</span><br><span class="line">                String rowKey = Bytes.toString(result.getRow());</span><br><span class="line">                String call1 = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME1)));</span><br><span class="line">                String call2 = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME2)));</span><br><span class="line">                String callTime = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME3)));</span><br><span class="line">                String duration = Bytes.toString(result.getValue(</span><br><span class="line">                        Bytes.toBytes(FAMILY),</span><br><span class="line">                        Bytes.toBytes(COLUMN_NAME4)));</span><br><span class="line">                ConCall cell = <span class="keyword">new</span> ConCall(call1,call2);</span><br><span class="line">                <span class="comment">//System.out.println( call1 + &quot;-&gt;&quot; + call2);</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Tuple5&lt;&gt;(rowKey, call1, call2, callTime, duration);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 将电话号码作为key 时间为value</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; pairRDD = dataRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple5, String, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Tuple2&lt;String, Integer&gt; <span class="title">call</span><span class="params">(Tuple5 tuple5)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                String call1 = (String) tuple5._2();</span><br><span class="line">                String call2 = (String) tuple5._3();</span><br><span class="line">                String duration = (String) tuple5._5();</span><br><span class="line">                String key = call1 + <span class="string">&quot;|&quot;</span> + call2;</span><br><span class="line">                <span class="comment">//int duration2 = Integer.parseInt(duration);</span></span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(key, <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 计算key的通话时长</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; resTupleRDD = pairRDD.reduceByKey(</span><br><span class="line">                <span class="keyword">new</span> Function2&lt;Integer, Integer, Integer&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">(Integer integer, Integer integer2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> integer + integer2;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//映射为&lt;Integer,电话&gt;</span></span><br><span class="line">        JavaPairRDD&lt;Integer, String&gt; resPairRDD = resTupleRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple2&lt;String, Integer&gt;, Integer, String&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Tuple2&lt;Integer, String&gt;</span></span><br><span class="line"><span class="function">                    <span class="title">call</span><span class="params">(Tuple2&lt;String, Integer&gt; tuple)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(tuple._2, tuple._1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">        JavaPairRDD&lt;Integer, String&gt; sortPairRDD = resPairRDD.sortByKey(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//再换回来 &lt;电话，通话时间Integer&gt;</span></span><br><span class="line">        <span class="comment">//映射为&lt;Integer,电话&gt;</span></span><br><span class="line">        JavaPairRDD&lt;String, Integer&gt; sortResPairRDD = sortPairRDD.mapToPair(</span><br><span class="line">                <span class="keyword">new</span> PairFunction&lt;Tuple2&lt;Integer, String&gt;, String, Integer&gt;() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="function"><span class="keyword">public</span> Tuple2&lt;String, Integer&gt;</span></span><br><span class="line"><span class="function">                    <span class="title">call</span><span class="params">(Tuple2&lt;Integer, String&gt; tuple)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">new</span> Tuple2&lt;&gt;(tuple._2, tuple._1);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 打印</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">        sortResPairRDD.foreach(<span class="keyword">new</span> VoidFunction&lt;Tuple2&lt;String, Integer&gt;&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">(Tuple2&lt;String, Integer&gt; tuple2)</span></span></span><br><span class="line"><span class="function">                    <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                String key = tuple2._1;</span><br><span class="line">                <span class="keyword">int</span> duration = tuple2._2;</span><br><span class="line">                <span class="comment">//System.out.println(key + &quot;::: 通话时间 ::&quot; + duration );</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        List&lt;Tuple2&lt;String, Integer&gt;&gt; resTop10 = sortResPairRDD.take(<span class="number">10</span>);</span><br><span class="line">        <span class="keyword">for</span> (Tuple2&lt;String, Integer&gt; tuple2 : resTop10) &#123;</span><br><span class="line">            String key = tuple2._1;</span><br><span class="line">            <span class="keyword">int</span> duration = tuple2._2;</span><br><span class="line">            System.out.println(key + <span class="string">&quot;::: 通话时间 ::&quot;</span> + duration );</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> count = sortResPairRDD.count();</span><br><span class="line">        System.out.println(<span class="string">&quot;数据总条数：&quot;</span> + count);</span><br><span class="line"></span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">package com.ct.analysis;
 
+
+import com.ct.analysis.tool.ConCall;
+import com.twitter.chill.Base64;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.protobuf.ProtobufUtil;
+import org.apache.hadoop.hbase.protobuf.generated.ClientProtos;
+import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFunction;
+import org.apache.spark.api.java.function.VoidFunction;
+import org.apache.spark.sql.SparkSession;
+import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
+import scala.Tuple2;
+import scala.Tuple5;
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 分析数据
+ */
+public class AnalysisData implements Serializable &#123;
+    public static void main(String[] args)  throws Exception &#123;
+        SparkSession ss = SparkSession
+                .builder()
+                //.config(&quot;spark.default.parallelism&quot;, 200)
+                .appName(&quot;RF&quot;)
+                .master(&quot;local[*]&quot;)
+                .getOrCreate();//
+        //错误级别日志
+        ss.sparkContext().setLogLevel(&quot;ERROR&quot;);
+        JavaSparkContext sc = JavaSparkContext
+                .fromSparkContext(ss.sparkContext());
+        //建立连接
+        Configuration conf = HBaseConfiguration.create();
+        Connection conn = ConnectionFactory.createConnection(conf);
+        TableName tableName = TableName.valueOf(&quot;test3&quot;);
+        conf.set(TableInputFormat.INPUT_TABLE, &quot;ct:calllog&quot;);
+
+        Admin admin = conn.getAdmin();
+
+        //表信息
+        final String FAMILY = &quot;caller&quot;;
+        final String COLUMN_NAME1 = &quot;call1&quot;;
+        final String COLUMN_NAME2 = &quot;call2&quot;;
+        final String COLUMN_NAME3 = &quot;calltime&quot;;
+        final String COLUMN_NAME4 = &quot;duration&quot;;
+        String COLUMN_NAME5 = &quot;flg&quot;;
+        //添加scan
+        Scan scan = new Scan();
+        scan.addFamily(Bytes.toBytes(FAMILY));
+        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME1));
+        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME2));
+        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME3));
+        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME4));
+        scan.addColumn(Bytes.toBytes(FAMILY), Bytes.toBytes(COLUMN_NAME5));
+
+        //添加scan
+        ClientProtos.Scan proto = ProtobufUtil.toScan(scan);
+        String ScanToString = Base64.encodeBytes(proto.toByteArray());
+        conf.set(TableInputFormat.SCAN, ScanToString);
+
+        //读HBase数据转化成RDD
+        //ImmutableBytesWritable就是一种数据类型,可以转为String
+        JavaPairRDD&lt;ImmutableBytesWritable, Result&gt; hbaseRDD =
+                sc.newAPIHadoopRDD(conf, TableInputFormat.class,
+                        ImmutableBytesWritable.class,
+                        Result.class);
+        hbaseRDD.cache();// 对myRDD进行缓存
+
+        /**
+         * 拿到数据 拿全
+         */
+        JavaRDD&lt;Tuple5&gt; dataRDD = hbaseRDD.map(
+                new Function&lt;Tuple2&lt;ImmutableBytesWritable, Result&gt;, Tuple5&gt;() &#123;
+            @Override
+            public Tuple5 call(Tuple2&lt;ImmutableBytesWritable, Result&gt; tuple2)
+                    throws Exception &#123;
+
+                Result result = tuple2._2;
+                String rowKey = Bytes.toString(result.getRow());
+                String call1 = Bytes.toString(result.getValue(
+                        Bytes.toBytes(FAMILY),
+                        Bytes.toBytes(COLUMN_NAME1)));
+                String call2 = Bytes.toString(result.getValue(
+                        Bytes.toBytes(FAMILY),
+                        Bytes.toBytes(COLUMN_NAME2)));
+                String callTime = Bytes.toString(result.getValue(
+                        Bytes.toBytes(FAMILY),
+                        Bytes.toBytes(COLUMN_NAME3)));
+                String duration = Bytes.toString(result.getValue(
+                        Bytes.toBytes(FAMILY),
+                        Bytes.toBytes(COLUMN_NAME4)));
+                ConCall cell = new ConCall(call1,call2);
+                //System.out.println( call1 + &quot;-&gt;&quot; + call2);
+                return new Tuple5&lt;&gt;(rowKey, call1, call2, callTime, duration);
+            &#125;
+        &#125;);
+
+        /**
+         * 将电话号码作为key 时间为value
+         */
+        JavaPairRDD&lt;String, Integer&gt; pairRDD = dataRDD.mapToPair(
+                new PairFunction&lt;Tuple5, String, Integer&gt;() &#123;
+            @Override
+            public Tuple2&lt;String, Integer&gt; call(Tuple5 tuple5)
+                    throws Exception &#123;
+                String call1 = (String) tuple5._2();
+                String call2 = (String) tuple5._3();
+                String duration = (String) tuple5._5();
+                String key = call1 + &quot;|&quot; + call2;
+                //int duration2 = Integer.parseInt(duration);
+                return new Tuple2&lt;&gt;(key, 1);
+            &#125;
+        &#125;);
+
+        /**
+         * 计算key的通话时长
+         */
+        JavaPairRDD&lt;String, Integer&gt; resTupleRDD = pairRDD.reduceByKey(
+                new Function2&lt;Integer, Integer, Integer&gt;() &#123;
+            @Override
+            public Integer call(Integer integer, Integer integer2)
+                    throws Exception &#123;
+                return integer + integer2;
+            &#125;
+        &#125;);
+
+        //映射为&lt;Integer,电话&gt;
+        JavaPairRDD&lt;Integer, String&gt; resPairRDD = resTupleRDD.mapToPair(
+                new PairFunction&lt;Tuple2&lt;String, Integer&gt;, Integer, String&gt;() &#123;
+                    @Override
+                    public Tuple2&lt;Integer, String&gt;
+                    call(Tuple2&lt;String, Integer&gt; tuple) throws Exception &#123;
+                        return new Tuple2&lt;&gt;(tuple._2, tuple._1);
+                    &#125;
+                &#125;);
+
+        JavaPairRDD&lt;Integer, String&gt; sortPairRDD = resPairRDD.sortByKey(false);
+
+        //再换回来 &lt;电话，通话时间Integer&gt;
+        //映射为&lt;Integer,电话&gt;
+        JavaPairRDD&lt;String, Integer&gt; sortResPairRDD = sortPairRDD.mapToPair(
+                new PairFunction&lt;Tuple2&lt;Integer, String&gt;, String, Integer&gt;() &#123;
+                    @Override
+                    public Tuple2&lt;String, Integer&gt;
+                    call(Tuple2&lt;Integer, String&gt; tuple) throws Exception &#123;
+                        return new Tuple2&lt;&gt;(tuple._2, tuple._1);
+                    &#125;
+                &#125;);
+
+        /**
+         * 打印
+         */
+
+        sortResPairRDD.foreach(new VoidFunction&lt;Tuple2&lt;String, Integer&gt;&gt;() &#123;
+            @Override
+            public void call(Tuple2&lt;String, Integer&gt; tuple2)
+                    throws Exception &#123;
+                String key = tuple2._1;
+                int duration = tuple2._2;
+                //System.out.println(key + &quot;::: 通话时间 ::&quot; + duration );
+            &#125;
+        &#125;);
+        List&lt;Tuple2&lt;String, Integer&gt;&gt; resTop10 = sortResPairRDD.take(10);
+        for (Tuple2&lt;String, Integer&gt; tuple2 : resTop10) &#123;
+            String key = tuple2._1;
+            int duration = tuple2._2;
+            System.out.println(key + &quot;::: 通话时间 ::&quot; + duration );
+        &#125;
+
+
+        long count = sortResPairRDD.count();
+        System.out.println(&quot;数据总条数：&quot; + count);
+
+        conn.close();
+    &#125;
+&#125;
+</code></pre>
 <p>只要把数据从Hbase读出来变成RDD就可以很轻松的操作进行各种转换<br>在这里实现了取通话记录的Top(10)</p>
 <p><img src="https://img-blog.csdnimg.cn/20210224140254310.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>项目完结！</p>
 

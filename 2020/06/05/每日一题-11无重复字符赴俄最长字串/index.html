@@ -231,14 +231,21 @@
 <span id="more"></span>
 
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;abcabcbb&quot;</span></span><br><span class="line">输出: <span class="number">3</span> </span><br><span class="line">解释: 因为无重复字符的最长子串是 <span class="string">&quot;abc&quot;</span>，所以其长度为 <span class="number">3</span>。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: &quot;abcabcbb&quot;
+输出: 3 
+解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;bbbbb&quot;</span></span><br><span class="line">输出: <span class="number">1</span></span><br><span class="line">解释: 因为无重复字符的最长子串是 <span class="string">&quot;b&quot;</span>，所以其长度为 <span class="number">1</span>。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: &quot;bbbbb&quot;
+输出: 1
+解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。
+</code></pre>
 <p>示例 3:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;pwwkew&quot;</span></span><br><span class="line">输出: <span class="number">3</span></span><br><span class="line">解释: 因为无重复字符的最长子串是 <span class="string">&quot;wke&quot;</span>，所以其长度为 <span class="number">3</span>。</span><br><span class="line">请注意，你的答案必须是 子串 的长度，<span class="string">&quot;pwke&quot;</span> 是一个子序列，不是子串。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: &quot;pwwkew&quot;
+输出: 3
+解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。
+请注意，你的答案必须是 子串 的长度，&quot;pwke&quot; 是一个子序列，不是子串。
+</code></pre>
 <h2 id="滑动窗口法"><a href="#滑动窗口法" class="headerlink" title="滑动窗口法"></a>滑动窗口法</h2><ul>
 <li>暴力解法时间复杂度较高，会达到 O(n^2)，故而采取滑动窗口的方法降低时间复杂度</li>
 <li>定义一个 map 数据结构存储 (k, v)，其中 key 值为字符，value 值为字符位置 +1，加 1<br>表示从字符位置后一个才开始不重复</li>
@@ -246,7 +253,24 @@
 <li>无论是否更新 start，都会更新其 map 数据结构和结果 ans。</li>
 <li>时间复杂度：O(n)O(n)</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">int</span> n = s.length();</span><br><span class="line">       <span class="keyword">int</span> ans = <span class="number">0</span>;  </span><br><span class="line">       Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> end = <span class="number">0</span>,start = <span class="number">0</span>; end &lt; n; end ++)&#123;</span><br><span class="line">           <span class="keyword">char</span> alpha = s.charAt(end);</span><br><span class="line">           <span class="keyword">if</span>(map.containsKey(alpha))&#123;</span><br><span class="line">               start = Math.max(map.get(alpha),start);</span><br><span class="line">              </span><br><span class="line">           &#125;</span><br><span class="line">            ans = Math.max(ans, end - start + <span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(end),end + <span class="number">1</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> public int lengthOfLongestSubstring(String s) &#123;
+        int n = s.length();
+        int ans = 0;  
+        Map&lt;Character,Integer&gt; map = new HashMap&lt;&gt;();
+
+        for(int end = 0,start = 0; end &lt; n; end ++)&#123;
+            char alpha = s.charAt(end);
+            if(map.containsKey(alpha))&#123;
+                start = Math.max(map.get(alpha),start);
+               
+            &#125;
+             ans = Math.max(ans, end - start + 1);
+             map.put(s.charAt(end),end + 1);
+        &#125;
+        return ans;
+
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200605105212762.png" alt="在这里插入图片描述"></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/solution/hua-jie-suan-fa-3-wu-zhong-fu-zi-fu-de-zui-chang-z/">力扣（LeetCode）</a></p>
 

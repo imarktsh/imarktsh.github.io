@@ -234,9 +234,36 @@
 
 
 <p><strong>示例：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">输入：n = <span class="number">3</span></span><br><span class="line">输出：[</span><br><span class="line">       <span class="string">&quot;((()))&quot;</span>,</span><br><span class="line">       <span class="string">&quot;(()())&quot;</span>,</span><br><span class="line">       <span class="string">&quot;(())()&quot;</span>,</span><br><span class="line">       <span class="string">&quot;()(())&quot;</span>,</span><br><span class="line">       <span class="string">&quot;()()()&quot;</span></span><br><span class="line">     ]</span><br></pre></td></tr></table></figure>
+<pre><code class="java">
+输入：n = 3
+输出：[
+       &quot;((()))&quot;,
+       &quot;(()())&quot;,
+       &quot;(())()&quot;,
+       &quot;()(())&quot;,
+       &quot;()()()&quot;
+     ]
+</code></pre>
 <p>题解千千万，迭代，动态规划全都不懂，看懂了一个dfs<br>我的理解就是生成括号可以看作一棵满二叉树，对二叉树进行遍历，看路径是否满足括号</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;String&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">generateParenthesis</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        dfs(n , n , <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> left,<span class="keyword">int</span> right,String curStr)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(left == <span class="number">0</span> &amp;&amp; right == <span class="number">0</span>)&#123;</span><br><span class="line">            res.add(curStr);<span class="comment">// 结果加入集合</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(left &gt; <span class="number">0</span>) dfs(left - <span class="number">1</span>, right,curStr + <span class="string">&quot;(&quot;</span>); <span class="comment">// 左大于0 拼接左括号</span></span><br><span class="line">        <span class="keyword">if</span>(right &gt; left) dfs(left, right - <span class="number">1</span>, curStr + <span class="string">&quot;)&quot;</span>);<span class="comment">//右大于左，可以拼接右括号</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    ArrayList&lt;String&gt; res = new ArrayList&lt;&gt;();
+    public List&lt;String&gt; generateParenthesis(int n) &#123;
+        dfs(n , n , &quot;&quot;);
+        return res;
+
+    &#125;
+
+    public void dfs(int left,int right,String curStr)&#123;
+        if(left == 0 &amp;&amp; right == 0)&#123;
+            res.add(curStr);// 结果加入集合
+            return;
+        &#125;
+        if(left &gt; 0) dfs(left - 1, right,curStr + &quot;(&quot;); // 左大于0 拼接左括号
+        if(right &gt; left) dfs(left, right - 1, curStr + &quot;)&quot;);//右大于左，可以拼接右括号
+
+    &#125;
+&#125;
+</code></pre>
 <p>时间复杂度：啊这。。不知道啊</p>
 <p><img src="https://img-blog.csdnimg.cn/20200604112734836.png"><br>找到了一个好理解的图片 这叫剪枝二叉树<br><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly9waWMubGVldGNvZGUtY24uY29tLzFmMThmOGNhZTgwOTc2NGFjZGVjYTcyZjgwNDlhOGZjYTE1ZTFjNDYyNjQzMjczMDYzYmIxOWJjMmYxNjY1MTItUVElRTUlOUIlQkUlRTclODklODcyMDIwMDQwOTExNTUzNS5wbmc?x-oss-process=image/format,png#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/202006041116525.png"></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/generate-parentheses">leetcode</a></p>

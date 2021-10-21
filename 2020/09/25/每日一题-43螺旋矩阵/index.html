@@ -226,14 +226,58 @@
 
 <p>示例 1:</p>
 <p>输入:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line"> [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> ],</span><br><span class="line"> [ <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span> ],</span><br><span class="line"> [ <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span> ]</span><br><span class="line">]</span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">9</span>,<span class="number">8</span>,<span class="number">7</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">[
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+]
+输出: [1,2,3,6,9,8,7,4,5]
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入:</span><br><span class="line">[</span><br><span class="line">  [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>],</span><br><span class="line">  [<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>],</span><br><span class="line">  [<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>]</span><br><span class="line">]</span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">8</span>,<span class="number">12</span>,<span class="number">11</span>,<span class="number">10</span>,<span class="number">9</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入:
+[
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9,10,11,12]
+]
+输出: [1,2,3,4,8,12,11,10,9,5,6,7]
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/spiral-matrix">https://leetcode-cn.com/problems/spiral-matrix</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <p>我用的方法就是设置四个角 left right top buttom  然后依次层层遍历<br>最主要是细心 反正我是写没成</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">spiralOrder</span><span class="params">(<span class="keyword">int</span>[][] matrix)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//我服了 照着答案写的 运行超出时间 copy就没有这个问题</span></span><br><span class="line">        List&lt;Integer&gt; order = <span class="keyword">new</span> ArrayList&lt;Integer&gt;();</span><br><span class="line">        <span class="keyword">if</span> (matrix == <span class="keyword">null</span> || matrix.length == <span class="number">0</span> || matrix[<span class="number">0</span>].length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> order;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> rows = matrix.length, columns = matrix[<span class="number">0</span>].length;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>, right = columns - <span class="number">1</span>, top = <span class="number">0</span>, bottom = rows - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right &amp;&amp; top &lt;= bottom) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> column = left; column &lt;= right; column++) &#123;</span><br><span class="line">                order.add(matrix[top][column]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> row = top + <span class="number">1</span>; row &lt;= bottom; row++) &#123;</span><br><span class="line">                order.add(matrix[row][right]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (left &lt; right &amp;&amp; top &lt; bottom) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> column = right - <span class="number">1</span>; column &gt; left; column--) &#123;</span><br><span class="line">                    order.add(matrix[bottom][column]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> row = bottom; row &gt; top; row--) &#123;</span><br><span class="line">                    order.add(matrix[row][left]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            left++;</span><br><span class="line">            right--;</span><br><span class="line">            top++;</span><br><span class="line">            bottom--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> order;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public List&lt;Integer&gt; spiralOrder(int[][] matrix) &#123;
+        //我服了 照着答案写的 运行超出时间 copy就没有这个问题
+        List&lt;Integer&gt; order = new ArrayList&lt;Integer&gt;();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) &#123;
+            return order;
+        &#125;
+        int rows = matrix.length, columns = matrix[0].length;
+        int left = 0, right = columns - 1, top = 0, bottom = rows - 1;
+        while (left &lt;= right &amp;&amp; top &lt;= bottom) &#123;
+            for (int column = left; column &lt;= right; column++) &#123;
+                order.add(matrix[top][column]);
+            &#125;
+            for (int row = top + 1; row &lt;= bottom; row++) &#123;
+                order.add(matrix[row][right]);
+            &#125;
+            if (left &lt; right &amp;&amp; top &lt; bottom) &#123;
+                for (int column = right - 1; column &gt; left; column--) &#123;
+                    order.add(matrix[bottom][column]);
+                &#125;
+                for (int row = bottom; row &gt; top; row--) &#123;
+                    order.add(matrix[row][left]);
+                &#125;
+            &#125;
+            left++;
+            right--;
+            top++;
+            bottom--;
+        &#125;
+        return order;
+    &#125;
+&#125;
+
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/2020092515522868.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

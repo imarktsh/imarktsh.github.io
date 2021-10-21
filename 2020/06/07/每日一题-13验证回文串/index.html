@@ -231,13 +231,25 @@
 <span id="more"></span>
 <p>说明：本题中，我们将空字符串定义为有效的回文串。</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;A man, a plan, a canal: Panama&quot;</span></span><br><span class="line">输出: <span class="keyword">true</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: &quot;A man, a plan, a canal: Panama&quot;
+输出: true
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;race a car&quot;</span></span><br><span class="line">输出: <span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">输入: &quot;race a car&quot;
+输出: false
+</code></pre>
 <p>先把字符串只保留0-9 a-z A-Z的字符 然后利用双指针一次判断前后对应位是否相等</p>
 <p>代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(s == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">       s = s.replaceAll(<span class="string">&quot;[^a-zA-Z0-9]&quot;</span>,<span class="string">&quot;&quot;</span>).toLowerCase();</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; s.length() / <span class="number">2</span>; i ++)&#123;</span><br><span class="line">           <span class="keyword">if</span>(s.charAt(i)!=s.charAt(s.length()-<span class="number">1</span>-i)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> public boolean isPalindrome(String s) &#123;
+        if(s == null) return true;
+        s = s.replaceAll(&quot;[^a-zA-Z0-9]&quot;,&quot;&quot;).toLowerCase();
+        for(int i = 0;i &lt; s.length() / 2; i ++)&#123;
+            if(s.charAt(i)!=s.charAt(s.length()-1-i)) return false;
+        &#125;
+        return true;
+
+    &#125;
+</code></pre>
 <p><strong>时间复杂度O(N)<br>空间复杂度O(N)</strong><br><img src="https://img-blog.csdnimg.cn/20200607093210188.png" alt="在这里插入图片描述"></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-palindrome">力扣（LeetCode）</a></p>
 

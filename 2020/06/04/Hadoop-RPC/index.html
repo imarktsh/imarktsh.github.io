@@ -258,25 +258,109 @@
 <p>定义RPC协议：<br> RPC协议是客户端和服务器端之间的通信接口，它定义了服务器端对外提供的服务接口。如ClientProtocol定义了HDFS客户端与NameNode的通信接口， ClientDatanodeProtocol定义了HDFS客户端与DataNode的通信接口等。</p>
 <p> 实现RPC协议：<br>对接口的实现，将会调用Server端的接口的实现。</p>
 <p>构造并启动RPC Server：<br>构造Server并监听请求。可使用静态类Builder构造一个RPC Server，并调用函数start()启动该Server，如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RPC.Server server = <span class="keyword">new</span> RPC.Builder(conf).setProtocol(MyProxyProtocol.class)</span><br><span class="line">        .setInstance(<span class="keyword">new</span> MyProxy())</span><br><span class="line">        .setBindAddress(HOST)</span><br><span class="line">        .setNumHandlers(<span class="number">2</span>)</span><br><span class="line">        .setPort(PORT)</span><br><span class="line">        .build();</span><br><span class="line">server.start();</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">RPC.Server server = new RPC.Builder(conf).setProtocol(MyProxyProtocol.class)
+        .setInstance(new MyProxy())
+        .setBindAddress(HOST)
+        .setNumHandlers(2)
+        .setPort(PORT)
+        .build();
+server.start();
+</code></pre>
 <p>构造RPC Client并发送请求：</p>
 <p>构造客户端代理对象，当有请求时客户端将通过动态代理，调用代理方法进行后续实现，如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyProxyProtocol proxy = RPC.getProxy(MyProxyProtocol.class,    MyProxyProtocol.versionID,        <span class="keyword">new</span> InetSocketAddress(HOST, PORT), conf);XXX result = proxy.fun(args);</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">MyProxyProtocol proxy = RPC.getProxy(MyProxyProtocol.class,    MyProxyProtocol.versionID,        new InetSocketAddress(HOST, PORT), conf);XXX result = proxy.fun(args);
+</code></pre>
 <h2 id="RPC-Client解读"><a href="#RPC-Client解读" class="headerlink" title="RPC Client解读"></a>RPC Client解读</h2><p>在 IPC（Inter-Process Communication）发生之前，客户端需要通过 RPC 提供的 getProxy 或 waitForProxy 获得代理对象，以 getProxy 的具体实现为例。</p>
 <p>RPC.getProxy 直接调用了 RPC.getProtocolProxy 方法，getProtocolProxy 方法如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">ProtocolProxy&lt;T&gt; <span class="title">getProtocolProxy</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">   ...</span><br><span class="line">   <span class="keyword">return</span> getProtocolEngine(protocol, conf).getProxy(...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public static &lt;T&gt; ProtocolProxy&lt;T&gt; getProtocolProxy(...) throws IOException &#123;
+   ...
+   return getProtocolEngine(protocol, conf).getProxy(...);
+&#125;
+</code></pre>
 <p>RPC 类提供了 getProtocolEngine 类方法用于适配 RPC 框架当前使用的序列化引擎，hadoop 本身实现了 Protobuf 和 Writable 序列化的RpcEngine 。以WritableRPCEngine 为例，getProxy(…) 实现如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">ProtocolProxy&lt;T&gt; <span class="title">getProxy</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;   </span><br><span class="line">  ...</span><br><span class="line">  <span class="comment">// 这里调用到原生的代理</span></span><br><span class="line">  T proxy = (T) Proxy.newProxyInstance(protocol.getClassLoader(),</span><br><span class="line">      <span class="keyword">new</span> Class[] &#123; protocol &#125;, <span class="keyword">new</span> WritableRpcEngine.Invoker(protocol, addr, ticket, conf,</span><br><span class="line">          factory, rpcTimeout, fallbackToSimpleAuth));</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ProtocolProxy&lt;T&gt;(protocol, proxy, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public &lt;T&gt; ProtocolProxy&lt;T&gt; getProxy(...) throws IOException &#123;   
+  ...
+  // 这里调用到原生的代理
+  T proxy = (T) Proxy.newProxyInstance(protocol.getClassLoader(),
+      new Class[] &#123; protocol &#125;, new WritableRpcEngine.Invoker(protocol, addr, ticket, conf,
+          factory, rpcTimeout, fallbackToSimpleAuth));
+  return new ProtocolProxy&lt;T&gt;(protocol, proxy, true);
+&#125;
+</code></pre>
 <p>上述使用动态代理模式，Proxy 实例化时 newProxyInstance 传进去的 InvocationHandler 的实现类是 WritableRpcEngine 的内部类 Invoker。 当 proxy 调用方法时，会代理到 WritableRpcEngine.Invoker 中的 invoke 方法，其代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Invoker</span> <span class="keyword">implements</span> <span class="title">RpcInvocationHandler</span> </span>&#123;</span><br><span class="line">    ....</span><br><span class="line">      </span><br><span class="line">    <span class="comment">// 构造器</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Invoker</span><span class="params">(...)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">this</span>.client = CLIENTS.getClient(conf, factory);</span><br><span class="line">      ...</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 执行的invoke方法</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">      ...</span><br><span class="line">      ObjectWritable value;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        value = (ObjectWritable)</span><br><span class="line">          client.call(RPC.RpcKind.RPC_WRITABLE, <span class="keyword">new</span> WritableRpcEngine.Invocation(method, args), remoteId, fallbackToSimpleAuth);</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (traceScope != <span class="keyword">null</span>) traceScope.close();</span><br><span class="line">      &#125;</span><br><span class="line">      ...</span><br><span class="line">      <span class="keyword">return</span> value.get();</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">private static class Invoker implements RpcInvocationHandler &#123;
+    ....
+      
+    // 构造器
+    public Invoker(...) throws IOException &#123;
+      ...
+      this.client = CLIENTS.getClient(conf, factory);
+      ...
+    &#125;
+  
+    // 执行的invoke方法
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable &#123;
+      ...
+      ObjectWritable value;
+      try &#123;
+        value = (ObjectWritable)
+          client.call(RPC.RpcKind.RPC_WRITABLE, new WritableRpcEngine.Invocation(method, args), remoteId, fallbackToSimpleAuth);
+      &#125; finally &#123;
+        if (traceScope != null) traceScope.close();
+      &#125;
+      ...
+      return value.get();
+    &#125;
+    ...
+&#125;
+</code></pre>
 <p>在 invoke 方法中，调用了 Client 类的 call 方法，并得到 RPC 请求的返回结果。其中 new WritableRpcEngine.Invocation(method, args) 实现了 Writable 接口，这里的作用是将 method 和 args 进行序列化成 Writable 传输类型。Client 类中的 call 方法如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Writable <span class="title">call</span><span class="params">(RPC.RpcKind rpcKind, Writable rpcRequest, ConnectionId remoteId, <span class="keyword">int</span> serviceClass, AtomicBoolean fallbackToSimpleAuth)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> Call call = createCall(rpcKind, rpcRequest);</span><br><span class="line">    Connection connection = getConnection(remoteId, call, serviceClass, fallbackToSimpleAuth);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 将远程调用信息发送给server端</span></span><br><span class="line">      connection.sendRpcRequest(call);                 <span class="comment">// send the rpc request</span></span><br><span class="line">    &#125; <span class="keyword">catch</span> (RejectedExecutionException e) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">&quot;connection has been closed&quot;</span>, e);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">      Thread.currentThread().interrupt();</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(e);</span><br><span class="line">    &#125;</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">synchronized</span> (call) &#123;</span><br><span class="line">      <span class="comment">// 判断call是否完成，等待server端notify</span></span><br><span class="line">      <span class="keyword">while</span> (!call.done) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 当前线程blocking住，</span></span><br><span class="line">          <span class="comment">// 等待Connection线程中receiveRpcResponse调用call.notify</span></span><br><span class="line">          call.wait();                           <span class="comment">// wait for the result</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException ie) &#123;</span><br><span class="line">          Thread.currentThread().interrupt();</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedIOException(<span class="string">&quot;Call interrupted&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  </span><br><span class="line">      <span class="keyword">if</span> (call.error != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (call.error <span class="keyword">instanceof</span> RemoteException) &#123;</span><br><span class="line">          call.error.fillInStackTrace();</span><br><span class="line">          <span class="keyword">throw</span> call.error;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// local exception</span></span><br><span class="line">          InetSocketAddress address = connection.getRemoteAddress();</span><br><span class="line">          <span class="keyword">throw</span> NetUtils.wrapException(address.getHostName(),</span><br><span class="line">                  address.getPort(),</span><br><span class="line">                  NetUtils.getHostname(),</span><br><span class="line">                  <span class="number">0</span>,</span><br><span class="line">                  call.error);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 得到server结果</span></span><br><span class="line">        <span class="keyword">return</span> call.getRpcResponse();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public Writable call(RPC.RpcKind rpcKind, Writable rpcRequest, ConnectionId remoteId, int serviceClass, AtomicBoolean fallbackToSimpleAuth) throws IOException &#123;
+    final Call call = createCall(rpcKind, rpcRequest);
+    Connection connection = getConnection(remoteId, call, serviceClass, fallbackToSimpleAuth);
+    try &#123;
+      // 将远程调用信息发送给server端
+      connection.sendRpcRequest(call);                 // send the rpc request
+    &#125; catch (RejectedExecutionException e) &#123;
+      throw new IOException(&quot;connection has been closed&quot;, e);
+    &#125; catch (InterruptedException e) &#123;
+      Thread.currentThread().interrupt();
+      throw new IOException(e);
+    &#125;
+  
+    synchronized (call) &#123;
+      // 判断call是否完成，等待server端notify
+      while (!call.done) &#123;
+        try &#123;
+          // 当前线程blocking住，
+          // 等待Connection线程中receiveRpcResponse调用call.notify
+          call.wait();                           // wait for the result
+        &#125; catch (InterruptedException ie) &#123;
+          Thread.currentThread().interrupt();
+          throw new InterruptedIOException(&quot;Call interrupted&quot;);
+        &#125;
+      &#125;
+  
+      if (call.error != null) &#123;
+        if (call.error instanceof RemoteException) &#123;
+          call.error.fillInStackTrace();
+          throw call.error;
+        &#125; else &#123; // local exception
+          InetSocketAddress address = connection.getRemoteAddress();
+          throw NetUtils.wrapException(address.getHostName(),
+                  address.getPort(),
+                  NetUtils.getHostname(),
+                  0,
+                  call.error);
+        &#125;
+      &#125; else &#123;
+        // 得到server结果
+        return call.getRpcResponse();
+      &#125;
+    &#125;
+  &#125;
+</code></pre>
 <p>以上代码展现了 call() 方法作为代理方法的整个流程。从整体来讲，客户端发送请求和接收请求在两个独立的线程中完成，发送线程调用 Client.call() 线程，而接收响应则是 call() 启动的 Connection 线程（ getConnection 方法中，由于篇幅原因不再展示）。</p>
 <p>那么二者如何同步 Server 的响应信息呢？内部类 Call 对象在此起到巧妙地同步作用。当线程1调用 Client.call() 方法发送 RPC 请求到 Server，会在请求对应的 Call 对象上调用 Call.wait() 方法等待 Server 响应信息；当线程2接收到 Server 响应信息后，将响应信息保存在 Call.rpcResponse 字段中，然后调用 Call.notify() 唤醒线程1。线程1被唤醒从 Call 中取出响应信息并返回。整个流程如图2所示，分析如下。</p>
 <p>在 call 方法中先将远程调用信息封装成一个 Client.Call 对象（保存了完成标志、返回信息、异常信息等），然后得到 connection 对象用于管理 Client 与 Server 的 Socket 连接。</p>
@@ -300,19 +384,97 @@
 <p>共享队列 callQueue 导致 RPC 拥塞，主要原因是将 Call 对象放在一起处理。FairCallQueue 首先改进的是划分出优先级关系，每个优先级对应一个队列，比如 Queue0，Queue1，Queue2 …，然后定义一个规则，数字越小的，优先级越高。</p>
 <p>优先级确定</p>
 <p>如何确定哪些请求该放到哪些优先级队列中呢？比较智能的做法是根据用户的请求频率确定优先级。频率越高，分到优先级越低的队列。比如，在相同时限内，A用户请求50次，B用户请求5次，则B用户将放入优先级较高的队列。这就涉及到在一定时限内统计用户请求频率，FairCallQueue 进入了一种频率衰减算法，前面时段内的计数结果通过衰减因子在下一轮的计算中，占比逐步衰减，这种做法比完全清零统计要平滑得多。相关代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The decay RPC scheduler counts incoming requests in a map, then</span></span><br><span class="line"><span class="comment"> * decays the counts at a fixed time interval. The scheduler is optimized</span></span><br><span class="line"><span class="comment"> * for large periods (on the order of seconds), as it offloads work to the</span></span><br><span class="line"><span class="comment"> * decay sweep.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecayRpcScheduler</span> <span class="keyword">implements</span> <span class="title">RpcScheduler</span>, <span class="title">DecayRpcSchedulerMXBean</span> </span>&#123;...&#125;</span><br><span class="line">从注释可知，衰减调度将对请求进行间隔几秒钟的计数统计，用于平滑计数。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">/**
+ * The decay RPC scheduler counts incoming requests in a map, then
+ * decays the counts at a fixed time interval. The scheduler is optimized
+ * for large periods (on the order of seconds), as it offloads work to the
+ * decay sweep.
+ */
+public class DecayRpcScheduler implements RpcScheduler, DecayRpcSchedulerMXBean &#123;...&#125;
+从注释可知，衰减调度将对请求进行间隔几秒钟的计数统计，用于平滑计数。
+</code></pre>
 <p>优先级权重</p>
 <p>为了防止低优先级队列“饥饿”，用轮询的方式从各个队列中取出一定的批次请求，再针对各个队列设置一个理论比重。FairCallQueue 采用加权轮询算法，相关代码及注释如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Determines which queue to start reading from, occasionally drawing from</span></span><br><span class="line"><span class="comment"> * low-priority queues in order to prevent starvation. Given the pull pattern</span></span><br><span class="line"><span class="comment"> * [9, 4, 1] for 3 queues:</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The cycle is (a minimum of) 9+4+1=14 reads.</span></span><br><span class="line"><span class="comment"> * Queue 0 is read (at least) 9 times</span></span><br><span class="line"><span class="comment"> * Queue 1 is read (at least) 4 times</span></span><br><span class="line"><span class="comment"> * Queue 2 is read (at least) 1 time</span></span><br><span class="line"><span class="comment"> * Repeat</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * There may be more reads than the minimum due to race conditions. This is</span></span><br><span class="line"><span class="comment"> * allowed by design for performance reasons.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightedRoundRobinMultiplexer</span> <span class="keyword">implements</span> <span class="title">RpcMultiplexer</span> </span>&#123;...&#125;</span><br><span class="line">从注释可知，若 Q0、Q1、Q2 的比重为 <span class="number">9</span>:<span class="number">4</span>:<span class="number">1</span>，理想情况下在 <span class="number">15</span> 次请求中，Q0 队列处理 <span class="number">9</span> 次请求，Q1 队列处理 <span class="number">4</span> 次请求，Q2 队列处理 <span class="number">1</span> 次请求。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * RPC服务端代码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyServer</span> </span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> SERVER_PORT = <span class="number">12345</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SERVER_ADDRESS = <span class="string">&quot;localhost&quot;</span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> Server server = RPC.getServer(<span class="keyword">new</span> MyBiz(), SERVER_ADDRESS,</span><br><span class="line">		SERVER_PORT, <span class="keyword">new</span> Configuration());</span><br><span class="line">		server.start();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+ * Determines which queue to start reading from, occasionally drawing from
+ * low-priority queues in order to prevent starvation. Given the pull pattern
+ * [9, 4, 1] for 3 queues:
+ *
+ * The cycle is (a minimum of) 9+4+1=14 reads.
+ * Queue 0 is read (at least) 9 times
+ * Queue 1 is read (at least) 4 times
+ * Queue 2 is read (at least) 1 time
+ * Repeat
+ *
+ * There may be more reads than the minimum due to race conditions. This is
+ * allowed by design for performance reasons.
+ */
+public class WeightedRoundRobinMultiplexer implements RpcMultiplexer &#123;...&#125;
+从注释可知，若 Q0、Q1、Q2 的比重为 9:4:1，理想情况下在 15 次请求中，Q0 队列处理 9 次请求，Q1 队列处理 4 次请求，Q2 队列处理 1 次请求。
+</code></pre>
+<pre><code class="java">/**
+ * RPC服务端代码
+ * @author liuyazhuang
+ * @date 2016-05-26
+*/
+public class MyServer &#123;
+    public static final int SERVER_PORT = 12345;
+    public static final String SERVER_ADDRESS = &quot;localhost&quot;;
+    public static void main(String[] args) throws IOException &#123;
+        final Server server = RPC.getServer(new MyBiz(), SERVER_ADDRESS,
+        SERVER_PORT, new Configuration());
+        server.start();
+    &#125;
+&#125;
+</code></pre>
 <p>核心在于 RPC.getServer 方法，该方法有四个参数，第一个参数是被调用的 java对象，第二个参数是服务器的地址，第三个参数是服务器的端口。获得服务器对象后，启动<br>服务器。这样，服务器就在指定端口监听客户端的请求。<br>下面的代码是被调用的远程对象类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 被调用的远程对象类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBiz</span> <span class="keyword">implements</span> <span class="title">MyBizable</span></span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> BIZ_VERSION = <span class="number">2345234L</span>;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;我被调用了&quot;</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;hello &quot;</span>+name;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getProtocolVersion</span><span class="params">(String protocol, <span class="keyword">long</span> clientVersion)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> BIZ_VERSION;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+ * 被调用的远程对象类
+ * @author liuyazhuang
+ * @date 2016-05-26
+*/
+public class MyBiz implements MyBizable&#123;
+    public static long BIZ_VERSION = 2345234L;
+    @Override
+    public String hello(String name)&#123;
+        System.out.println(&quot;我被调用了&quot;);
+        return &quot;hello &quot;+name;
+    &#125;
+    @Override
+    public long getProtocolVersion(String protocol, long clientVersion) throws IOException &#123;
+        return BIZ_VERSION;
+    &#125;
+&#125;
+</code></pre>
 <p>被调用的远程对象实现了接口 MyBizable，这里面有两个方法被实现，一个就是 hello方法，另一个是 getProtocalVersion 方法。这个 hello 方法内部有个输出语句。<br>下面的代码是远程调用类的接口定义：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 远程调用类的接口</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MyBizable</span> <span class="keyword">extends</span> <span class="title">VersionedProtocol</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">hello</span><span class="params">(String name)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+ * 远程调用类的接口
+ * @author liuyazhuang
+ * @date 2016-05-26
+*/
+public interface MyBizable extends VersionedProtocol&#123;
+    public abstract String hello(String name);
+&#125;
+</code></pre>
 <p>这个接口中的方法就是刚才的 Biz 中实现的方法。接口继承的 VersionedProtocal，是hadoop 的 RPC 的接口，所有的 RPC 通信必须实现这一接口，用于保证客户端和服务端的端口一致。服务端被调用的类必须继承这个接口 VersionedProtocal。<br>下面是客户端代码，这里使用的调用对象的接口：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 客户端代码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> liuyazhuang</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2016-05-26</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClient</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">final</span> MyBizable proxy = (MyBizable)RPC.getProxy(MyBizable.class,</span><br><span class="line">		MyBiz.BIZ_VERSION, <span class="keyword">new</span> InetSocketAddress(MyServer.SERVER_ADDRESS,</span><br><span class="line">		MyServer.SERVER_PORT), <span class="keyword">new</span> Configuration());</span><br><span class="line">		<span class="comment">//调用接口中的方法</span></span><br><span class="line">		<span class="keyword">final</span> String result = proxy.hello(<span class="string">&quot;world&quot;</span>);</span><br><span class="line">		System.out.println(result);</span><br><span class="line">		<span class="comment">//本质是关闭网络连接</span></span><br><span class="line">		RPC.stopProxy(proxy);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+ * 客户端代码
+ * @author liuyazhuang
+ * @date 2016-05-26
+*/
+public class MyClient &#123;
+    public static void main(String[] args) throws Exception &#123;
+        final MyBizable proxy = (MyBizable)RPC.getProxy(MyBizable.class,
+        MyBiz.BIZ_VERSION, new InetSocketAddress(MyServer.SERVER_ADDRESS,
+        MyServer.SERVER_PORT), new Configuration());
+        //调用接口中的方法
+        final String result = proxy.hello(&quot;world&quot;);
+        System.out.println(result);
+        //本质是关闭网络连接
+        RPC.stopProxy(proxy);
+    &#125;
+&#125;
+</code></pre>
 <p>以上代码中核心在于 RPC.getProxy()，该方法有四个参数，第一个参数是被调用的接口类，第二个是客户端版本号，第三个是服务端地址。返回的代理对象，就是服务端对象的代理，内部就是使用 java.lang.Proxy 实现的。运行时，先启动服务端，再启动客户端。可以在服务端和客户端输出信息来打印自己想要的内容。<br>从上面的 RPC 调用中，可以看出：在客户端调用的业务类的方法是定义在业务类的接口中的。该接口实现了 VersionedProtocal 接口。</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/51508795">原文链接</a></p>
 <p><a target="_blank" rel="noopener" href="http://blog.itpub.net/69908606/viewspace-2648472/">原文链接</a></p>

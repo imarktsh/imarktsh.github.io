@@ -226,17 +226,34 @@
 
 <p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">3</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">输出: <span class="number">3</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [3,2,3]
+输出: 3
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">2</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [2,2,1,1,1,2,2]
+输出: 2
+</code></pre>
 <p>感觉我思想出了问题，看见题目第一感觉都是暴力遍历，这样不行啊</p>
 <blockquote>
 <p>从第一个数开始count=1，遇到相同的就加1，遇到不同的就减1，减到0就重新换个数开始计数，总能找到最多的那个</p>
 </blockquote>
 <p>按照这个思路一下就搞出来了<br>代码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">majorityElement</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> num = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> count = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> a = <span class="number">1</span>; a &lt; nums.length; a ++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(count &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">if</span>(num == nums[a]) count ++;</span><br><span class="line">                <span class="keyword">else</span> count --;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                num = nums[a];</span><br><span class="line">                count = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> num;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public int majorityElement(int[] nums) &#123;
+        int num = nums[0];
+        int count = 1;
+        for(int a = 1; a &lt; nums.length; a ++)&#123;
+            if(count &gt; 0)&#123;
+                if(num == nums[a]) count ++;
+                else count --;
+            &#125;
+            else &#123;
+                num = nums[a];
+                count = 1;
+            &#125;
+        &#125;
+        return num;
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200620114643108.png" alt="在这里插入图片描述"></p>
 <p><strong>遍历一次复杂度O（N)</strong></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/majority-element/submissions/">leetcode</a></p>

@@ -226,17 +226,41 @@
 <p>数组中的每个元素代表你在该位置可以跳跃的最大长度。</p>
 <p>判断你是否能够到达最后一个位置。</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">4</span>]</span><br><span class="line">输出: <span class="keyword">true</span></span><br><span class="line">解释: 我们可以先跳 <span class="number">1</span> 步，从位置 <span class="number">0</span> 到达 位置 <span class="number">1</span>, </span><br><span class="line">然后再从位置 <span class="number">1</span> 跳 <span class="number">3</span> 步到达最后一个位置。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [2,3,1,1,4]
+输出: true
+解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 
+然后再从位置 1 跳 3 步到达最后一个位置。
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">4</span>]</span><br><span class="line">输出: <span class="keyword">false</span></span><br><span class="line">解释: 无论怎样，你总会到达索引为 <span class="number">3</span> 的位置。</span><br><span class="line">但该位置的最大跳跃长度是 <span class="number">0</span> ， 所以你永远不可能到达最后一个位置。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [3,2,1,0,4]
+输出: false
+解释: 无论怎样，你总会到达索引为 3 的位置。
+但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/jump-game">https://leetcode-cn.com/problems/jump-game</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <p>评论 永远的神！</p>
 <blockquote>
 <p>其实很简单！<br>想象你是那个在格子上行走的小人，格子里面的数字代表“能量”，你需要“能量”才能继续行走。<br>每次走到一个格子的时候，你检查现在格子里面的“能量”和你自己拥有的“能量”哪个更大，取更大的“能量”！ 如果你有更多的能量，你就可以走的更远啦！~</p>
 </blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">canJump</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.length &lt;=<span class="number">1</span> ) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">int</span> can_reach = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//刚开始没有加 can_reach&gt;= i 一直错误 因为值判断能不能到达终点 可能中图就失败 </span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length &amp;&amp; can_reach &gt;= i; i ++)&#123;</span><br><span class="line">           </span><br><span class="line">            <span class="comment">//找当前位置跟前面的哪个能走更远，保持大的</span></span><br><span class="line">            can_reach = Math.max(can_reach, i + nums[i]);</span><br><span class="line">             <span class="comment">//最后i比最大能到达还大 就不行</span></span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> can_reach &gt;= nums.length-<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public boolean canJump(int[] nums) &#123;
+        if(nums.length &lt;=1 ) return true;
+        int can_reach = 0;
+        //刚开始没有加 can_reach&gt;= i 一直错误 因为值判断能不能到达终点 可能中图就失败 
+        for(int i = 0; i &lt; nums.length &amp;&amp; can_reach &gt;= i; i ++)&#123;
+           
+            //找当前位置跟前面的哪个能走更远，保持大的
+            can_reach = Math.max(can_reach, i + nums[i]);
+             //最后i比最大能到达还大 就不行
+            
+        &#125;
+        return can_reach &gt;= nums.length-1;
+
+
+    &#125;
+    
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/2020092516192927.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>不着急 慢慢学</p>
 
     </div>

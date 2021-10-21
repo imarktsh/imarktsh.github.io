@@ -227,10 +227,18 @@
         <p>这几天spark程序打包上传集群运行</p>
 <span id="more"></span>
 <p>有时候改几个参数或者出错了又要重新打包上传 非常的不方便 这几天已经重复五六十次了<br>所以把需要改的参数作为main函数参数传入<br>首先在idea里面怎么写</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    System.out.println(args[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    public static void main(String[] args) &#123;
+        System.out.println(args[0]);
+    &#125;
+</code></pre>
 <p>直接取args就行<br>那么如何在idea中传args呢？<br><img src="https://img-blog.csdnimg.cn/20201019101818986.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201019101903918.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>箭头这个 写参数就行 注意用空格隔开</p>
 <p>打包之后xshell怎么写？</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(args[<span class="number">0</span>].equals(<span class="string">&quot;output&quot;</span>)) datapath = datapath1;</span><br><span class="line"><span class="keyword">int</span> numFeatures = Integer.parseInt(args[<span class="number">1</span>]);</span><br><span class="line"><span class="keyword">int</span> numClasses = Integer.parseInt(args[<span class="number">2</span>]);</span><br><span class="line"><span class="keyword">int</span> numTrees = Integer.parseInt(args[<span class="number">3</span>]); <span class="comment">// 树的数量</span></span><br><span class="line"><span class="keyword">int</span> maxDepth = Integer.parseInt(args[<span class="number">4</span>]);</span><br></pre></td></tr></table></figure>
+<pre><code class="java">if(args[0].equals(&quot;output&quot;)) datapath = datapath1;
+int numFeatures = Integer.parseInt(args[1]);
+int numClasses = Integer.parseInt(args[2]);
+int numTrees = Integer.parseInt(args[3]); // 树的数量
+int maxDepth = Integer.parseInt(args[4]);
+</code></pre>
 <p>xshll里面直接写参数 加空格<br><img src="https://img-blog.csdnimg.cn/20201019103728419.png#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20201019103956184.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>正常运行</p>
 
     </div>

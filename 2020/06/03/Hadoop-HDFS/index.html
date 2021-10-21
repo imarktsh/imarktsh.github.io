@@ -287,8 +287,8 @@
 </ul>
 <p>上面提到 HDFS 中的数据是以 block 的形式分散在 DataNode 中，那什么是 block ，它是如何形成的呢？</p>
 <h2 id="数据块（Block）"><a href="#数据块（Block）" class="headerlink" title="数据块（Block）"></a>数据块（Block）</h2><p>通常，在任何文件系统中，都将<strong>数据存储为 block</strong> 的集合。block 是硬盘上存储数据的最不连续的位置。在 hadoop 集群中，每个 <strong>block 的默认大小为 128M</strong>（此处指 hadoop 2.x 版本，hadoop 1.x 版本为 64M），您也可以通过如下配置配置 block 的大小：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.block.size 或 dfs.blocksize = 64M</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">dfs.block.size 或 dfs.blocksize = 64M
+</code></pre>
 <p>HDFS 不会将每个文件存储在配置的 block 大小的确切倍数中，比如一个 514M 的文件 example.txt，如果上图所示，假设 block 大小为默认的 128M，那么将会创建 5 个block，前 4 个 block 大小为 128M，但是最后一个 block 的大小则仅为 2M。</p>
 <p>那么，为何需要将 block 的大小设置为如此大，比如 128M，而不是更小呢？</p>
 <p>通常我们在谈论 HDFS 的作用的时，都会谈论到<strong>巨大的数据集</strong>，即 Terabytes 和 PB 数据，所以如果我们的 block 大小仅为 4KB，那么将会产生太多的 block，间接导致产生太多的元数据，从而使<strong>管理这些 block 和 元数据会产生巨大的开销</strong>，这样无疑会<strong>增加 Namenode</strong> 和 Datanode 的负载，尤其 Namenode 是一个中心服务器，所以这并不会是我们想要的。</p>

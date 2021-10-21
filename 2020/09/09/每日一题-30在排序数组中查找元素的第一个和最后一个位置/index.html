@@ -227,14 +227,33 @@
 <p>你的算法时间复杂度必须是 <strong>O(log n)</strong> 级别。</p>
 <p>如果数组中不存在目标值，返回 [-1, -1]。</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: nums = [<span class="number">5</span>,<span class="number">7</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">10</span>], target = <span class="number">8</span></span><br><span class="line">输出: [<span class="number">3</span>,<span class="number">4</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: nums = [<span class="number">5</span>,<span class="number">7</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">8</span>,<span class="number">10</span>], target = <span class="number">6</span></span><br><span class="line">输出: [-<span class="number">1</span>,-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: nums = [5,7,7,8,8,10], target = 6
+输出: [-1,-1]
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array">https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array</a></p>
 <p>这个复杂度要求 直接使用二分查找</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] searchRange(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">     <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">int</span> right = nums.length - <span class="number">1</span>;</span><br><span class="line">     <span class="comment">//二分查找</span></span><br><span class="line">     <span class="keyword">while</span>(left &lt;= right)&#123;</span><br><span class="line">         <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;</span><br><span class="line">         <span class="keyword">if</span>(target &gt; nums[mid]) left = mid + <span class="number">1</span>;</span><br><span class="line">         <span class="keyword">else</span> <span class="keyword">if</span>(target &lt; nums[mid]) right = mid - <span class="number">1</span>;</span><br><span class="line">         <span class="comment">//找到之后判断首尾</span></span><br><span class="line">         <span class="keyword">else</span>&#123;</span><br><span class="line">             <span class="keyword">while</span>(target != nums[left]) left ++;</span><br><span class="line">             <span class="keyword">while</span>(target != nums[right]) right --;</span><br><span class="line">             <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;left,right&#125;;</span><br><span class="line">         &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;-<span class="number">1</span>,-<span class="number">1</span>&#125;;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">   public int[] searchRange(int[] nums, int target) &#123;
+        int left = 0;
+        int right = nums.length - 1;
+        //二分查找
+        while(left &lt;= right)&#123;
+            int mid = left + (right - left) / 2;
+            if(target &gt; nums[mid]) left = mid + 1;
+            else if(target &lt; nums[mid]) right = mid - 1;
+            //找到之后判断首尾
+            else&#123;
+                while(target != nums[left]) left ++;
+                while(target != nums[right]) right --;
+                return new int[]&#123;left,right&#125;;
+            &#125;
+        &#125;
+        return new int[]&#123;-1,-1&#125;;
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200909143039732.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

@@ -229,10 +229,30 @@
 <p>注意: 不能使用代码库中的排序函数来解决这道题。</p>
 </blockquote>
 <p>示例:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>]</span><br><span class="line">输出: [<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [2,0,2,1,1,0]
+输出: [0,0,1,1,2,2]
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sort-colors">https://leetcode-cn.com/problems/sort-colors</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sortColors</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//计数排序</span></span><br><span class="line">    <span class="keyword">int</span> zero = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> one = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> two = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i ++)&#123;</span><br><span class="line">        <span class="keyword">switch</span>(nums[i])&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: zero ++;<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: one ++;<span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: two ++;<span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; zero; i ++) nums[i] = <span class="number">0</span>;   </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = zero; i &lt; zero+one; i ++) nums[i] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = zero+one; i &lt; zero+one+two; i ++) nums[i] = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public void sortColors(int[] nums) &#123;
+    //计数排序
+    int zero = 0;
+    int one = 0;
+    int two = 0;
+    for(int i = 0; i &lt; nums.length; i ++)&#123;
+        switch(nums[i])&#123;
+            case 0: zero ++;break;
+            case 1: one ++;break;
+            case 2: two ++;break;
+        &#125;
+    &#125;
+    for(int i = 0; i &lt; zero; i ++) nums[i] = 0;   
+    for(int i = zero; i &lt; zero+one; i ++) nums[i] = 1;
+    for(int i = zero+one; i &lt; zero+one+two; i ++) nums[i] = 2;
+    &#125;
+
+&#125;
+</code></pre>
 <p>计数排序可以搞定<br><img src="https://img-blog.csdnimg.cn/20201006214551234.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

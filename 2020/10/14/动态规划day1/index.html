@@ -231,9 +231,71 @@
 <p>斐波那契数列 递归复杂度为N方 改为队列递推之后复杂度为On<br><img src="https://img-blog.csdnimg.cn/20201013210158896.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 <p>赚最多的钱</p>
 <p><img src="https://img-blog.csdnimg.cn/20201013210654856.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>关键在于求opt数组<br><img src="https://img-blog.csdnimg.cn/20201013211808113.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>不相邻最大的数字和<br><img src="https://img-blog.csdnimg.cn/20201013212330528.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>动态规划】</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy as np</span><br><span class="line">arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">3</span>]</span><br><span class="line"><span class="function">def <span class="title">rec_opt</span><span class="params">(arr,i)</span>:</span></span><br><span class="line"><span class="function">    <span class="keyword">if</span> i </span>== <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> arr[<span class="number">0</span>]</span><br><span class="line">    elif i == <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> max(arr[<span class="number">0</span>],arr[<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        A = rec_opt(arr, i - <span class="number">2</span>) + arr[i]</span><br><span class="line">        B = rec_opt(arr, i - <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> max(A,B)</span><br><span class="line"></span><br><span class="line">#递归会产生重叠子问题 复杂度N方</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">dp_opt</span><span class="params">(arr)</span>:</span></span><br><span class="line"><span class="function">    opt </span>= np.zeros(len(arr))</span><br><span class="line">    opt[<span class="number">0</span>] = arr[<span class="number">0</span>]</span><br><span class="line">    opt[<span class="number">1</span>] = max(arr[<span class="number">0</span>],arr[<span class="number">1</span>])</span><br><span class="line">    <span class="function"><span class="keyword">for</span> i in <span class="title">range</span><span class="params">(<span class="number">2</span>,len(arr)</span>):</span></span><br><span class="line"><span class="function">        A </span>= opt[i - <span class="number">2</span>] + arr[i]</span><br><span class="line">        B = opt[i - <span class="number">1</span>]</span><br><span class="line">        opt[i] = max(A,B)</span><br><span class="line">    <span class="keyword">return</span> opt[len(arr) - <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">a = dp_opt(arr)</span><br><span class="line">print(a)</span><br><span class="line">#数组的方式 复杂度为N</span><br></pre></td></tr></table></figure>
+<pre><code class="java">import numpy as np
+arr = [1,2,4,1,7,8,3]
+def rec_opt(arr,i):
+    if i == 0:
+        return arr[0]
+    elif i == 1:
+        return max(arr[0],arr[1])
+    else:
+        A = rec_opt(arr, i - 2) + arr[i]
+        B = rec_opt(arr, i - 1)
+        return max(A,B)
+
+#递归会产生重叠子问题 复杂度N方
+
+def dp_opt(arr):
+    opt = np.zeros(len(arr))
+    opt[0] = arr[0]
+    opt[1] = max(arr[0],arr[1])
+    for i in range(2,len(arr)):
+        A = opt[i - 2] + arr[i]
+        B = opt[i - 1]
+        opt[i] = max(A,B)
+    return opt[len(arr) - 1]
+
+a = dp_opt(arr)
+print(a)
+#数组的方式 复杂度为N
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201013214021829.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>这道题是数组里面存在数字加起来 等于s</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">arr1 = [<span class="number">3</span>,<span class="number">34</span>,<span class="number">4</span>,<span class="number">12</span>,<span class="number">5</span>,<span class="number">2</span>]</span><br><span class="line">#递归的方式求</span><br><span class="line"><span class="function">def <span class="title">rec_subset</span><span class="params">(arr,i,s)</span>:</span></span><br><span class="line"><span class="function">    #三种递归出口</span></span><br><span class="line"><span class="function">    <span class="title">if</span><span class="params">(s == <span class="number">0</span>)</span>:</span></span><br><span class="line"><span class="function">        return True</span></span><br><span class="line"><span class="function">    elif i </span>== <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> arr[<span class="number">0</span>] == s</span><br><span class="line">    elif arr[i] &gt; s:</span><br><span class="line">        <span class="keyword">return</span> rec_subset(arr,i-<span class="number">1</span>,s)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        A = rec_subset(arr, i-<span class="number">1</span>,s-arr[i])#选这个</span><br><span class="line">        B = rec_subset(arr,i-<span class="number">1</span>,s)#不选这个数</span><br><span class="line">        <span class="keyword">return</span> A or B</span><br><span class="line">s = rec_subset(arr1,len(arr1)-<span class="number">1</span>,<span class="number">13</span>)</span><br><span class="line">print(s)</span><br><span class="line"></span><br><span class="line"><span class="function">def <span class="title">dp_subset</span><span class="params">(arr,s)</span>:</span></span><br><span class="line"><span class="function">    subset </span>= np.zeros((len(arr),s+<span class="number">1</span>),dtype=bool)</span><br><span class="line">    subset[:,<span class="number">0</span>] = True</span><br><span class="line">    subset[<span class="number">0</span>,:] = False</span><br><span class="line">    subset[<span class="number">0</span>,arr[<span class="number">0</span>]] = True</span><br><span class="line">    #填表</span><br><span class="line">    <span class="function"><span class="keyword">for</span> i in <span class="title">range</span><span class="params">(<span class="number">1</span>,len(arr)</span>):</span></span><br><span class="line"><span class="function">        <span class="keyword">for</span> s in <span class="title">range</span><span class="params">(<span class="number">1</span>,s+<span class="number">1</span>)</span>:</span></span><br><span class="line"><span class="function">            <span class="title">if</span><span class="params">(arr[i] &gt; s)</span>:</span></span><br><span class="line"><span class="function">                subset[i,s] </span>= subset[i-<span class="number">1</span>,s]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                A = subset[i-<span class="number">1</span>,s-arr[i]]</span><br><span class="line">                B = subset[i-<span class="number">1</span>,s]</span><br><span class="line">                subset[i,s] = A or B</span><br><span class="line">    r,c = subset.shape</span><br><span class="line">    <span class="keyword">return</span> subset[r-<span class="number">1</span>,c-<span class="number">1</span>]</span><br><span class="line">v = dp_subset(arr1,<span class="number">9</span>)</span><br><span class="line">print(v)</span><br></pre></td></tr></table></figure>
+<pre><code class="java">arr1 = [3,34,4,12,5,2]
+#递归的方式求
+def rec_subset(arr,i,s):
+    #三种递归出口
+    if(s == 0):
+        return True
+    elif i == 0:
+        return arr[0] == s
+    elif arr[i] &gt; s:
+        return rec_subset(arr,i-1,s)
+    else:
+        A = rec_subset(arr, i-1,s-arr[i])#选这个
+        B = rec_subset(arr,i-1,s)#不选这个数
+        return A or B
+s = rec_subset(arr1,len(arr1)-1,13)
+print(s)
+
+def dp_subset(arr,s):
+    subset = np.zeros((len(arr),s+1),dtype=bool)
+    subset[:,0] = True
+    subset[0,:] = False
+    subset[0,arr[0]] = True
+    #填表
+    for i in range(1,len(arr)):
+        for s in range(1,s+1):
+            if(arr[i] &gt; s):
+                subset[i,s] = subset[i-1,s]
+            else:
+                A = subset[i-1,s-arr[i]]
+                B = subset[i-1,s]
+                subset[i,s] = A or B
+    r,c = subset.shape
+    return subset[r-1,c-1]
+v = dp_subset(arr1,9)
+print(v)
+</code></pre>
 <p>这道题代码就是这样子</p>
 
     </div>

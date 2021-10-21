@@ -264,8 +264,9 @@
 <li>将切片的规划放入文件内job.xml等文件.<br>切片相关参数: Math.max(minSize,Math.min(maxSize,blockSize)).minSize: 默认为1, 配置参数mapreduce.input.fileinputformat.split.minsize.<br>maxSize: 默认值为Long.MAXVALUE,<br>配置参数mapreduce.input.fileinputformat.split.maxsize.</li>
 </ul>
 <p><strong>blockSize</strong><br>默认情况下,切片大小为BlockSize. maxsize, 如果设置比blockSize小会使得切片变小. minsize, 如果设置比BlockSize大, 则可以让切片变得比BlockSize大.<br>实例:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">比如有两个文件: file1.txt 320M file2.txt 10M</span><br><span class="line">切分后的结果为: file1.txt.split1 <span class="number">1</span>-128M / file1.txt.split2 <span class="number">128</span>-<span class="number">256</span> / file1.txt.split3 <span class="number">256</span>-<span class="number">320</span> /file2.txt.split1 <span class="number">1</span>-10M</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">比如有两个文件: file1.txt 320M file2.txt 10M
+切分后的结果为: file1.txt.split1 1-128M / file1.txt.split2 128-256 / file1.txt.split3 256-320 /file2.txt.split1 1-10M
+</code></pre>
 <p>主要影响: 结点硬件环境/运算类型:IO密集型/CPU密集型/运算任务的数据量,</p>
 <p>Job的提交流程<br><img src="https://img-blog.csdnimg.cn/20200607102116391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <ul>

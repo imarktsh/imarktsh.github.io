@@ -224,11 +224,39 @@
         <p>对java程序员笔试解析 整理(4) 多线程</p>
 <span id="more"></span>
 <p><img src="https://img-blog.csdnimg.cn/20210129114157919.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>40.实现多线程的三种方法<br>实现Run able接口，并实现接口中的run方法。步骤自定义类并实现Runable接口实现run方法；创建Thread对象，用实现Runable接口的对象作为参数实例化Thread对象；调用Thread对象的start()方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">implements</span> <span class="title">Runable</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">         System.out.println(<span class="string">&quot;Thread body&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//调用</span></span><br><span class="line">MyThread thread = <span class="keyword">new</span> MyThread();</span><br><span class="line">Thread t = <span class="keyword">new</span> Thread(thread);</span><br><span class="line">t.start();</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class MyThread implements Runable&#123;
+    public void run()&#123;
+         System.out.println(&quot;Thread body&quot;);
+&#125;
+&#125;
+//调用
+MyThread thread = new MyThread();
+Thread t = new Thread(thread);
+t.start();
+</code></pre>
 <p>继承Thread类重写run’方法。启动线程的唯一方式就是start()方法,它是一个本地方法，将启动一个线程并执行run方法，当start调用之后并不是立即执行多线程代码，而是使得该线程变为可运行状态，至于什么时候运行由操作系统决定。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">         System.out.println(<span class="string">&quot;Thread body&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">MyThread thread = <span class="keyword">new</span> MyThread();</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class MyThread extends Thread&#123;
+    public void run()&#123;
+         System.out.println(&quot;Thread body&quot;);
+&#125;
+&#125;
+MyThread thread = new MyThread();
+thread.start();
+</code></pre>
 <p>实现Callable接口，重写call方法。Callable对象属于Executor框架中功能类，Callable接口与Runable接口类似，但是功能更强大。<br>Callable可以在任务结束后提供一个返回值<br>call()方法可以抛出异常<br>运行Callable可以拿到一个Future对象，Futrure对象表示异步计算的结果。可以使用Furure监视目标线程调用call()方法的情况，当调用Future的get方法当前线程回阻塞，知道call方法返回结果。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> calss CallableTset implements Callable&lt;String&gt;&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;hello word&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ExecutorService threadPool = Executor.newSingleThreadExecutor();</span><br><span class="line">Future&lt;String&gt; future = threadPool.submit(<span class="keyword">new</span> CallbaleTest());</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;wait thread to finish&quot;</span>);</span><br><span class="line">    System.out.println(future.get());</span><br><span class="line">&#125;<span class="keyword">catch</span>(Exception e)&#123;e.printStackTrace()&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public static calss CallableTset implements Callable&lt;String&gt;&#123;
+    public String call() throws Exception&#123;
+        return &quot;hello word&quot;;
+&#125;
+&#125;
+
+ExecutorService threadPool = Executor.newSingleThreadExecutor();
+Future&lt;String&gt; future = threadPool.submit(new CallbaleTest());
+try&#123;
+    System.out.println(&quot;wait thread to finish&quot;);
+    System.out.println(future.get());
+&#125;catch(Exception e)&#123;e.printStackTrace()&#125;
+</code></pre>
 <p>以上三种方法前两种都没返回值，只有最后一种带返回值。推荐使用Runable实现多线程，Thread类定义多种方法可以被派生类重写，只有run方法必须被重写，在run方法中实现这个线程的主要功能。</p>
 <p>41.使用violate修饰的变量编译器不会优化，每次直接从内存中读取。<br>sleep方法指定线程不会运行的最短时间，当线程休眠时，会返回到可运行状态，运行状态还需要等待CPU调度。</p>
 <p>42.sleep和wait的区别<br>sleep时Thread类的静态方法，是线程用来控制自身的流程，它会使线程暂停指定时间，把执行机会让给其他线程，等到计时时间到此线程会自动苏醒。<br>wait是Object类的方法，用于线程间的通信，这个方法会使当前拥有对象锁的进程等待，直到其他线程调用notify方法。<br>对锁的处理机制不同，sleep到时间自动恢复，不涉及线程间通信，因此调用sleep方法不会释放锁。wait方法调用会释放掉他所占的锁，从而其他synchronized数据可被其他线程使用。<br>使用区域不同，wait必须在同步代码块和同步语句中，而sleep方法则可以在任何地方。<br>sleep方法必须捕捉异常，而wait、notify不需要捕捉异常，由于sleep不会释放锁，容易导致死锁发生。</p>
@@ -237,7 +265,27 @@
 <p>45.i=i++和++i<br>都不是线程安全的，首先把i的值取出来放到栈顶，相当于引入一个第三方变量k，k的值为i然后执行自增操作，最后执行i=k操作。<br>AtomicInteger是一个提供原子操作的Integer类底层使用CAS操作，CAS操作包含三个运算符：内存地址V，期望值A和期望值B。当操作的时候如果地址上存放的值等于期望值A则则将地址V赋值为B。</p>
 <p>45.线程池<br>频繁的创建线程导致过度消耗系统资源，线程池的引入就是解决这些问题。<br>线程池的线程可以重复利用另一方面可以限制线程的数量，不会导致创建过多线程的性能下降。<br>Java提供如下4个线程池的实现类：<br>newSingleThreadExecutor:创建一个单线程的线程池，他只会用唯一的工作线程来执行任务，相当于单线程执行任务，如果这个唯一线程因为异常结束，那么会有一个新线程代替它。<br>newFixedThreadPool:创建一个定长的线程池，可控制线程的最大并发数超出的线程会在队列中等待。<br>newCachaedThreadPool：创建一个可缓存线程池，<br>newScheeduledThreadPool:创建一个定长的线程池，此线程池支持定长以及周期性执行任务的需求。</p>
 <p>46.写一段死锁代码<br>死锁是指两个或以上的进程在执行过程中，因争夺资源而造成的一种互相等待的现象。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thread1</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(ShareObject1.class)&#123;System.out.ptintln(<span class="string">&quot;线程1获取到ShareObject1锁&quot;</span>)&#125;；</span><br><span class="line">        <span class="keyword">try</span>&#123;Thread.sleep(<span class="number">100</span>);&#125;</span><br><span class="line">        <span class="keyword">catch</span>(InterruptedException e)&#123;e.printStackTrace();&#125;</span><br><span class="line">        <span class="keyword">synchronized</span>(ShareObject2.class)&#123;System.out.ptintln(<span class="string">&quot;线程1获取到ShareObject2锁&quot;</span>)&#125;；</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thread2</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span>&#123;Thread.sleep(<span class="number">100</span>);&#125;</span><br><span class="line">        <span class="keyword">catch</span>(InterruptedException e)&#123;e.printStackTrace();&#125;</span><br><span class="line">        <span class="keyword">synchronized</span>(ShareObject2.class)&#123;System.out.ptintln(<span class="string">&quot;线程2获取到ShareObject2锁&quot;</span>);&#125;</span><br><span class="line">        <span class="keyword">synchronized</span>(ShareObject1.class)&#123;Syetem.out.println(<span class="string">&quot;线程2获取到ShareObject1锁&quot;</span>);&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> Thread1().start();</span><br><span class="line"><span class="keyword">new</span> Thread2().start();</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Thread1 extends Thread&#123;
+    @Override
+    public void run()&#123;
+        synchronized(ShareObject1.class)&#123;System.out.ptintln(&quot;线程1获取到ShareObject1锁&quot;)&#125;；
+        try&#123;Thread.sleep(100);&#125;
+        catch(InterruptedException e)&#123;e.printStackTrace();&#125;
+        synchronized(ShareObject2.class)&#123;System.out.ptintln(&quot;线程1获取到ShareObject2锁&quot;)&#125;；
+&#125;
+&#125;
+class Thread2 extends Thread&#123;
+    @Override
+    public void run()&#123;
+        try&#123;Thread.sleep(100);&#125;
+        catch(InterruptedException e)&#123;e.printStackTrace();&#125;
+        synchronized(ShareObject2.class)&#123;System.out.ptintln(&quot;线程2获取到ShareObject2锁&quot;);&#125;
+        synchronized(ShareObject1.class)&#123;Syetem.out.println(&quot;线程2获取到ShareObject1锁&quot;);&#125;
+&#125;
+&#125;
+new Thread1().start();
+new Thread2().start();
+</code></pre>
 <p>这段代码线程1先获取到ShareObject1的锁，然后尝试获取ShareObject2的锁，此时线程2以及获取到ShareObject2的锁，继续尝试获取ShareObject1的锁，都需要获取对方的资源才能运行，因此会导致死锁。<br>改一下：请求资源方式改为先获取shareObject1对象。</p>
 <p>47.GC线程是守护线程<br>守护线程又称服务进程。如果所有用户进程结束，那么Java虚拟机也就退出了，守护进程具有低优先级。</p>
 

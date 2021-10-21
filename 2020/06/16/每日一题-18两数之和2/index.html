@@ -227,10 +227,32 @@
 <p>函数应该返回这两个下标值 index1 和 index2，其中 <strong>index1 必须小于 index2。</strong></p>
 <p>说明:</p>
 <p>返回的下标值（index1 和 index2）不是从零开始的。<br>你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。<br><strong>示例:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: numbers = [<span class="number">2</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">15</span>], target = <span class="number">9</span></span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">解释: <span class="number">2</span> 与 <span class="number">7</span> 之和等于目标数 <span class="number">9</span> 。因此 index1 = <span class="number">1</span>, index2 = <span class="number">2</span> 。</span><br></pre></td></tr></table></figure>
+<pre><code class="java">输入: numbers = [2, 7, 11, 15], target = 9
+输出: [1,2]
+解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+</code></pre>
 <p>自己先写了个暴力法，效率太低了 看别人用的双指针</p>
 <p>双指针：因为是升序数组 大于target 移动右指针 小于target移动左指针。<br><strong>代码：</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] numbers, <span class="keyword">int</span> target) &#123;</span><br><span class="line">      <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">2</span>];</span><br><span class="line">      <span class="keyword">int</span> l = <span class="number">0</span>; <span class="keyword">int</span> r = numbers.length -<span class="number">1</span>;</span><br><span class="line">      <span class="keyword">while</span>(l &lt; r)&#123;</span><br><span class="line">          <span class="keyword">if</span>(numbers[l]+numbers[r] == target)&#123;</span><br><span class="line">              res[<span class="number">0</span>] = l+<span class="number">1</span>;</span><br><span class="line">              res[<span class="number">1</span>] = r+<span class="number">1</span>;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span>(numbers[l]+numbers[r] &lt; target) &#123;</span><br><span class="line">              l++;</span><br><span class="line">              &#125;</span><br><span class="line">          <span class="keyword">else</span>&#123;</span><br><span class="line">              r--;</span><br><span class="line">              &#125;</span><br><span class="line">         </span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> res;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">  public int[] twoSum(int[] numbers, int target) &#123;
+        int[] res = new int[2];
+        int l = 0; int r = numbers.length -1;
+        while(l &lt; r)&#123;
+            if(numbers[l]+numbers[r] == target)&#123;
+                res[0] = l+1;
+                res[1] = r+1;
+                break;
+            &#125;
+            else if(numbers[l]+numbers[r] &lt; target) &#123;
+                l++;
+                &#125;
+            else&#123;
+                r--;
+                &#125;
+           
+        &#125;
+        return res;
+    &#125;
+</code></pre>
 <p>时间复杂度遍历一次O(N)；、<br><img src="https://img-blog.csdnimg.cn/20200616134750968.png" alt="在这里插入图片描述"><br>效率高了一点<br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/submissions/">leetcode</a></p>
 
     </div>

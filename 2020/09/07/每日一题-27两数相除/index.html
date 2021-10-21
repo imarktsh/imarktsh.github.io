@@ -226,18 +226,57 @@
 <p>返回被除数 dividend 除以除数 divisor 得到的商。</p>
 <p>整数除法的结果应当截去（truncate）其小数部分，例如：truncate(8.345) = 8 以及 truncate(-2.7335) = -2</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: dividend = <span class="number">10</span>, divisor = <span class="number">3</span></span><br><span class="line">输出: <span class="number">3</span></span><br><span class="line">解释: <span class="number">10</span>/<span class="number">3</span> = truncate(<span class="number">3.33333</span>..) = truncate(<span class="number">3</span>) = <span class="number">3</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: dividend = 10, divisor = 3
+输出: 3
+解释: 10/3 = truncate(3.33333..) = truncate(3) = 3
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: dividend = <span class="number">7</span>, divisor = -<span class="number">3</span></span><br><span class="line">输出: -<span class="number">2</span></span><br><span class="line">解释: <span class="number">7</span>/-<span class="number">3</span> = truncate(-<span class="number">2.33333</span>..) = -<span class="number">2</span></span><br><span class="line"> </span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: dividend = 7, divisor = -3
+输出: -2
+解释: 7/-3 = truncate(-2.33333..) = -2
+ 
+</code></pre>
 <p>提示：</p>
 <p>被除数和除数均为 32 位有符号整数。<br>除数不为 0。<br>假设我们的环境只能存储 32 位有符号整数，其数值范围是 [−2^31^,  2^31^ − 1]。本题中，如果除法结果溢出，则返回 2^31^ − 1。</p>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/divide-two-integers">https://leetcode-cn.com/problems/divide-two-integers</a></p>
 <p>根本不会写 看了一下<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jJ411j78H?from=search&seid=6952880828269286269">视频</a>就懂了</p>
 <p>比如100 /3 相当于 100减3减33次之后余数为1小于除数 </p>
 <p>当直接使用减法就会发现超时 所以对减法进行优化，生产两个链表 第一个是除数的倍数 分别为 3* 2^1^  ，3* 2^2^  ，3* 2^3^ ,等等 直到3的N次大于100，然后依次再减，先减去3*2的5次就是3 * 32，res=32 然后被除数减去96得到4 再继续<br>看代码就懂了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">divide</span><span class="params">(<span class="keyword">int</span> dividend, <span class="keyword">int</span> divisor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> d1 = dividend;</span><br><span class="line">        <span class="keyword">long</span> d2 = divisor;</span><br><span class="line">        <span class="keyword">if</span>(d1 &lt; <span class="number">0</span>) d1 = -d1;</span><br><span class="line">        <span class="keyword">if</span>(d2 &lt; <span class="number">0</span>) d2 = -d2;</span><br><span class="line">        <span class="keyword">long</span> cur = d2;</span><br><span class="line">        <span class="comment">//存两个链表</span></span><br><span class="line">        List&lt;Long&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        List&lt;Long&gt; list2 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">long</span> bei = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(cur &lt;= d1)&#123;</span><br><span class="line">            list.add(cur);</span><br><span class="line">            list2.add(bei);</span><br><span class="line">            cur += cur;</span><br><span class="line">            bei += bei;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">//依次减表里面的数字 把结果加上去</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = list.size()-<span class="number">1</span>; i &gt;= <span class="number">0</span>; i --)&#123;</span><br><span class="line">            <span class="keyword">if</span>(list.get(i) &lt;= d1)&#123;</span><br><span class="line">                res += list2.get(i);</span><br><span class="line">                d1 -= list.get(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">         <span class="comment">//判断符号</span></span><br><span class="line">        <span class="keyword">if</span>(dividend &lt; <span class="number">0</span> &amp;&amp; divisor &gt; <span class="number">0</span>) res = -res;</span><br><span class="line">        <span class="keyword">if</span>(dividend &gt; <span class="number">0</span> &amp;&amp; divisor &lt; <span class="number">0</span>) res = -res;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(res &gt; Integer.MAX_VALUE || res &lt; Integer.MIN_VALUE) <span class="keyword">return</span> Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">return</span> (<span class="keyword">int</span>)res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public int divide(int dividend, int divisor) &#123;
+        long d1 = dividend;
+        long d2 = divisor;
+        if(d1 &lt; 0) d1 = -d1;
+        if(d2 &lt; 0) d2 = -d2;
+        long cur = d2;
+        //存两个链表
+        List&lt;Long&gt; list = new ArrayList&lt;&gt;();
+        List&lt;Long&gt; list2 = new ArrayList&lt;&gt;();
+        long bei = 1;
+        while(cur &lt;= d1)&#123;
+            list.add(cur);
+            list2.add(bei);
+            cur += cur;
+            bei += bei;
+        &#125;
+        long res = 0;
+        //依次减表里面的数字 把结果加上去
+        for(int i = list.size()-1; i &gt;= 0; i --)&#123;
+            if(list.get(i) &lt;= d1)&#123;
+                res += list2.get(i);
+                d1 -= list.get(i);
+            &#125;
+        &#125;
+         //判断符号
+        if(dividend &lt; 0 &amp;&amp; divisor &gt; 0) res = -res;
+        if(dividend &gt; 0 &amp;&amp; divisor &lt; 0) res = -res;
+        
+        if(res &gt; Integer.MAX_VALUE || res &lt; Integer.MIN_VALUE) return Integer.MAX_VALUE;
+        return (int)res;
+
+    &#125;
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200907172121129.png#pic_center" alt="在这里插入图片描述"><br>效率不够高 ，先通过再考虑优化问题</p>
 
     </div>

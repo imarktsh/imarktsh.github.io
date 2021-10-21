@@ -229,11 +229,54 @@
 <p>现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？</p>
 <span id="more"></span>
 <p><img src="https://img-blog.csdnimg.cn/20210228170459580.png" alt="在这里插入图片描述"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">输入：obstacleGrid = [[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>],[<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>]]</span><br><span class="line">输出：<span class="number">2</span></span><br><span class="line">解释：</span><br><span class="line">3x3 网格的正中间有一个障碍物。</span><br><span class="line">从左上角到右下角一共有 <span class="number">2</span> 条不同的路径：</span><br><span class="line"><span class="number">1.</span> 向右 -&gt; 向右 -&gt; 向下 -&gt; 向下</span><br><span class="line"><span class="number">2.</span> 向下 -&gt; 向下 -&gt; 向右 -&gt; 向右</span><br><span class="line"></span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">链接：https:<span class="comment">//leetcode-cn.com/problems/unique-paths-ii</span></span><br><span class="line">著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<pre><code class="java">输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+输出：2
+解释：
+3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -&gt; 向右 -&gt; 向下 -&gt; 向下
+2. 向下 -&gt; 向下 -&gt; 向右 -&gt; 向右
+
+来源：力扣（LeetCode）
+链接：https://leetcode-cn.com/problems/unique-paths-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+</code></pre>
 <p>动态规划 懂了</p>
 <p><img src="https://img-blog.csdnimg.cn/20210228170707886.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>结果总是由可以得到他的路径数加起来得到</p>
 <p><img src="https://img-blog.csdnimg.cn/20210228170804906.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">uniquePathsWithObstacles</span><span class="params">(<span class="keyword">int</span>[][] obstacleGrid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m = obstacleGrid.length;</span><br><span class="line">    <span class="keyword">int</span> n = obstacleGrid[<span class="number">0</span>].length;</span><br><span class="line">    <span class="comment">//起点终点为障碍物直接返回</span></span><br><span class="line">    <span class="keyword">if</span>(obstacleGrid[<span class="number">0</span>][<span class="number">0</span>] == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(obstacleGrid[m-<span class="number">1</span>][n-<span class="number">1</span>] == <span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//动态数组</span></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line">    <span class="comment">//起点不为障碍物设置为1</span></span><br><span class="line">    dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//数组初始化 注意第一行出现一个障碍物那么后面的都不能到达 要设置为0</span></span><br><span class="line">    <span class="comment">//第一列出现障碍物那么后面也不可到达</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        dp[i][<span class="number">0</span>] = (obstacleGrid[i][<span class="number">0</span>] == <span class="number">0</span> &amp;&amp; dp[i-<span class="number">1</span>][<span class="number">0</span>] == <span class="number">1</span>) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">        dp[<span class="number">0</span>][i] = (obstacleGrid[<span class="number">0</span>][i] == <span class="number">0</span> &amp;&amp; dp[<span class="number">0</span>][i-<span class="number">1</span>] == <span class="number">1</span>) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//按照公式更新数据 然后最后目标数组的路径数</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(obstacleGrid[i][j] == <span class="number">0</span>)&#123;</span><br><span class="line">                dp[i][j] = dp[i-<span class="number">1</span>][j] + dp[i][j-<span class="number">1</span>];</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//这是障碍物标记为0</span></span><br><span class="line">                dp[i][j] = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[m-<span class="number">1</span>][n-<span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    public int uniquePathsWithObstacles(int[][] obstacleGrid) &#123;
+        int m = obstacleGrid.length;
+        int n = obstacleGrid[0].length;
+        //起点终点为障碍物直接返回
+        if(obstacleGrid[0][0] == 1) return 0;
+        if(obstacleGrid[m-1][n-1] == 1) return 0;
+        //动态数组
+        int[][] dp = new int[m][n];
+        //起点不为障碍物设置为1
+        dp[0][0] = 1;
+        //数组初始化 注意第一行出现一个障碍物那么后面的都不能到达 要设置为0
+        //第一列出现障碍物那么后面也不可到达
+        for (int i = 1; i &lt; m; i++) &#123;
+            dp[i][0] = (obstacleGrid[i][0] == 0 &amp;&amp; dp[i-1][0] == 1) ? 1 : 0;
+        &#125;
+        for (int i = 1; i &lt; n; i++) &#123;
+            dp[0][i] = (obstacleGrid[0][i] == 0 &amp;&amp; dp[0][i-1] == 1) ? 1 : 0;
+        &#125;
+
+        //按照公式更新数据 然后最后目标数组的路径数
+        for (int i = 1; i &lt; m; i++) &#123;
+            for (int j = 1; j &lt; n; j++) &#123;
+                if(obstacleGrid[i][j] == 0)&#123;
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1];
+                &#125;else &#123;
+                    //这是障碍物标记为0
+                    dp[i][j] = 0;
+                &#125;
+            &#125;
+        &#125;
+        return dp[m-1][n-1];
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20210228175417362.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 
     </div>

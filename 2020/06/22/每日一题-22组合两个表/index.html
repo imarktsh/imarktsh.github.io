@@ -222,18 +222,35 @@
         <h2 id="组合两个表"><a href="#组合两个表" class="headerlink" title="组合两个表"></a>组合两个表</h2><h4 id="SQL架构"><a href="#SQL架构" class="headerlink" title="SQL架构"></a>SQL架构</h4><span id="more"></span>
 
 <p>表1: Person</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+-------------+---------+</span><br><span class="line">| 列名         | 类型     |</span><br><span class="line">+-------------+---------+</span><br><span class="line">| PersonId    | <span class="keyword">int</span>     |</span><br><span class="line">| FirstName   | varchar |</span><br><span class="line">| LastName    | varchar |</span><br><span class="line">+-------------+---------+</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">+-------------+---------+
+| 列名         | 类型     |
++-------------+---------+
+| PersonId    | int     |
+| FirstName   | varchar |
+| LastName    | varchar |
++-------------+---------+
+</code></pre>
 <p>PersonId 是上表主键<br>表2: Address</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+-------------+---------+</span><br><span class="line">| 列名         | 类型    |</span><br><span class="line">+-------------+---------+</span><br><span class="line">| AddressId   | <span class="keyword">int</span>     |</span><br><span class="line">| PersonId    | <span class="keyword">int</span>     |</span><br><span class="line">| City        | varchar |</span><br><span class="line">| State       | varchar |</span><br><span class="line">+-------------+---------+</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">+-------------+---------+
+| 列名         | 类型    |
++-------------+---------+
+| AddressId   | int     |
+| PersonId    | int     |
+| City        | varchar |
+| State       | varchar |
++-------------+---------+
+</code></pre>
 <p>AddressId 是上表主键</p>
 <p>编写一个 SQL 查询，满足条件：无论 person 是否有地址信息，都需要基于上述两表提供 person 的以下信息：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FirstName, LastName, City, State</span><br></pre></td></tr></table></figure>
-
+<pre><code class="sql">FirstName, LastName, City, State
+</code></pre>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/combine-two-tables">来源：力扣（LeetCode）</a></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> p.FirstName,p.LastName,a.City,a.State</span><br><span class="line"><span class="keyword">from</span> </span><br><span class="line">person p <span class="keyword">left</span> <span class="keyword">join</span> address a</span><br><span class="line"><span class="keyword">on</span> </span><br><span class="line">p.personid<span class="operator">=</span>a.personid</span><br></pre></td></tr></table></figure>
-
+<pre><code class="sql">select p.FirstName,p.LastName,a.City,a.State
+from 
+person p left join address a
+on 
+p.personid=a.personid
+</code></pre>
 
     </div>
 

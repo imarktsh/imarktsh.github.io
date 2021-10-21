@@ -230,29 +230,161 @@
 <p>官方解释：Java接口是一系列<strong>方法的声明</strong>，是一些方法特征的集合，一个接口<strong>只有方法的特征没有方法的实现</strong>，因此这些方法可以在不同的地方被不同的类实现，而这些实现可以具有不同的行为（功能）。（多态）</p>
 </blockquote>
 <p>接口是解决Java无法使用多继承的一种手段，但是接口在实际中更多的作用是制定标准的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;<span class="comment">//定义一个接口</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MSG = <span class="string">&quot;hello&quot;</span>;<span class="comment">//全局常量</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;<span class="comment">//抽象方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;//定义一个接口
 
+    public static final String MSG = &quot;hello&quot;;//全局常量
+    public abstract void print();//抽象方法
+&#125;
+</code></pre>
 <h2 id="接口的使用"><a href="#接口的使用" class="headerlink" title="接口的使用"></a>接口的使用</h2><p>（1）接口必须要有子类，但此时<strong>一个子类可以使用implements关键字实现多个接口</strong>；<br>（2）接口的子类（如果不是抽象类），那么必须要覆写接口中的<strong>全部抽象</strong>方法；<br>（3）接口的对象可以利用子类对象的向上转型进行实例化。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;<span class="comment">//定义一个接口A</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MSG = <span class="string">&quot;hello&quot;</span>;<span class="comment">//全局常量</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;<span class="comment">//抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B</span></span>&#123;<span class="comment">//定义一个接口B</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> <span class="keyword">implements</span> <span class="title">A</span>,<span class="title">B</span></span>&#123;<span class="comment">//X类实现了A和B两个接口</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;接口A的抽象方法print()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;接口B的抽象方法get()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        X x = <span class="keyword">new</span> X();<span class="comment">//实例化子类对象</span></span><br><span class="line">        A a = x;<span class="comment">//向上转型</span></span><br><span class="line">        B b = x;<span class="comment">//向上转型</span></span><br><span class="line"></span><br><span class="line">        a.print();</span><br><span class="line">        b.get();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于子类而言，除了实现接口外，还可以继承抽象类。若既要继承抽象类，同时还要实现接口的话，使用一下语法格式：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> 子类 [<span class="keyword">extends</span> 父类] [<span class="title">implemetns</span> 接口1,接口2,...] </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>范例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;<span class="comment">//定义一个接口A</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MSG = <span class="string">&quot;hello&quot;</span>;<span class="comment">//全局常量</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;<span class="comment">//抽象方法</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B</span></span>&#123;<span class="comment">//定义一个接口B</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123;<span class="comment">//定义一个抽象类C</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> <span class="keyword">extends</span> <span class="title">C</span> <span class="keyword">implements</span> <span class="title">A</span>,<span class="title">B</span></span>&#123;<span class="comment">//X类继承C类，并实现了A和B两个接口</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;接口A的抽象方法print()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;接口B的抽象方法get()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">change</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;抽象类C的抽象方法change()&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>对于接口，里面的组成只有抽象方法和全局常量，所以很多时候为了书写简单，可以不用写<code>public abstract</code> 或者<code>public static final</code>。并且，接口中的访问权限只有一种：<code>public</code>，即：定义接口方法和全局常量的时候就算没有写上<code>public</code>，那么最终的访问权限也是<code>public</code>，注意不是<code>default</code>。以下两种写法是完全等价的：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MSG = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;//定义一个接口A
 
+    public static final String MSG = &quot;hello&quot;;//全局常量
+
+    public abstract void print();//抽象方法
+&#125;
+
+interface B&#123;//定义一个接口B
+
+    public abstract void get();
+&#125;
+
+class X implements A,B&#123;//X类实现了A和B两个接口
+
+    @Override
+    public void print() &#123;
+        System.out.println(&quot;接口A的抽象方法print()&quot;);
+    &#125;
+
+    @Override
+    public void get() &#123;
+        System.out.println(&quot;接口B的抽象方法get()&quot;);
+    &#125;
+
+&#125;
+
+public class TestDemo &#123;
+
+    public static void main(String[] args)&#123;
+
+        X x = new X();//实例化子类对象
+        A a = x;//向上转型
+        B b = x;//向上转型
+
+        a.print();
+        b.get();
+    &#125;
+
+&#125;
+</code></pre>
+<p>对于子类而言，除了实现接口外，还可以继承抽象类。若既要继承抽象类，同时还要实现接口的话，使用一下语法格式：</p>
+<pre><code class="java">class 子类 [extends 父类] [implemetns 接口1,接口2,...] &#123;&#125;
+</code></pre>
+<p>范例：</p>
+<pre><code class="java">interface A&#123;//定义一个接口A
+
+    public static final String MSG = &quot;hello&quot;;//全局常量
+
+    public abstract void print();//抽象方法
+&#125;
+
+interface B&#123;//定义一个接口B
+
+    public abstract void get();
+&#125;
+
+abstract class C&#123;//定义一个抽象类C
+    public abstract void change();
+&#125;
+
+class X extends C implements A,B&#123;//X类继承C类，并实现了A和B两个接口
+
+    @Override
+    public void print() &#123;
+        System.out.println(&quot;接口A的抽象方法print()&quot;);
+    &#125;
+
+    @Override
+    public void get() &#123;
+        System.out.println(&quot;接口B的抽象方法get()&quot;);
+    &#125;
+
+    @Override
+    public void change() &#123;
+        System.out.println(&quot;抽象类C的抽象方法change()&quot;);
+    &#125;
+&#125;
+</code></pre>
+<p>对于接口，里面的组成只有抽象方法和全局常量，所以很多时候为了书写简单，可以不用写<code>public abstract</code> 或者<code>public static final</code>。并且，接口中的访问权限只有一种：<code>public</code>，即：定义接口方法和全局常量的时候就算没有写上<code>public</code>，那么最终的访问权限也是<code>public</code>，注意不是<code>default</code>。以下两种写法是完全等价的：</p>
+<pre><code class="java">interface A&#123;
+    public static final String MSG = &quot;hello&quot;;
+    public abstract void print();
+&#125;
+</code></pre>
 <p>等价于</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    String MSG = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;
+    String MSG = &quot;hello&quot;;
+    void print();
+&#125;
+</code></pre>
 <p>因为接口中默认是public修饰，若子类中没用public修饰，则访问权限变严格了，给子类分配的是更低的访问权限。所以，在定义接口的时候强烈建议在抽象方法前加上public<br>在Java中，一个抽象类只能继承一个抽象类，但一个接口却可以使用extends关键字同时继承多个接口（但接口不能继承抽象类）。</p>
 <p>范例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funA</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funB</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//C接口同时继承了A和B两个接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">C</span> <span class="keyword">extends</span> <span class="title">A</span>,<span class="title">B</span></span>&#123;<span class="comment">//使用的是extends</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funC</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> <span class="keyword">implements</span> <span class="title">C</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funA</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funC</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;
+    public void funA();
+&#125;
+
+interface B&#123;
+    public void funB();
+&#125;
+
+//C接口同时继承了A和B两个接口
+interface C extends A,B&#123;//使用的是extends
+    public void funC();
+&#125;
+
+class X implements C&#123;
+
+    @Override
+    public void funA() &#123;
+    &#125;
+
+    @Override
+    public void funB() &#123;
+    &#125;
+
+    @Override
+    public void funC() &#123;
+    &#125;
+
+&#125;
+</code></pre>
 <p>由此可见，从继承关系来说接口的限制比抽象类少：<br>（1）一个抽象类只能继承一个抽象父类，而接口可以继承多个接口；<br>（2）一个子类只能继承一个抽象类，却可以实现多个接口（在Java中，接口的主要功能是解决单继承局限问题）</p>
 <p>4、从接口的概念上来讲，接口只能由抽象方法和全局常量组成，但是内部结构是不受概念限制的，正如抽象类中可以定义抽象内部类一样，在接口中也可以定义普通内部类、抽象内部类和内部接口（但从实际的开发来讲，用户自己去定义内部抽象类或内部接口的时候是比较少见的），范例如下，在接口中定义一个抽象内部类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funA</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;<span class="comment">//定义一个抽象内部类</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">funB</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;
+    public void funA();
 
+    abstract class B&#123;//定义一个抽象内部类
+        public abstract void funB();
+    &#125;
+&#125;
+</code></pre>
 <p>在接口中如果使用了static去定义一个内接口，它表示一个外部接口：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funA</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">interface</span> <span class="title">B</span></span>&#123;<span class="comment">//使用了static，是一个外部接口</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funB</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> <span class="keyword">implements</span> <span class="title">A</span>.<span class="title">B</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">funB</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">interface A&#123;
+    public void funA();
 
+    static interface B&#123;//使用了static，是一个外部接口
+        public void funB();
+    &#125;
+&#125;
+class X implements A.B&#123;
+
+    @Override
+    public void funB() &#123;
+
+    &#125;
+
+&#125;
+</code></pre>
 <h2 id="接口的特点"><a href="#接口的特点" class="headerlink" title="接口的特点"></a>接口的特点</h2><p>就像一个类一样，一个接口也能够拥有方法和属性，但是在接口中声明的方法默认是抽象的。（即<strong>只有方法标识符，而没有方法体</strong>）。</p>
 <ul>
 <li>接口指明了一个类必须要做什么和不能做什么，相当于类的蓝图。</li>
@@ -260,19 +392,88 @@
 <li>一个JAVA库中接口的例子是：<strong>Comparator接口</strong>，这个接口代表了“能够进行比较”这种能力，任何类只要实现了这个Comparator接口的话，这个类也具备了“比较”这种能力，那么就可以用来进行排序操作了。</li>
 </ul>
 <h2 id="接口的应用"><a href="#接口的应用" class="headerlink" title="接口的应用"></a>接口的应用</h2><p>实例：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">USB</span> </span>&#123;</span><br><span class="line">	<span class="comment">//定义标准</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">public interface USB &#123;
+    //定义标准
+    public void install();
+    public void work();
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Computer</span>  </span>&#123;</span><br><span class="line">	<span class="comment">//装载设备</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">plugin</span><span class="params">(USB usb)</span> </span>&#123;</span><br><span class="line">		usb.install();</span><br><span class="line">		usb.work();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&#125;
+</code></pre>
+<pre><code class="java">public class Computer  &#123;
+    //装载设备
+    public void plugin(USB usb) &#123;
+        usb.install();
+        usb.work();
+    &#125;
+&#125;
+</code></pre>
 <p>实现手机USB</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Phone</span> <span class="keyword">implements</span> <span class="title">USB</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;手机安装&quot;</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;手机工作&quot;</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>实现打印机USB</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Printer</span> <span class="keyword">implements</span> <span class="title">USB</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">install</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;打印机安装&quot;</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">&quot;打印机工作&quot;</span>);</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">手机安装</span><br><span class="line">手机工作</span><br><span class="line">打印机安装</span><br><span class="line">打印机工作</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class Phone implements USB&#123;
 
+    @Override
+    public void install() &#123;
+        System.out.println(&quot;手机安装&quot;);
+        
+    &#125;
+
+    @Override
+    public void work() &#123;
+        System.out.println(&quot;手机工作&quot;);
+        
+    &#125;
+
+&#125;
+</code></pre>
+<p>实现打印机USB</p>
+<pre><code class="java">public class Printer implements USB&#123;
+
+    @Override
+    public void install() &#123;
+        System.out.println(&quot;打印机安装&quot;);
+        
+    &#125;
+
+    @Override
+    public void work() &#123;
+        System.out.println(&quot;打印机工作&quot;);
+        
+    &#125;
+
+&#125;
+</code></pre>
+<p>输出：</p>
+<pre><code class="java">手机安装
+手机工作
+打印机安装
+打印机工作
+</code></pre>
 <h2 id="接口的应用—工厂设计模式（Factory）"><a href="#接口的应用—工厂设计模式（Factory）" class="headerlink" title="接口的应用—工厂设计模式（Factory）"></a>接口的应用—工厂设计模式（Factory）</h2><p>程序之中，最大的问题在于耦合上，发现在主方法中，一个接口和一个子类紧密耦合在一起，这种方式比较直接，可以简单的理解为由<strong>A —&gt;B</strong>，但是这种紧密的方式不方便于维护，所以我们可以这样改：<strong>A—&gt; C—&gt;B</strong>，中间经历了一个过渡，这样一来，B改变，然后C去改变，但是A不需要改变。这可以参考Java中JVM的设计思想：程序—&gt; JVM—&gt;适应不同的操作系统。</p>
 <p>于是，本程序我们这么修改，加上一个工厂类：<br>一个例子</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DAOFactory</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**获取任务管理DAO</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ITaskDAO <span class="title">getTaskDAO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> TaskDAOImpl();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**获取session聚合统计DAO</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ISessionAggrStatDAO <span class="title">getSessionAggrStatDAO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> SessionAggrStatDAOImpl();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/**</span></span><br><span class="line"><span class="comment">	 * 获取随机抽取DAO</span></span><br><span class="line"><span class="comment">	 * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">	 */</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ISessionRandomExtractDAO <span class="title">getSessionRandomExtractDAO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> SessionRandomExtractDAOImpl();</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class DAOFactory &#123;
+    
+    /**获取任务管理DAO
+     * @return
+     */
+    public static ITaskDAO getTaskDAO() &#123;
+        return new TaskDAOImpl();
+    &#125;
+    
+    /**获取session聚合统计DAO
+     * @return
+     */
+    public static ISessionAggrStatDAO getSessionAggrStatDAO() &#123;
+        return new SessionAggrStatDAOImpl();
+    &#125;
+    
+    /**
+     * 获取随机抽取DAO
+     * @return
+     */
+    public static ISessionRandomExtractDAO getSessionRandomExtractDAO() &#123;
+        return new SessionRandomExtractDAOImpl();
+    &#125;
+    &#125;
+</code></pre>
 <p>这样的话，客户端不会看见具体的子类，客户端不再和一个具体的子类耦合在一起了，就算以后增加了新的子类，那么只需要修改Factory类即可实现，客户端的调用不会改变。</p>
 <p>工厂模式的关系图如下：<img src="https://img-blog.csdn.net/20161006112456518#pic_center" alt="在这里插入图片描述"></p>
 <h2 id="接口的应用—代理设计模式（Proxy）"><a href="#接口的应用—代理设计模式（Proxy）" class="headerlink" title="接口的应用—代理设计模式（Proxy）"></a>接口的应用—代理设计模式（Proxy）</h2><p>所谓代理，就是一个人或者机构代表另一个人或者机构采取行动。在一些情况下，一个客户不想或者不能够直接引用一个对象，而代理对象可以在客户端和目标对象之间起到中介的作用。</p>

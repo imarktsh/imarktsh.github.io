@@ -671,14 +671,28 @@
 <p>说明：</p>
 <p>你的算法应该具有<strong>线性时间</strong>复杂度。 你可以<strong>不使用额外空间</strong>来实现吗？</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>]</span><br><span class="line">输出: <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: [2,2,1]
+输出: 1
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">输入: [4,1,2,1,2]
+输出: 4
+</code></pre>
 <p>一个我不知道的知识点 异或操作<br>^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为1.<br>一个数a与另一个数b异或的结果等于a^b，用结果（ a^b)异或a，就会得到b；</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> c=a^b ; ------------ <span class="number">01</span>=<span class="number">10</span>^<span class="number">11</span> 得到结果C（ a^b)</span><br><span class="line">b=c^b; ------------ <span class="number">10</span>=<span class="number">01</span>^<span class="number">11</span> 用结果（ a^b)异或a，就会得到b；</span><br><span class="line">a=c^a; -------------<span class="number">11</span>=<span class="number">01</span>^<span class="number">10</span> 用结果（ a^b)异或b，就会得到a；</span><br></pre></td></tr></table></figure>
+<pre><code class="java">int c=a^b ; ------------ 01=10^11 得到结果C（ a^b)
+b=c^b; ------------ 10=01^11 用结果（ a^b)异或a，就会得到b；
+a=c^a; -------------11=01^10 用结果（ a^b)异或b，就会得到a；
+</code></pre>
 <p><strong>异或实现</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c: nums)&#123;</span><br><span class="line">            res ^= c;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public int singleNumber(int[] nums) &#123;
+        int res = 0;
+        for(int c: nums)&#123;
+            res ^= c;
+        &#125;
+        return res;
+
+    &#125;
+</code></pre>
 <p><strong>时间复杂度 O(N)</strong><br><img src="https://img-blog.csdnimg.cn/20200608095906398.png" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/single-number/submissions/">leetcode</a></p>
 
       

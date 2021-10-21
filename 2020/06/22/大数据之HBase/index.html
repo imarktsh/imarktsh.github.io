@@ -279,9 +279,14 @@
 <li>WAL位于/hbase/WALs/目录下</li>
 <li>MultiWAL: 如果每个RegionServer只有一个WAL，由于HDFS必须是连续的，导致必须写WAL连续的，然后出现性能问题。MultiWAL可以让RegionServer同时写多个WAL并行的，通过HDFS底层的多管道，最终提升总的吞吐量，但是不会提升单个Region的吞吐量。</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  WAL的配置：</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启用multiwal</span></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;hbase.wal.provider&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;multiwal&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">  WAL的配置：
 
-
+// 启用multiwal
+&lt;property&gt;
+  &lt;name&gt;hbase.wal.provider&lt;/name&gt;
+  &lt;value&gt;multiwal&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
 <h3 id="HFile"><a href="#HFile" class="headerlink" title="HFile"></a>HFile</h3><p>HFile是Hbase在HDFS中存储数据的格式，它包含多层的索引，这样在Hbase检索数据的时候就不用完全的加载整个文件。索引的大小(keys的大小，数据量的大小)影响block的大小，在大数据集的情况下，block的大小设置为每个RegionServer 1GB也是常见的。</p>
 <p>探讨数据库的数据存储方式，其实就是探讨数据如何在磁盘上进行有效的组织。因为我们通常以如何高效读取和消费数据为目的，而不是数据存储本身。</p>
 <p><strong>Hfile生成方式</strong><br>起初，HFile中并没有任何Block，数据还存在于MemStore中。</p>
@@ -291,13 +296,17 @@
 <h2 id="Hbase单机模式安装"><a href="#Hbase单机模式安装" class="headerlink" title="Hbase单机模式安装"></a>Hbase单机模式安装</h2><p>这一次来部署一个单机版的Hbase，单独的Hbase daemon(Master，RegionServers和ZooKeeper)运行在同一个JVM进程中，然后持久化存储到文件系统中。这是最简单的部署，但是却能帮助我们更好的理解Hbase。安装完成之后，我们在演示一下hbase命令行的用法。<br>这个安装搞了两天失败了 这个留着回学校部署；</p>
 <h2 id="使用Hbase"><a href="#使用Hbase" class="headerlink" title="使用Hbase"></a>使用Hbase</h2><p>我们可以先用Hbase提供的命令行工具，位于hbase的/bin/目录下</p>
 <p>连接Hbase</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.<span class="operator">/</span>hbase shell</span><br></pre></td></tr></table></figure>
-
+<pre><code class="sql">./hbase shell
+</code></pre>
 <p>查看帮助信息, 敲</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span>help</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">&gt;help
+</code></pre>
 <p>创建一个表，必须要指定表名称和列簇名</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):<span class="number">003</span>:<span class="number">0</span><span class="operator">&gt;</span> <span class="keyword">create</span> <span class="string">&#x27;test&#x27;</span>, <span class="string">&#x27;cf&#x27;</span></span><br><span class="line"><span class="number">0</span> <span class="type">row</span>(s) <span class="keyword">in</span> <span class="number">1.6320</span> seconds</span><br><span class="line"></span><br><span class="line"><span class="operator">=</span><span class="operator">&gt;</span> Hbase::<span class="keyword">Table</span> <span class="operator">-</span> test</span><br></pre></td></tr></table></figure>
+<pre><code class="sql">hbase(main):003:0&gt; create &#39;test&#39;, &#39;cf&#39;
+0 row(s) in 1.6320 seconds
 
+=&gt; Hbase::Table - test
+</code></pre>
 <h2 id="Hbase数据模型"><a href="#Hbase数据模型" class="headerlink" title="Hbase数据模型"></a>Hbase数据模型</h2><p>在Hbase中，有一些术语需要提前了解。如下：</p>
 <ul>
 <li>Table：Hbase的table由多个行组成</li>
@@ -313,11 +322,22 @@
 <h2 id="Hbase表-Schema-设计要点"><a href="#Hbase表-Schema-设计要点" class="headerlink" title="Hbase表(Schema)设计要点"></a>Hbase表(Schema)设计要点</h2><p>只要是数据库都存在，模式设计的问题，关系型中有模式设计的范式，Hbase作为列式存储数据库，其模式设计也非常重要。</p>
 <p>设计时需要关注的属性，如何设计这些属性等</p>
 <p>Hbase与关系型数据库对比</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">属性	      Hbase  	RDBMS</span><br><span class="line">数据类型	只有字符串	丰富的数据类型</span><br><span class="line">数据操作	增删改查，不支持<span class="keyword">join</span>	各种各样的函数与表连接</span><br><span class="line">存储模式	基于列式存储	基于表结构和行式存储</span><br><span class="line">数据保护	更新后仍然保留旧版本	替换</span><br><span class="line">可伸缩性	轻易增加节点	需要中间层，牺牲性能</span><br></pre></td></tr></table></figure>
-
+<pre><code class="sql">属性          Hbase      RDBMS
+数据类型    只有字符串    丰富的数据类型
+数据操作    增删改查，不支持join    各种各样的函数与表连接
+存储模式    基于列式存储    基于表结构和行式存储
+数据保护    更新后仍然保留旧版本    替换
+可伸缩性    轻易增加节点    需要中间层，牺牲性能
+</code></pre>
 <h3 id="Hbase设计时要考虑的因素"><a href="#Hbase设计时要考虑的因素" class="headerlink" title="Hbase设计时要考虑的因素"></a>Hbase设计时要考虑的因素</h3><p>Hbase关键概念：表，rowkey，列簇，时间戳</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">这个表应该有多少列簇</span><br><span class="line">列簇使用什么数据</span><br><span class="line">每个列簇有有多少列</span><br><span class="line">列名是什么，尽管列名不必在建表时定义，但读写数据是要知道的</span><br><span class="line">单元应该存放什么数据</span><br><span class="line">每个单元存储多少时间版本</span><br><span class="line">行健(rowKey)结构是什么，应该包含什么信息</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">这个表应该有多少列簇
+列簇使用什么数据
+每个列簇有有多少列
+列名是什么，尽管列名不必在建表时定义，但读写数据是要知道的
+单元应该存放什么数据
+每个单元存储多少时间版本
+行健(rowKey)结构是什么，应该包含什么信息
+</code></pre>
 <h2 id="设计要点"><a href="#设计要点" class="headerlink" title="设计要点"></a>设计要点</h2><h3 id="行健设计"><a href="#行健设计" class="headerlink" title="行健设计"></a>行健设计</h3><ul>
 <li>关键部分，直接关系到后续服务的访问性能。如果行健设计不合理，后续查询服务效率会成倍的递减。</li>
 <li>避免单调的递增行健，因为Hbase的行健是有序排列的，这样可能导致一段时间内大部分写入集中在某一个Region上进行操作，负载都在一台节点上。可以设计成：<br>[metric_type][event_timestamp]，不同的metric_type可以将压力分散到不同的region上</li>
@@ -330,8 +350,13 @@
 <li>列簇名的长度要尽量小，一个为了节省空间，另外加快效率，比如d表示data，v表示value</li>
 </ul>
 <h3 id="列簇属性配置"><a href="#列簇属性配置" class="headerlink" title="列簇属性配置"></a>列簇属性配置</h3><p>HFile数据块，默认是64KB，数据库的大小影响数据块索引的大小。数据块大的话一次加载进内存的数据越多，扫描查询效果越好。但是数据块小的话，随机查询性能更好</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; create <span class="string">&#x27;mytable&#x27;</span>,&#123;NAME =&gt; <span class="string">&#x27;cf1&#x27;</span>, BLOCKSIZE =&gt; <span class="string">&#x27;65536&#x27;</span>&#125;</span><br><span class="line">数据块缓存，数据块缓存默认是打开的，如果一些比较少访问的数据可以选择关闭缓存</span><br><span class="line">&gt; create <span class="string">&#x27;mytable&#x27;</span>,&#123;NAME =&gt; <span class="string">&#x27;cf1&#x27;</span>, BLOCKCACHE =&gt; <span class="string">&#x27;FALSE&#x27;</span>&#125;</span><br><span class="line">数据压缩，压缩会提高磁盘利用率，但是会增加CPU的负载，看情况进行控制</span><br><span class="line">&gt; create <span class="string">&#x27;mytable&#x27;</span>,&#123;NAME =&gt; <span class="string">&#x27;cf1&#x27;</span>, COMPRESSION =&gt; <span class="string">&#x27;SNAPPY&#x27;</span>&#125;</span><br><span class="line">Hbase表设计是和需求相关的，但是遵守表设计的一些硬性指标对性能的提升还是很有帮助的，这里整理了一些设计时用到的要点。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">&gt; create &#39;mytable&#39;,&#123;NAME =&gt; &#39;cf1&#39;, BLOCKSIZE =&gt; &#39;65536&#39;&#125;
+数据块缓存，数据块缓存默认是打开的，如果一些比较少访问的数据可以选择关闭缓存
+&gt; create &#39;mytable&#39;,&#123;NAME =&gt; &#39;cf1&#39;, BLOCKCACHE =&gt; &#39;FALSE&#39;&#125;
+数据压缩，压缩会提高磁盘利用率，但是会增加CPU的负载，看情况进行控制
+&gt; create &#39;mytable&#39;,&#123;NAME =&gt; &#39;cf1&#39;, COMPRESSION =&gt; &#39;SNAPPY&#39;&#125;
+Hbase表设计是和需求相关的，但是遵守表设计的一些硬性指标对性能的提升还是很有帮助的，这里整理了一些设计时用到的要点。
+</code></pre>
 <h2 id="Java-API操作"><a href="#Java-API操作" class="headerlink" title="Java API操作"></a>Java API操作</h2><p>Hbase有多种不同的客户端，如REST客户端，Thift客户端，ORM框架Kundera等等。 Hbase也提供了Java的API来操作表与列簇等信息，它的shell就是对Java的API做了一层封装。</p>
 <p>Hbase的Java API提供了很多高级的特性：</p>
 <ul>
@@ -340,8 +365,12 @@
 </ul>
 <p>我们还是直接看代码这样理解的更容易</p>
 <p>环境<br>Hbase 0.98<br>Java 1.8<br>Zookeeper 3.4.6<br>Mac OS<br>案例<br>Hbase的客户端版本不一致实验结果很容易出现问题，尽量采用同样的版本。因为服务端实验的是Hbase0.98，客户端也用0.98，另外由于Hadoop 2.x的版本现对于1.x做了很大的提升，建议采用Hbase-hadoop 2.x的客户端。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;<span class="number">0.98</span><span class="number">.24</span>-hadoop2&lt;/version&gt;</span><br><span class="line">  &lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">  &lt;dependency&gt;
+        &lt;groupId&gt;org.apache.hbase&lt;/groupId&gt;
+        &lt;artifactId&gt;hbase-client&lt;/artifactId&gt;
+        &lt;version&gt;0.98.24-hadoop2&lt;/version&gt;
+    &lt;/dependency&gt;
+</code></pre>
 <p><strong>建立连接</strong></p>
 <ol>
 <li>直接新建HTable(“tableName”)，但是这种每次创建表的时候因为都要查询.meta表，来判断表是不是存在，导致创建表的过程会有点慢，所以不建议每个请求都创建一个Htable</li>
@@ -351,41 +380,137 @@
 <p>Put<br>Get<br>Delete<br>Scan<br>Increment<br>我们详细的讨论几个类，剩余的可以举一反三。</p>
 <p><strong>写数据</strong><br>当写请求收到的时候，默认数据同步的写到Hlog中和MemStore，同时在两个地方写是为了保证数据的持久性，Memstore最终会持久化到磁盘中的Hfile中。每次MemStore进行Flush的时候，就会创建一个新的Hfile。</p>
 <p>Put类用于向Hbase的表中存储数据，存储数据时，Put的实例必须要指定Rowkey<br>创建完Put实例后，再向其中添加数据</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       <span class="comment">// 获取默认的配置</span></span><br><span class="line">       Configuration conf = HBaseConfiguration.create();</span><br><span class="line">       <span class="comment">// 获取Table实例 </span></span><br><span class="line">       HTable table = <span class="keyword">new</span> HTable(conf, <span class="string">&quot;tab1&quot;</span>);</span><br><span class="line">       <span class="comment">// 创建Put实例，并且指定rowKey </span></span><br><span class="line">       Put put = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">&quot;row-1&quot;</span>));</span><br><span class="line">       <span class="comment">// 添加一个 column，值为 &quot;Hello&quot;，在 &quot;cf1:greet&quot; 列中</span></span><br><span class="line">       put.add(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;greet&quot;</span>), Bytes.toBytes(<span class="string">&quot;Hello&quot;</span>));</span><br><span class="line">       <span class="comment">// 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中</span></span><br><span class="line">       put.add(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;person&quot;</span>), Bytes.toBytes(<span class="string">&quot;John&quot;</span>));</span><br><span class="line">       table.put(put); </span><br><span class="line">       table.close();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java"> public void put() throws IOException &#123;
+        // 获取默认的配置
+        Configuration conf = HBaseConfiguration.create();
+        // 获取Table实例 
+        HTable table = new HTable(conf, &quot;tab1&quot;);
+        // 创建Put实例，并且指定rowKey 
+        Put put = new Put(Bytes.toBytes(&quot;row-1&quot;));
+        // 添加一个 column，值为 &quot;Hello&quot;，在 &quot;cf1:greet&quot; 列中
+        put.add(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;greet&quot;), Bytes.toBytes(&quot;Hello&quot;));
+        // 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中
+        put.add(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;person&quot;), Bytes.toBytes(&quot;John&quot;));
+        table.put(put); 
+        table.close();
+    &#125;
+</code></pre>
 <p>数据也可以批量的进行插入：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// table对象可以传入List参数</span></span><br><span class="line">table.put(<span class="keyword">final</span> List&lt;Put&gt; puts)</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">// table对象可以传入List参数
+table.put(final List&lt;Put&gt; puts)
+</code></pre>
 <p><strong>读数据</strong><br>Hbase使用LRU缓存读取数据。Htable对象使用下面的方法读取数据</p>
 <p>而Get实例的构造方法和Put很像，构造方法要指定一个rowkey。</p>
 <p>如果要查找特定的cell，就是特定列的数据，可以采用额外的方法进行更加精细的调控。<br>看一下如下的案例代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">// 获取默认的配置</span></span><br><span class="line">        Configuration conf = HBaseConfiguration.create();</span><br><span class="line">        <span class="comment">// 获取Table实例</span></span><br><span class="line">        HTable table = <span class="keyword">new</span> HTable(conf, <span class="string">&quot;tab1&quot;</span>);</span><br><span class="line">        <span class="comment">// 创建Put实例，并且指定rowKey</span></span><br><span class="line">        Get get = <span class="keyword">new</span> Get(Bytes.toBytes(<span class="string">&quot;row-1&quot;</span>));</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        get.addColumn(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;greet&quot;</span>));</span><br><span class="line">        <span class="comment">// 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中</span></span><br><span class="line">        Result result = table.get(get);</span><br><span class="line">        <span class="keyword">byte</span>[] value = result.getValue(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;greet&quot;</span>));</span><br><span class="line">        System.out.println(<span class="string">&quot;获取到的值&quot;</span> + <span class="keyword">new</span> String(value));</span><br><span class="line">        table.close();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
+<pre><code class="java">public void get() throws IOException &#123;
+        // 获取默认的配置
+        Configuration conf = HBaseConfiguration.create();
+        // 获取Table实例
+        HTable table = new HTable(conf, &quot;tab1&quot;);
+        // 创建Put实例，并且指定rowKey
+        Get get = new Get(Bytes.toBytes(&quot;row-1&quot;));
+        //
+        get.addColumn(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;greet&quot;));
+        // 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中
+        Result result = table.get(get);
+        byte[] value = result.getValue(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;greet&quot;));
+        System.out.println(&quot;获取到的值&quot; + new String(value));
+        table.close();
+    &#125;
+</code></pre>
 <p><strong>更新数据</strong><br>更新数据与写数据基本一致，只是在Put实例赋值的时候，在相同的列上设置不同的值，操作的时候就会更新为新的值。</p>
 <p>代码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Configuration conf = HBaseConfiguration.create();</span><br><span class="line">        <span class="comment">// 获取Table实例</span></span><br><span class="line">        HTable table = <span class="keyword">new</span> HTable(conf, <span class="string">&quot;tab1&quot;</span>);</span><br><span class="line">        <span class="comment">// 创建Put实例，并且指定rowKey</span></span><br><span class="line">        Put put = <span class="keyword">new</span> Put(Bytes.toBytes(<span class="string">&quot;row-1&quot;</span>));</span><br><span class="line">        <span class="comment">// 添加一个 column，值为 &quot;Hello&quot;，在 &quot;cf1:greet&quot; 列中</span></span><br><span class="line">        put.add(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;greet&quot;</span>), Bytes.toBytes(<span class="string">&quot;Good Morning&quot;</span>));</span><br><span class="line">        <span class="comment">// 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中</span></span><br><span class="line"><span class="comment">//        put.add(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;person&quot;), Bytes.toBytes(&quot;John&quot;));</span></span><br><span class="line">        table.put(put);</span><br><span class="line">        table.close();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public void update() throws IOException &#123;
+        Configuration conf = HBaseConfiguration.create();
+        // 获取Table实例
+        HTable table = new HTable(conf, &quot;tab1&quot;);
+        // 创建Put实例，并且指定rowKey
+        Put put = new Put(Bytes.toBytes(&quot;row-1&quot;));
+        // 添加一个 column，值为 &quot;Hello&quot;，在 &quot;cf1:greet&quot; 列中
+        put.add(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;greet&quot;), Bytes.toBytes(&quot;Good Morning&quot;));
+        // 添加一个 column，值为 &quot;John&quot;，在 &quot;cf1:person&quot; 列中
+//        put.add(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;person&quot;), Bytes.toBytes(&quot;John&quot;));
+        table.put(put);
+        table.close();
+    &#125;
+</code></pre>
 <p><strong>删除数据</strong><br>Delete命令只是标记当前的数据为删除状态，而不是立刻的删除，也就是先进行逻辑删除。实际上的删除是在Hfile进行压缩的时候，这些被标记的记录就会被删除掉。</p>
 <p>Delete对象与Put和Get也很像</p>
 <p>看下面的案例代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Configuration conf = HBaseConfiguration.create();</span><br><span class="line">        <span class="comment">// 获取Table实例</span></span><br><span class="line">        HTable table = <span class="keyword">new</span> HTable(conf, <span class="string">&quot;tab1&quot;</span>);</span><br><span class="line">        <span class="comment">// 创建Delete实例，并且指定rowKey</span></span><br><span class="line">        Delete delete = <span class="keyword">new</span> Delete(Bytes.toBytes(<span class="string">&quot;row-1&quot;</span>));</span><br><span class="line">        <span class="comment">// 删除 column &quot;cf1:greet&quot; </span></span><br><span class="line">        delete.deleteColumn(Bytes.toBytes(<span class="string">&quot;cf1&quot;</span>), Bytes.toBytes(<span class="string">&quot;greet&quot;</span>));</span><br><span class="line">        </span><br><span class="line">        table.delete(delete);</span><br><span class="line">        table.close();</span><br><span class="line">    &#125;</span><br><span class="line">执行结果:连续执行两次删除</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">public void delete() throws IOException &#123;
+        Configuration conf = HBaseConfiguration.create();
+        // 获取Table实例
+        HTable table = new HTable(conf, &quot;tab1&quot;);
+        // 创建Delete实例，并且指定rowKey
+        Delete delete = new Delete(Bytes.toBytes(&quot;row-1&quot;));
+        // 删除 column &quot;cf1:greet&quot; 
+        delete.deleteColumn(Bytes.toBytes(&quot;cf1&quot;), Bytes.toBytes(&quot;greet&quot;));
+        
+        table.delete(delete);
+        table.close();
+    &#125;
+执行结果:连续执行两次删除
+</code></pre>
 <h2 id="操作优化"><a href="#操作优化" class="headerlink" title="操作优化"></a>操作优化</h2><p>一个系统上线之后，开发和调优将一直贯穿系统的生命周期中，HBase也不列外。这里主要说一些Hbase的调优</p>
 <p><strong>Hbase查询优化</strong><br>作为NoSQL数据库，增删改查是其最基本的功能，其中查询是最常用的一项。</p>
 <p><strong>设置Scan缓存</strong><br>HBase中Scan查询可以设置缓存，方法是setCaching()，这样可以有效的减少服务端与客户端的交互，更有效的提升扫描查询的性能。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Set the number of rows for caching that will be passed to scanners.</span></span><br><span class="line"><span class="comment"> * If not set, the default setting from &#123;<span class="doctag">@link</span> HTable#getScannerCaching()&#125; will apply.</span></span><br><span class="line"><span class="comment"> * Higher caching values will enable faster scanners but will use more memory.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> caching the number of rows for caching</span></span><br><span class="line"><span class="comment"> * 设置scanners缓存的行数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCaching</span><span class="params">(<span class="keyword">int</span> caching)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.caching = caching;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">   /**
+   * Set the number of rows for caching that will be passed to scanners.
+   * If not set, the default setting from &#123;@link HTable#getScannerCaching()&#125; will apply.
+   * Higher caching values will enable faster scanners but will use more memory.
+   * @param caching the number of rows for caching
+   * 设置scanners缓存的行数
+   */
+  public void setCaching(int caching) &#123;
+    this.caching = caching;
+  &#125;
+</code></pre>
 <p><strong>显示的指定列</strong><br>当使用Scan或者GET获取大量的行时，最好指定所需要的列，因为服务端通过网络传输到客户端，数据量太大可能是瓶颈。如果能有效过滤部分数据，能很大程度的减少网络I/O的花费。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Get all columns from the specified family.</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;</span></span><br><span class="line"><span class="comment">   * Overrides previous calls to addColumn for this family.</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> family family name</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> this</span></span><br><span class="line"><span class="comment">   * 获取指定列簇的所有列</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Scan <span class="title">addFamily</span><span class="params">(<span class="keyword">byte</span> [] family)</span> </span>&#123;</span><br><span class="line">    familyMap.remove(family);</span><br><span class="line">    familyMap.put(family, <span class="keyword">null</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Get the column from the specified family with the specified qualifier.</span></span><br><span class="line"><span class="comment">   * &lt;p&gt;</span></span><br><span class="line"><span class="comment">   * Overrides previous calls to addFamily for this family.</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> family family name</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@param</span> qualifier column qualifier</span></span><br><span class="line"><span class="comment">   * <span class="doctag">@return</span> this</span></span><br><span class="line"><span class="comment">   * 获取指定列簇的特定列</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Scan <span class="title">addColumn</span><span class="params">(<span class="keyword">byte</span> [] family, <span class="keyword">byte</span> [] qualifier)</span> </span>&#123;</span><br><span class="line">    NavigableSet&lt;<span class="keyword">byte</span> []&gt; set = familyMap.get(family);</span><br><span class="line">    <span class="keyword">if</span>(set == <span class="keyword">null</span>) &#123;</span><br><span class="line">      set = <span class="keyword">new</span> TreeSet&lt;<span class="keyword">byte</span> []&gt;(Bytes.BYTES_COMPARATOR);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (qualifier == <span class="keyword">null</span>) &#123;</span><br><span class="line">      qualifier = HConstants.EMPTY_BYTE_ARRAY;</span><br><span class="line">    &#125;</span><br><span class="line">    set.add(qualifier);</span><br><span class="line">    familyMap.put(family, set);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  &#125;</span><br><span class="line">一般用:</span><br><span class="line">scan.addColumn(...)</span><br></pre></td></tr></table></figure>
+<pre><code class="java">  /**
+   * Get all columns from the specified family.
+   * &lt;p&gt;
+   * Overrides previous calls to addColumn for this family.
+   * @param family family name
+   * @return this
+   * 获取指定列簇的所有列
+   */
+  public Scan addFamily(byte [] family) &#123;
+    familyMap.remove(family);
+    familyMap.put(family, null);
+    return this;
+  &#125;
 
+  /**
+   * Get the column from the specified family with the specified qualifier.
+   * &lt;p&gt;
+   * Overrides previous calls to addFamily for this family.
+   * @param family family name
+   * @param qualifier column qualifier
+   * @return this
+   * 获取指定列簇的特定列
+   */
+  public Scan addColumn(byte [] family, byte [] qualifier) &#123;
+    NavigableSet&lt;byte []&gt; set = familyMap.get(family);
+    if(set == null) &#123;
+      set = new TreeSet&lt;byte []&gt;(Bytes.BYTES_COMPARATOR);
+    &#125;
+    if (qualifier == null) &#123;
+      qualifier = HConstants.EMPTY_BYTE_ARRAY;
+    &#125;
+    set.add(qualifier);
+    familyMap.put(family, set);
+    return this;
+  &#125;
+一般用:
+scan.addColumn(...)
+</code></pre>
 <p><strong>关闭ResultScanner</strong><br>如果在使用table.getScanner之后，忘记关闭该类，它会一直和服务端保持连接，资源无法释放，从而导致服务端的某些资源不可用。</p>
 <p>所以在用完之后，需要执行关闭操作，这点与JDBS操作MySQL类似</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scanner.close()</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">scanner.close()
+</code></pre>
 <p><strong>禁用块缓存</strong><br>如果批量进行全表扫描，默认是有缓存的，如果此时有缓存，会降低扫描的效率。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan.setCacheBlocks(<span class="keyword">true</span>|<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">scan.setCacheBlocks(true|false);
+</code></pre>
 <p>对于经常读到的数据，建议使用默认值，开启块缓存</p>
 <p><strong>缓存查询结果</strong><br>对于频繁查询HBase的应用场景，可以考虑在应用程序和Hbase之间做一层缓存系统，新的查询先去缓存查，缓存没有再去查Hbase。</p>
 <p><strong>写入优化</strong><br>写也是Hbase常有的操作之一，并且Hbase在写入操作上有着其他NoSQL无法比拟的优势，下面讲如何优化写入操作</p>
@@ -393,49 +518,111 @@
 <p>风险： 当RegionServer宕机时，写入的数据出现丢失，且无法恢复</p>
 <p><strong>设置AutoFlush</strong><br>Htable有一个属性是AutoFlush，该属性用于支持客户端的批量更新，默认是true，当客户端每收到一条数据，立刻发送到服务端，如果设置为false，当客户端提交put请求时候，先将该请求在客户端缓存，到达阈值的时候或者执行hbase.flushcommits()，才向RegionServer提交请求。</p>
 <p>风险 在请求未发送到RegionServer之前客户端崩溃，数据也会丢失</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">table.setAutoFlush(<span class="keyword">false</span>);</span><br><span class="line">table.setWriteBufferSize( <span class="number">12</span> * <span class="number">1024</span> * <span class="number">1024</span> );</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java"> table.setAutoFlush(false);
+ table.setWriteBufferSize( 12 * 1024 * 1024 );
+</code></pre>
 <p><strong>预创建Region</strong><br>一般表刚开始只有一个Region，插入该表的数据都会保存在此Region中，插入该表的所有塑化剂都会保存在该Region中，当到达一定的阈值时，才发生分裂。 这样开始时刻针对该表的写操作都集中在某台服务器上，造成这台服务器的压力很紧张，同时对整个集群资源的浪费</p>
 <p>建议刚开始的时候预创建Region，可以使用Hbase自带的RegionSplitter</p>
 <p><strong>延迟日志flush</strong><br>默认写入操作，首先写入WAL，并且在1S内写入HDFS，这个时间默认是1S，可以通过参数配置</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase.regionserver.optionallogflushinterval</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">hbase.regionserver.optionallogflushinterval
+</code></pre>
 <p>可以配置大一点的值，比如5s，这段时间数据会保留在内存中，直到RegionServer周期性的执行flush操作。</p>
 <p><strong>Scan的重要参数</strong><br>Scan是操作Hbase中非常常用的一个操作，虽然前面的Hbase API操作简单的介绍了Scan的操作，但不够详细，由于Scan非常常用，关于其详细的整理也是很有必要的。</p>
 <p><strong>Scan</strong><br>HBase中的数据表通过划分成一个个的Region来实现数据的分片，每一个Region关联一个RowKey的范围区间，而每一个Region中的数据，按RowKey的字典顺序进行组织。</p>
 <p>正是基于这种设计，使得HBase能够轻松应对这类查询：”指定一个RowKey的范围区间，获取该区间的所有记录”， 这类查询在HBase被称之为Scan。</p>
 <p>1 . 构建Scan，指定startRow与stopRow，如果未指定的话会进行全表扫描<br>2 . 获取ResultScanner<br>3 . 遍历查询结果<br>4 . 关闭ResultScanner</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">stringFilter</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">       Configuration conf = HBaseConfiguration.create();</span><br><span class="line">       <span class="comment">// 获取Table实例</span></span><br><span class="line">       HTable table = <span class="keyword">new</span> HTable(conf, <span class="string">&quot;user&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 构建Scan</span></span><br><span class="line">       Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">       scan = scan.setStartRow(Bytes.toBytes(<span class="string">&quot;startRowxxx&quot;</span>)).setStopRow(Bytes.toBytes(<span class="string">&quot;StopRowxxx&quot;</span>));</span><br><span class="line">       RowFilter filter = <span class="keyword">new</span> RowFilter(</span><br><span class="line">               CompareFilter.CompareOp.EQUAL,</span><br><span class="line">               <span class="keyword">new</span> BinaryComparator(Bytes.toBytes(<span class="string">&quot;224382618261914241&quot;</span>))</span><br><span class="line">       );</span><br><span class="line"></span><br><span class="line">       scan.setFilter(filter);</span><br><span class="line">       </span><br><span class="line">       <span class="comment">// 获取resultScanner</span></span><br><span class="line">       ResultScanner scanner = table.getScanner(scan);</span><br><span class="line">       Result result = <span class="keyword">null</span>;</span><br><span class="line">       </span><br><span class="line">       <span class="comment">// 处理结果</span></span><br><span class="line">       <span class="keyword">while</span> ((result = scanner.next()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">           <span class="keyword">byte</span>[] value = result.getValue(Bytes.toBytes(<span class="string">&quot;ship&quot;</span>), Bytes.toBytes(<span class="string">&quot;addr&quot;</span>));</span><br><span class="line">           <span class="keyword">if</span> (value == <span class="keyword">null</span> || value.length == <span class="number">0</span>) &#123;</span><br><span class="line">               <span class="keyword">continue</span>;</span><br><span class="line">           &#125;</span><br><span class="line">           System.out.println(</span><br><span class="line">                   <span class="keyword">new</span> String(value)</span><br><span class="line">           );</span><br><span class="line">           System.out.println(<span class="string">&quot;hello World&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">   </span><br><span class="line">       <span class="comment">// 关闭ResultScanner</span></span><br><span class="line">       scanner.close();</span><br><span class="line">       table.close();</span><br><span class="line">   &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><strong>其它的设置参数</strong><br>Caching: 设置一次RPC请求批量读取的Results数量<br>下面的示例代码设定了一次读取回来的Results数量为100：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan.setCaching(<span class="number">100</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> public void stringFilter() throws IOException &#123;
+        Configuration conf = HBaseConfiguration.create();
+        // 获取Table实例
+        HTable table = new HTable(conf, &quot;user&quot;);
 
+        // 构建Scan
+        Scan scan = new Scan();
+        scan = scan.setStartRow(Bytes.toBytes(&quot;startRowxxx&quot;)).setStopRow(Bytes.toBytes(&quot;StopRowxxx&quot;));
+        RowFilter filter = new RowFilter(
+                CompareFilter.CompareOp.EQUAL,
+                new BinaryComparator(Bytes.toBytes(&quot;224382618261914241&quot;))
+        );
+
+        scan.setFilter(filter);
+        
+        // 获取resultScanner
+        ResultScanner scanner = table.getScanner(scan);
+        Result result = null;
+        
+        // 处理结果
+        while ((result = scanner.next()) != null) &#123;
+            byte[] value = result.getValue(Bytes.toBytes(&quot;ship&quot;), Bytes.toBytes(&quot;addr&quot;));
+            if (value == null || value.length == 0) &#123;
+                continue;
+            &#125;
+            System.out.println(
+                    new String(value)
+            );
+            System.out.println(&quot;hello World&quot;);
+        &#125;
+    
+        // 关闭ResultScanner
+        scanner.close();
+        table.close();
+    &#125;
+</code></pre>
+<p><strong>其它的设置参数</strong><br>Caching: 设置一次RPC请求批量读取的Results数量<br>下面的示例代码设定了一次读取回来的Results数量为100：</p>
+<pre><code class="java">scan.setCaching(100);
+</code></pre>
 <p>Client每一次往RegionServer发送scan请求，都会批量拿回一批数据(由Caching决定过了每一次拿回的Results数量)，然后放到本次的Result Cache中：</p>
 <p>应用每一次读取数据时，都是从本地的Result Cache中获取的。如果Result Cache中的数据读完了，则Client会再次往RegionServer发送scan请求获取更多的数据。</p>
 <p>Batch: 设置每一个Result中的列的数量<br>下面的示例代码设定了每一个Result中的列的数量的限制值为3：</p>
 <p>scan.setBatch(3);<br>该参数适用于一行数据过大的场景，这样，一行数据被请求的列会被拆成多个Results返回给Client。</p>
 <p>举例说明如下：</p>
 <p>假设一行数据中共有十个列：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09, Col10&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">&#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09, Col10&#125;
+</code></pre>
 <p>假设Scan中设置的Batch为3，那么，这一行数据将会被拆成4个Results返回：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Result1 -&gt; &#123;Col01，Col02，Col03&#125;</span><br><span class="line">Result2 -&gt; &#123;Col04，Col05，Col06&#125;</span><br><span class="line">Result3 -&gt; &#123;Col07，Col08，Col09&#125;</span><br><span class="line">Result4 -&gt; &#123;Col10&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">Result1 -&gt; &#123;Col01，Col02，Col03&#125;
+Result2 -&gt; &#123;Col04，Col05，Col06&#125;
+Result3 -&gt; &#123;Col07，Col08，Col09&#125;
+Result4 -&gt; &#123;Col10&#125;
+</code></pre>
 <p>关于Caching参数，我们说明了是Client每一次从RegionServer侧获取到的Results的数量，上例中，一行数据被拆成了4个Results，这将会导致Caching中的计数器被减了4次。结合Caching与Batch，我们再列举一个稍复杂的例子：</p>
 <p>假设，Scan的参数设置如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="keyword">byte</span>[] start = Bytes.toBytes(<span class="string">&quot;Row1&quot;</span>);</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">byte</span>[] stop = Bytes.toBytes(<span class="string">&quot;Row5&quot;</span>);</span><br><span class="line">Scan scan = <span class="keyword">new</span> Scan();</span><br><span class="line">scan.withStartRow(start).withStopRow(stop);</span><br><span class="line">scan.setCaching(<span class="number">10</span>);</span><br><span class="line">scan.setBatch(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">final byte[] start = Bytes.toBytes(&quot;Row1&quot;);
+final byte[] stop = Bytes.toBytes(&quot;Row5&quot;);
+Scan scan = new Scan();
+scan.withStartRow(start).withStopRow(stop);
+scan.setCaching(10);
+scan.setBatch(3);
+</code></pre>
 <p>待读取的数据RowKey与所关联的列集如下所示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Row1: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10&#125;</span><br><span class="line">Row2: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10，Col11&#125;</span><br><span class="line">Row3: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">Row1: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10&#125;
+Row2: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10，Col11&#125;
+Row3: &#123;Col01，Col02，Col03，Col04，Col05，Col06，Col07，Col08，Col09，Col10&#125;
+</code></pre>
 <p>再回顾一下Caching与Batch的定义：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Caching: 影响一次读取返回的Results数量。</span><br><span class="line"></span><br><span class="line">Batch: 限定了一个Result中所包含的列的数量，如果一行数据被请求的列的数量超出Batch限制，那么这行数据会被拆成多个Results。</span><br><span class="line"></span><br><span class="line">那么， Client往RegionServer第一次请求所返回的结果集如下所示：</span><br><span class="line"></span><br><span class="line">Result1 -&gt; Row1: &#123;Col01，Col02，Col03&#125;</span><br><span class="line">Result2 -&gt; Row1: &#123;Col04，Col05，Col06&#125;</span><br><span class="line">Result3 -&gt; Row1: &#123;Col07，Col08，Col09&#125;</span><br><span class="line">Result4 -&gt; Row1: &#123;Col10&#125;</span><br><span class="line">Result5 -&gt; Row2: &#123;Col01，Col02，Col03&#125;</span><br><span class="line">Result6 -&gt; Row2: &#123;Col04，Col05，Col06&#125;</span><br><span class="line">Result7 -&gt; Row2: &#123;Col07，Col08，Col09&#125;</span><br><span class="line">Result8 -&gt; Row2: &#123;Col10，Col11&#125;</span><br><span class="line">Result9 -&gt; Row3: &#123;Col01，Col02，Col03&#125;</span><br><span class="line">Result10 -&gt; Row3: &#123;Col04，Col05，Col06&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">Caching: 影响一次读取返回的Results数量。
 
+Batch: 限定了一个Result中所包含的列的数量，如果一行数据被请求的列的数量超出Batch限制，那么这行数据会被拆成多个Results。
+
+那么， Client往RegionServer第一次请求所返回的结果集如下所示：
+
+Result1 -&gt; Row1: &#123;Col01，Col02，Col03&#125;
+Result2 -&gt; Row1: &#123;Col04，Col05，Col06&#125;
+Result3 -&gt; Row1: &#123;Col07，Col08，Col09&#125;
+Result4 -&gt; Row1: &#123;Col10&#125;
+Result5 -&gt; Row2: &#123;Col01，Col02，Col03&#125;
+Result6 -&gt; Row2: &#123;Col04，Col05，Col06&#125;
+Result7 -&gt; Row2: &#123;Col07，Col08，Col09&#125;
+Result8 -&gt; Row2: &#123;Col10，Col11&#125;
+Result9 -&gt; Row3: &#123;Col01，Col02，Col03&#125;
+Result10 -&gt; Row3: &#123;Col04，Col05，Col06&#125;
+</code></pre>
 <p>Limit: 限制一次Scan操作所获取的行的数量<br>同SQL语法中的limit子句，限制一次Scan操作所获取的行的总量：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scan.setLimit(<span class="number">10000</span>);</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">scan.setLimit(10000);
+</code></pre>
 <p>注意：Limit参数是在2.0版本中新引入的。但在2.0.0版本中，当Batch与Limit同时设置时，似乎还存在一个BUG，初步分析问题原因应该与BatchScanResultCache中的numberOfCompletedRows计数器逻辑处理有关。因此，暂时不建议同时设置这两个参数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CacheBlock: RegionServer侧是否要缓存本次Scan所涉及的HFileBlocks</span><br><span class="line">scan.setCacheBlocks(<span class="keyword">true</span>);</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">CacheBlock: RegionServer侧是否要缓存本次Scan所涉及的HFileBlocks
+scan.setCacheBlocks(true);
+</code></pre>
 <p>e) Raw Scan: 是否可以读取到删除标识以及被删除但尚未被清理的数据</p>
 <p>scan.setRaw(true);</p>
 <p>MaxResultSize: 从内存占用量的维度限制一次Scan的返回结果集<br>下面的示例代码将返回结果集的最大值设置为5MB：</p>

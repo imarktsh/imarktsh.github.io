@@ -223,16 +223,62 @@
       
         <p>给定一个二叉树，返回它的 <strong>前序</strong> 遍历。</p>
 <span id="more"></span>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> 示例:</span><br><span class="line"></span><br><span class="line">输入: [<span class="number">1</span>,<span class="keyword">null</span>,<span class="number">2</span>,<span class="number">3</span>]  </span><br><span class="line">   <span class="number">1</span></span><br><span class="line">    \</span><br><span class="line">     <span class="number">2</span></span><br><span class="line">    /</span><br><span class="line">   <span class="number">3</span> </span><br><span class="line"></span><br><span class="line">输出: [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> 示例:
 
+输入: [1,null,2,3]  
+   1
+    \
+     2
+    /
+   3 
+
+输出: [1,2,3]
+</code></pre>
 <p>首先二叉树的递归遍历</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(root != <span class="keyword">null</span>)&#123;</span><br><span class="line">        res.add(root.val);</span><br><span class="line">        preorder(root.left,res);</span><br><span class="line">        preorder(root.right,res);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
+<pre><code class="java">    private void preorder(TreeNode root, List&lt;Integer&gt; res)&#123;
+        if(root != null)&#123;
+            res.add(root.val);
+            preorder(root.left,res);
+            preorder(root.right,res);
+        &#125;
+</code></pre>
 <p>第二 二叉树的非递归 使用栈来存储节点 效率不是很高</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">preorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        List&lt;Integer&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        preorder(root,res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span></span>&#123;</span><br><span class="line">        <span class="comment">//使用栈</span></span><br><span class="line">        Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="comment">//root不为null或者栈不为空 循环</span></span><br><span class="line">        <span class="keyword">while</span>(root != <span class="keyword">null</span> || !stack.isEmpty())&#123;</span><br><span class="line">            <span class="comment">//节点有子节点 先读val 然后节点入栈 继续找左节点 </span></span><br><span class="line">            <span class="keyword">while</span>(root != <span class="keyword">null</span>)&#123;</span><br><span class="line">                res.add(root.val);</span><br><span class="line">                stack.add(root);</span><br><span class="line">                root = root.left;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//没有左节点 把root取出找右节点</span></span><br><span class="line">            root = stack.pop().right;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">/**
+ * Definition for a binary tree node.
+ * public class TreeNode &#123;
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) &#123; val = x; &#125;
+ * &#125;
+ */
+class Solution &#123;
+    public List&lt;Integer&gt; preorderTraversal(TreeNode root) &#123;
+        List&lt;Integer&gt; res = new ArrayList&lt;&gt;();
+        preorder(root,res);
+        return res;
 
+
+    &#125;
+    private void preorder(TreeNode root, List&lt;Integer&gt; res)&#123;
+        //使用栈
+        Stack&lt;TreeNode&gt; stack = new Stack&lt;&gt;();
+        //root不为null或者栈不为空 循环
+        while(root != null || !stack.isEmpty())&#123;
+            //节点有子节点 先读val 然后节点入栈 继续找左节点 
+            while(root != null)&#123;
+                res.add(root.val);
+                stack.add(root);
+                root = root.left;
+            &#125;
+            //没有左节点 把root取出找右节点
+            root = stack.pop().right;
+        &#125;
+    &#125;
+
+
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200912110915616.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

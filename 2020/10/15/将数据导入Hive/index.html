@@ -224,9 +224,69 @@
       
         <p>三种方式<br>standalone </p>
 <span id="more"></span>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> trafficePro.data2hive;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.hive.HiveContext;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1.代码方式向hive中创建数据</span></span><br><span class="line"><span class="comment"> * 2.后面可以有sql文件执行直接在hive中创建数据库表</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Data2Hive</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf conf = <span class="keyword">new</span> SparkConf();</span><br><span class="line">		conf.setAppName(<span class="string">&quot;traffic2hive&quot;</span>);</span><br><span class="line">		JavaSparkContext sc = <span class="keyword">new</span> JavaSparkContext(conf);</span><br><span class="line">		<span class="comment">//HiveContext是SQLContext的子类。</span></span><br><span class="line">		HiveContext hiveContext = <span class="keyword">new</span> HiveContext(sc);</span><br><span class="line">		hiveContext.sql(<span class="string">&quot;USE traffic&quot;</span>);</span><br><span class="line">		hiveContext.sql(<span class="string">&quot;DROP TABLE IF EXISTS monitor_flow_action&quot;</span>);</span><br><span class="line">		<span class="comment">//在hive中创建monitor_flow_action表</span></span><br><span class="line">		hiveContext.sql(<span class="string">&quot;CREATE TABLE IF NOT EXISTS monitor_flow_action &quot;</span></span><br><span class="line">				+ <span class="string">&quot;(date STRING,monitor_id STRING,camera_id STRING,car STRING,action_time STRING,speed STRING,road_id STRING,area_id STRING) &quot;</span></span><br><span class="line">				+ <span class="string">&quot;row format delimited fields terminated by &#x27;\t&#x27; &quot;</span>);</span><br><span class="line">		hiveContext.sql(<span class="string">&quot;load data local inpath &#x27;/root/soft/monitor_flow_action&#x27; into table monitor_flow_action&quot;</span>);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//在hive中创建monitor_camera_info表</span></span><br><span class="line">		hiveContext.sql(<span class="string">&quot;DROP TABLE IF EXISTS monitor_camera_info&quot;</span>); </span><br><span class="line">		hiveContext.sql(<span class="string">&quot;CREATE TABLE IF NOT EXISTS monitor_camera_info (monitor_id STRING, camera_id STRING) row format delimited fields terminated by &#x27;\t&#x27;&quot;</span>);  </span><br><span class="line">		hiveContext.sql(<span class="string">&quot;LOAD DATA &quot;</span></span><br><span class="line">				+ <span class="string">&quot;LOCAL INPATH &#x27;/root/soft/monitor_camera_info&#x27;&quot;</span></span><br><span class="line">				+ <span class="string">&quot;INTO TABLE monitor_camera_info&quot;</span>);</span><br><span class="line">		</span><br><span class="line">		System.out.println(<span class="string">&quot;========data2hive finish========&quot;</span>);</span><br><span class="line">		sc.stop();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">package trafficePro.data2hive;
+
+import org.apache.spark.SparkConf;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.hive.HiveContext;
+
+/**
+ * 1.代码方式向hive中创建数据
+ * 2.后面可以有sql文件执行直接在hive中创建数据库表
+ *
+ */
+public class Data2Hive &#123;
+    public static void main(String[] args) &#123;
+        SparkConf conf = new SparkConf();
+        conf.setAppName(&quot;traffic2hive&quot;);
+        JavaSparkContext sc = new JavaSparkContext(conf);
+        //HiveContext是SQLContext的子类。
+        HiveContext hiveContext = new HiveContext(sc);
+        hiveContext.sql(&quot;USE traffic&quot;);
+        hiveContext.sql(&quot;DROP TABLE IF EXISTS monitor_flow_action&quot;);
+        //在hive中创建monitor_flow_action表
+        hiveContext.sql(&quot;CREATE TABLE IF NOT EXISTS monitor_flow_action &quot;
+                + &quot;(date STRING,monitor_id STRING,camera_id STRING,car STRING,action_time STRING,speed STRING,road_id STRING,area_id STRING) &quot;
+                + &quot;row format delimited fields terminated by &#39;\t&#39; &quot;);
+        hiveContext.sql(&quot;load data local inpath &#39;/root/soft/monitor_flow_action&#39; into table monitor_flow_action&quot;);
+        
+        //在hive中创建monitor_camera_info表
+        hiveContext.sql(&quot;DROP TABLE IF EXISTS monitor_camera_info&quot;); 
+        hiveContext.sql(&quot;CREATE TABLE IF NOT EXISTS monitor_camera_info (monitor_id STRING, camera_id STRING) row format delimited fields terminated by &#39;\t&#39;&quot;);  
+        hiveContext.sql(&quot;LOAD DATA &quot;
+                + &quot;LOCAL INPATH &#39;/root/soft/monitor_camera_info&#39;&quot;
+                + &quot;INTO TABLE monitor_camera_info&quot;);
+        
+        System.out.println(&quot;========data2hive finish========&quot;);
+        sc.stop();
+    &#125;
+&#125;
+</code></pre>
 <p>打包提交<br>第二种 写sql</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">set hive.support.sql11.reserved.keywords=<span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS traffic.monitor_flow_action(  </span><br><span class="line">date string ,  </span><br><span class="line">monitor_id string ,  </span><br><span class="line">camera_id string ,  </span><br><span class="line">car string ,  </span><br><span class="line">action_time string ,</span><br><span class="line">speed string  ,</span><br><span class="line">road_id string,</span><br><span class="line">area_id string</span><br><span class="line">)  </span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY <span class="string">&#x27;\t&#x27;</span> ; </span><br><span class="line"></span><br><span class="line">load data local inpath <span class="string">&#x27;/root/soft/monitor_flow_action&#x27;</span> into table traffic.monitor_flow_action; </span><br><span class="line"></span><br><span class="line">CREATE TABLE IF NOT EXISTS traffic.monitor_camera_info(  </span><br><span class="line">monitor_id string ,  </span><br><span class="line">camera_id string </span><br><span class="line">)  </span><br><span class="line">ROW FORMAT DELIMITED FIELDS TERMINATED BY <span class="string">&#x27;\t&#x27;</span> ; </span><br><span class="line"></span><br><span class="line">load data local inpath <span class="string">&#x27;/root/soft/monitor_camera_info&#x27;</span> into table traffic.monitor_camera_info; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">set hive.support.sql11.reserved.keywords=false;
+
+CREATE TABLE IF NOT EXISTS traffic.monitor_flow_action(  
+date string ,  
+monitor_id string ,  
+camera_id string ,  
+car string ,  
+action_time string ,
+speed string  ,
+road_id string,
+area_id string
+)  
+ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39; ; 
+
+load data local inpath &#39;/root/soft/monitor_flow_action&#39; into table traffic.monitor_flow_action; 
+
+CREATE TABLE IF NOT EXISTS traffic.monitor_camera_info(  
+monitor_id string ,  
+camera_id string 
+)  
+ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39; ; 
+
+load data local inpath &#39;/root/soft/monitor_camera_info&#39; into table traffic.monitor_camera_info; 
+</code></pre>
 <p>第三种 yarn模式<br>注意 1是把文件上传hdfs 采用hdfs路径<br>2，共享hive配置文件<br><img src="https://img-blog.csdnimg.cn/20201015122028399.png#pic_center" alt="在这里插入图片描述"><br>搞定，最后select一下看看进去没有<br><img src="https://img-blog.csdnimg.cn/20201015122059204.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

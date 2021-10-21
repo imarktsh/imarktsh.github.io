@@ -228,16 +228,43 @@
 <p>问总共有多少条不同的路径？<br><img src="https://img-blog.csdnimg.cn/20201010195109117.png#pic_center" alt="在这里插入图片描述"></p>
 <p>例如，上图是一个7 x 3 的网格。有多少可能的路径？</p>
 <p>示例 1:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入: m = <span class="number">3</span>, n = <span class="number">2</span></span><br><span class="line">输出: <span class="number">3</span></span><br><span class="line">解释:</span><br><span class="line">从左上角开始，总共有 <span class="number">3</span> 条路径可以到达右下角。</span><br><span class="line"><span class="number">1.</span> 向右 -&gt; 向右 -&gt; 向下</span><br><span class="line"><span class="number">2.</span> 向右 -&gt; 向下 -&gt; 向右</span><br><span class="line"><span class="number">3.</span> 向下 -&gt; 向右 -&gt; 向右</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: m = 3, n = 2
+输出: 3
+解释:
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -&gt; 向右 -&gt; 向下
+2. 向右 -&gt; 向下 -&gt; 向右
+3. 向下 -&gt; 向右 -&gt; 向右
+</code></pre>
 <p>示例 2:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: m = <span class="number">7</span>, n = <span class="number">3</span></span><br><span class="line">输出: <span class="number">28</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入: m = 7, n = 3
+输出: 28
+</code></pre>
 <p>第一个动态规划题 人都蒙了</p>
 <p>上题解！动态规划解决<br><strong>这里机器人只能向下和向右移动，不能往其他方向移动，我们用dp[i][j]表示到坐标(i，j)这个格内有多少条不同的路径，所以最终的答案就是求dp[m-1][n-1]。</strong></p>
 <p>因为只能从上面或左边走过来，所以递推公式是</p>
 <p><strong>dp[i][j]=dp[i-1][j]+dp[i][j-1]。<br>dp[i-1][j] 表示的是从上面走过来的路径条数。<br>dp[i][j-1] 表示的是从左边走过来的路径条数。</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">uniquePaths</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[m][n];</span><br><span class="line">        <span class="comment">//第一列都是1</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">            dp[i][<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//第一行为0</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">            dp[<span class="number">0</span>][i] = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//递推</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; m; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">                dp[i][j] = dp[i - <span class="number">1</span>][j] + dp[i][j - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[m - <span class="number">1</span>][n - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">class Solution &#123;
+    public int uniquePaths(int m, int n) &#123;
+        int[][] dp = new int[m][n];
+        //第一列都是1
+        for (int i = 0; i &lt; m; i++) &#123;
+            dp[i][0] = 1;
+        &#125;
+        //第一行为0
+        for (int i = 0; i &lt; n; i++) &#123;
+            dp[0][i] = 1;
+        &#125;
+        //递推
+        for (int i = 1; i &lt; m; i++) &#123;
+            for (int j = 1; j &lt; n; j++) &#123;
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            &#125;
+        &#125;
+        return dp[m - 1][n - 1];
+    &#125;
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201010200235295.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

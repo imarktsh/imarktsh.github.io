@@ -224,10 +224,35 @@
         <p>给定一个正整数 n，生成一个包含 1 到 n2 所有元素，且元素按顺时针顺序螺旋排列的正方形矩阵。</p>
 <span id="more"></span>
 <p>示例:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">3</span></span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line"> [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> ],</span><br><span class="line"> [ <span class="number">8</span>, <span class="number">9</span>, <span class="number">4</span> ],</span><br><span class="line"> [ <span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span> ]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="go">输入: 3
+输出:
+[
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+]
+</code></pre>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/spiral-matrix-ii">https://leetcode-cn.com/problems/spiral-matrix-ii</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。<br>优秀的代码不需要注释</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public <span class="keyword">int</span>[][] generateMatrix(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">if</span>( n == <span class="number">0</span>) <span class="keyword">return</span> <span class="built_in">new</span> <span class="keyword">int</span>[<span class="number">0</span>][];</span><br><span class="line">        <span class="keyword">int</span> [][] matrix = <span class="built_in">new</span> <span class="keyword">int</span>[n][n];</span><br><span class="line">        <span class="keyword">int</span> l = <span class="number">0</span>, r = n - <span class="number">1</span>,t = <span class="number">0</span>, b = n - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> num = <span class="number">1</span>;</span><br><span class="line">        while (num &lt;= n * n)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = l; i &lt;= r; i ++) matrix[t][i] = num++;</span><br><span class="line">            t ++;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = t; i &lt;= b; i ++) matrix[i][r] = num++;</span><br><span class="line">            r --;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = r; i &gt;= l; i --) matrix[b][i] = num++;</span><br><span class="line">            b --;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i = b; i &gt;= t; i --) matrix[i][l] = num++;</span><br><span class="line">            l ++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> matrix;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="go">class Solution &#123;
+    public int[][] generateMatrix(int n) &#123;
+        if( n == 0) return new int[0][];
+        int [][] matrix = new int[n][n];
+        int l = 0, r = n - 1,t = 0, b = n - 1;
+        int num = 1;
+        while (num &lt;= n * n)&#123;
+            for(int i = l; i &lt;= r; i ++) matrix[t][i] = num++;
+            t ++;
+            for (int i = t; i &lt;= b; i ++) matrix[i][r] = num++;
+            r --;
+            for(int i = r; i &gt;= l; i --) matrix[b][i] = num++;
+            b --;
+            for(int i = b; i &gt;= t; i --) matrix[i][l] = num++;
+            l ++;
+        &#125;
+        return matrix;
+    &#125;
+&#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201009194327393.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

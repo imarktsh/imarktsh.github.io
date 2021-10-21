@@ -226,20 +226,103 @@
         <p>首先安装MySQL 采用yum方式安装</p>
 <span id="more"></span>![在这里插入图片描述](https://img-blog.csdnimg.cn/20201014144900206.png#pic_center)
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">启动服务 service mysqld start</span><br></pre></td></tr></table></figure>
+<pre><code class="java">启动服务 service mysqld start
+</code></pre>
 <p>修改用户名和权限</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">select host,password from user;</span><br><span class="line">mysql&gt; grant all privileges on *.* to<span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified by <span class="string">&#x27;123&#x27;</span> with grant optio</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>删除其他用户<br><img src="https://img-blog.csdnimg.cn/20201014150723153.png#pic_center" alt="在这里插入图片描述"><br>刷新权限登录</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">安装mysql  </span><br><span class="line">Yum install mysql-server -y</span><br><span class="line"></span><br><span class="line">修改mysql权限：</span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123&#x27;</span> WITH GRANT OPTION;</span><br><span class="line">flush privileges;</span><br><span class="line">删除多余会对权限造成影响的数据</span><br><span class="line">刷新权限</span><br><span class="line"></span><br><span class="line">[ERROR] Terminal initialization failed; falling back to unsupported</span><br><span class="line">java.lang.IncompatibleClassChangeError: Found <span class="class"><span class="keyword">class</span> <span class="title">jline</span>.<span class="title">Terminal</span>, <span class="title">but</span> <span class="title">interface</span> <span class="title">was</span> <span class="title">expected</span></span></span><br><span class="line"><span class="class">	<span class="title">at</span> <span class="title">jline</span>.<span class="title">TerminalFactory</span>.<span class="title">create</span>(<span class="title">TerminalFactory</span>.<span class="title">java</span>:101)</span></span><br><span class="line"><span class="class">错误的原因： <span class="title">Hadoop</span> <span class="title">jline</span>版本和<span class="title">hive</span>的<span class="title">jline</span>不一致</span></span><br><span class="line"><span class="class"></span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">select host,password from user;
+mysql&gt; grant all privileges on *.* to&#39;root&#39;@&#39;%&#39; identified by &#39;123&#39; with grant optio
 
+</code></pre>
+<p>删除其他用户<br><img src="https://img-blog.csdnimg.cn/20201014150723153.png#pic_center" alt="在这里插入图片描述"><br>刷新权限登录</p>
+<pre><code class="java">安装mysql  
+Yum install mysql-server -y
+
+修改mysql权限：
+GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;123&#39; WITH GRANT OPTION;
+flush privileges;
+删除多余会对权限造成影响的数据
+刷新权限
+
+[ERROR] Terminal initialization failed; falling back to unsupported
+java.lang.IncompatibleClassChangeError: Found class jline.Terminal, but interface was expected
+    at jline.TerminalFactory.create(TerminalFactory.java:101)
+错误的原因： Hadoop jline版本和hive的jline不一致
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201014150751414.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>解压之后配置环境变量</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;/user/hive_remote/warehouse&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.local&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;<span class="keyword">true</span>&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;jdbc:mysql:<span class="comment">//node1/hive_remote?createDatabaseIfNotExist=true&lt;/value&gt;  </span></span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;root&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;<span class="number">123</span>&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">&lt;property&gt;  
+  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  
+  &lt;value&gt;/user/hive_remote/warehouse&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;hive.metastore.local&lt;/name&gt;  
+  &lt;value&gt;true&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;  
+  &lt;value&gt;jdbc:mysql://node1/hive_remote?createDatabaseIfNotExist=true&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;  
+  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;  
+  &lt;value&gt;root&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;  
+  &lt;value&gt;123&lt;/value&gt;  
+&lt;/property&gt;  
+</code></pre>
 <p>启动 hive</p>
 <h2 id="多节点模式"><a href="#多节点模式" class="headerlink" title="多节点模式"></a>多节点模式</h2><p>1.Remote一体<br>这种存储方式需要在远端服务器运行一个mysql服务器，并且需要在Hive服务器启动meta服务。<br>：这里把hive的服务端和客户端都放在同一台服务器上了。服务端和客户端可以拆开模式<br>3服务端 配置</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;/user/hive/warehouse&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;jdbc:mysql:<span class="comment">//192.168.57.6:3306/hive?createDatabaseIfNotExist=true&lt;/value&gt;  </span></span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;     </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;root&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;<span class="number">123456</span>&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">&lt;/configuration&gt;  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">&lt;property&gt;  
+  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  
+  &lt;value&gt;/user/hive/warehouse&lt;/value&gt;  
+&lt;/property&gt;  
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionURL&lt;/name&gt;  
+  &lt;value&gt;jdbc:mysql://192.168.57.6:3306/hive?createDatabaseIfNotExist=true&lt;/value&gt;  
+&lt;/property&gt;  
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionDriverName&lt;/name&gt;  
+  &lt;value&gt;com.mysql.jdbc.Driver&lt;/value&gt;  
+&lt;/property&gt;     
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionUserName&lt;/name&gt;  
+  &lt;value&gt;root&lt;/value&gt;  
+&lt;/property&gt;  
+&lt;property&gt;  
+  &lt;name&gt;javax.jdo.option.ConnectionPassword&lt;/name&gt;  
+  &lt;value&gt;123456&lt;/value&gt;  
+&lt;/property&gt;  
+&lt;/configuration&gt;  
+</code></pre>
 <p>客户端配置</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;  </span><br><span class="line">  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;/user/hive/warehouse&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">   </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.local&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;<span class="keyword">false</span>&lt;/value&gt;  </span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">  </span><br><span class="line">&lt;property&gt;  </span><br><span class="line">  &lt;name&gt;hive.metastore.uris&lt;/name&gt;  </span><br><span class="line">  &lt;value&gt;thrift:<span class="comment">//192.168.57.5:9083&lt;/value&gt;  </span></span><br><span class="line">&lt;/property&gt;  </span><br><span class="line">  </span><br><span class="line">&lt;/configuration&gt;  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code class="java">&lt;configuration&gt;  
+  
+&lt;property&gt;  
+  &lt;name&gt;hive.metastore.warehouse.dir&lt;/name&gt;  
+  &lt;value&gt;/user/hive/warehouse&lt;/value&gt;  
+&lt;/property&gt;  
+   
+&lt;property&gt;  
+  &lt;name&gt;hive.metastore.local&lt;/name&gt;  
+  &lt;value&gt;false&lt;/value&gt;  
+&lt;/property&gt;  
+  
+&lt;property&gt;  
+  &lt;name&gt;hive.metastore.uris&lt;/name&gt;  
+  &lt;value&gt;thrift://192.168.57.5:9083&lt;/value&gt;  
+&lt;/property&gt;  
+  
+&lt;/configuration&gt;  
+</code></pre>
 <p>node4 输入hive启动客户端<br><img src="https://img-blog.csdnimg.cn/20201014161033556.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

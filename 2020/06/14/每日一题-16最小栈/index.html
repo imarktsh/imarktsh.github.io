@@ -227,21 +227,79 @@
 <p><code>push(x)</code> —— 将元素 x 推入栈中。<br><code>pop()</code> —— 删除栈顶的元素。<br><code>top()</code> —— 获取栈顶元素。<br><code>getMin()</code> —— 检索栈中的最小元素。</p>
 <p><strong>示例:</strong></p>
 <p>输入：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&quot;MinStack&quot;</span>,<span class="string">&quot;push&quot;</span>,<span class="string">&quot;push&quot;</span>,<span class="string">&quot;push&quot;</span>,<span class="string">&quot;getMin&quot;</span>,<span class="string">&quot;pop&quot;</span>,<span class="string">&quot;top&quot;</span>,<span class="string">&quot;getMin&quot;</span>]</span><br><span class="line">[[],[-<span class="number">2</span>],[<span class="number">0</span>],[-<span class="number">3</span>],[],[],[],[]]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">[&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;]
+[[],[-2],[0],[-3],[],[],[],[]]
+</code></pre>
 <p>输出：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,<span class="keyword">null</span>,-<span class="number">3</span>,<span class="keyword">null</span>,<span class="number">0</span>,-<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">[null,null,null,null,-3,null,0,-2]
+</code></pre>
 <p>解释：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MinStack minStack = <span class="keyword">new</span> MinStack();</span><br><span class="line">minStack.push(-<span class="number">2</span>);</span><br><span class="line">minStack.push(<span class="number">0</span>);</span><br><span class="line">minStack.push(-<span class="number">3</span>);</span><br><span class="line">minStack.getMin();   --&gt; 返回 -<span class="number">3.</span></span><br><span class="line">minStack.pop();</span><br><span class="line">minStack.top();      --&gt; 返回 <span class="number">0.</span></span><br><span class="line">minStack.getMin();   --&gt; 返回 -<span class="number">2.</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --&gt; 返回 -3.
+minStack.pop();
+minStack.top();      --&gt; 返回 0.
+minStack.getMin();   --&gt; 返回 -2.
+</code></pre>
 <p>提示：</p>
 <ul>
 <li>pop、top 和 getMin 操作总是在 非空栈 上调用。</li>
 </ul>
 <p> 这题基本不知道说的啥意思 看了下评论互喷起来了，找来个靠谱点的抄一下；<br> <strong>代码</strong>`</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinStack</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Node head;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MinStack</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(head == <span class="keyword">null</span>) head = <span class="keyword">new</span> Node(x,x);</span><br><span class="line">        <span class="keyword">else</span> head = <span class="keyword">new</span> Node(x,Math.min(x,head.min),head);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        head = head.next;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> head.val;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getMin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> head.min;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val; </span><br><span class="line">        <span class="keyword">int</span> min;</span><br><span class="line">        Node next;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> val, <span class="keyword">int</span> min)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>(val,min,<span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">private</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> val,<span class="keyword">int</span> min,Node next)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.val = val;</span><br><span class="line">            <span class="keyword">this</span>.min = min;</span><br><span class="line">            <span class="keyword">this</span>.next = next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Your MinStack object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"> * MinStack obj = new MinStack();</span></span><br><span class="line"><span class="comment"> * obj.push(x);</span></span><br><span class="line"><span class="comment"> * obj.pop();</span></span><br><span class="line"><span class="comment"> * int param_3 = obj.top();</span></span><br><span class="line"><span class="comment"> * int param_4 = obj.getMin();</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">class MinStack &#123;
 
+    private Node head;
+    public MinStack() &#123;
+
+    &#125;
+    
+    public void push(int x) &#123;
+        if(head == null) head = new Node(x,x);
+        else head = new Node(x,Math.min(x,head.min),head);
+
+    &#125;
+    
+    public void pop() &#123;
+        head = head.next;
+
+    &#125;
+    
+    public int top() &#123;
+        return head.val;
+
+    &#125;
+    
+    public int getMin() &#123;
+        return head.min;
+
+    &#125;
+    private class Node&#123;
+        int val; 
+        int min;
+        Node next;
+
+        private Node(int val, int min)&#123;
+            this(val,min,null);
+        &#125;
+        private Node(int val,int min,Node next)&#123;
+            this.val = val;
+            this.min = min;
+            this.next = next;
+        &#125;
+    &#125;
+&#125;
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200614194105399.png" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/min-stack/submissions/">leetcode</a></p>
 
     </div>

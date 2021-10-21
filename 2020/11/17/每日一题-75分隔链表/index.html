@@ -225,9 +225,42 @@
 <p>你应当保留两个分区中每个节点的初始相对位置。</p>
  <span id="more"></span>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">示例:</span><br><span class="line"></span><br><span class="line">输入: head = <span class="number">1</span>-&gt;<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">2</span>-&gt;<span class="number">5</span>-&gt;<span class="number">2</span>, x = <span class="number">3</span></span><br><span class="line">输出: <span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">2</span>-&gt;<span class="number">4</span>-&gt;<span class="number">3</span>-&gt;<span class="number">5</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">示例:
+
+输入: head = 1-&gt;4-&gt;3-&gt;2-&gt;5-&gt;2, x = 3
+输出: 1-&gt;2-&gt;2-&gt;4-&gt;3-&gt;5
+</code></pre>
 <p>双链表法，把大与 x的节点放在一个新链表，<br>最后两个链表合起来</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">partition</span><span class="params">(ListNode head, <span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(head == <span class="keyword">null</span> ) <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    <span class="comment">//起始</span></span><br><span class="line">    ListNode dummy = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">    <span class="comment">//新链表</span></span><br><span class="line">    ListNode taildummy = <span class="keyword">new</span> ListNode(-<span class="number">1</span>);</span><br><span class="line">    dummy.next = head;</span><br><span class="line">    <span class="comment">//第一个链表指针</span></span><br><span class="line">    head = dummy;</span><br><span class="line">    <span class="comment">//第二个链表指针</span></span><br><span class="line">    ListNode tail = taildummy;</span><br><span class="line">    <span class="keyword">while</span> (head.next != <span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="comment">//小于x直接走</span></span><br><span class="line">        <span class="keyword">if</span>(head.next.val &lt; x)&#123;</span><br><span class="line">            head = head.next;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//大与x 把节点复杂到新链表</span></span><br><span class="line">            ListNode node = <span class="keyword">new</span> ListNode(head.next.val);</span><br><span class="line">            tail.next = node;</span><br><span class="line">            tail = node;</span><br><span class="line">            <span class="comment">//把旧链表删除</span></span><br><span class="line">            head.next = head.next.next;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//把两个链表连起来</span></span><br><span class="line">    tail.next = <span class="keyword">null</span>;</span><br><span class="line">    head.next = taildummy.next;</span><br><span class="line">    <span class="keyword">return</span> dummy.next;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">    public ListNode partition(ListNode head, int x) &#123;
+        if(head == null ) return null;
+        //起始
+        ListNode dummy = new ListNode(-1);
+        //新链表
+        ListNode taildummy = new ListNode(-1);
+        dummy.next = head;
+        //第一个链表指针
+        head = dummy;
+        //第二个链表指针
+        ListNode tail = taildummy;
+        while (head.next != null)&#123;
+        //小于x直接走
+            if(head.next.val &lt; x)&#123;
+                head = head.next;
+            &#125;else &#123;
+            //大与x 把节点复杂到新链表
+                ListNode node = new ListNode(head.next.val);
+                tail.next = node;
+                tail = node;
+                //把旧链表删除
+                head.next = head.next.next;
+            &#125;
+        &#125;
+        //把两个链表连起来
+        tail.next = null;
+        head.next = taildummy.next;
+        return dummy.next;
+    &#125;
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20201117191013491.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>

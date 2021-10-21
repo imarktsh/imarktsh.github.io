@@ -222,24 +222,57 @@
 
       
         <h2 id="斐波那契数"><a href="#斐波那契数" class="headerlink" title="斐波那契数"></a>斐波那契数</h2><p>斐波那契数，通常用 F(n) 表示，形成的序列称为斐波那契数列。<span id="more"></span>该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">F(<span class="number">0</span>) = <span class="number">0</span>,   F(<span class="number">1</span>) = <span class="number">1</span></span><br><span class="line">F(N) = F(N - <span class="number">1</span>) + F(N - <span class="number">2</span>), 其中 N &gt; <span class="number">1.</span></span><br><span class="line">给定 N，计算 F(N)。</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">F(0) = 0,   F(1) = 1
+F(N) = F(N - 1) + F(N - 2), 其中 N &gt; 1.
+给定 N，计算 F(N)。
+</code></pre>
 <p>示例 1：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：<span class="number">2</span></span><br><span class="line">输出：<span class="number">1</span></span><br><span class="line">解释：F(<span class="number">2</span>) = F(<span class="number">1</span>) + F(<span class="number">0</span>) = <span class="number">1</span> + <span class="number">0</span> = <span class="number">1.</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入：2
+输出：1
+解释：F(2) = F(1) + F(0) = 1 + 0 = 1.
+</code></pre>
 <p>示例 2：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：<span class="number">3</span></span><br><span class="line">输出：<span class="number">2</span></span><br><span class="line">解释：F(<span class="number">3</span>) = F(<span class="number">2</span>) + F(<span class="number">1</span>) = <span class="number">1</span> + <span class="number">1</span> = <span class="number">2.</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">输入：3
+输出：2
+解释：F(3) = F(2) + F(1) = 1 + 1 = 2.
+</code></pre>
 <p>示例 3：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入：<span class="number">4</span></span><br><span class="line">输出：<span class="number">3</span></span><br><span class="line">解释：F(<span class="number">4</span>) = F(<span class="number">3</span>) + F(<span class="number">2</span>) = <span class="number">2</span> + <span class="number">1</span> = <span class="number">3.</span></span><br></pre></td></tr></table></figure>
+<pre><code class="java">输入：4
+输出：3
+解释：F(4) = F(3) + F(2) = 2 + 1 = 3.
+</code></pre>
 <p><a target="_blank" rel="noopener" href="https://labuladong.gitbook.io/algo/di-ling-zhang-bi-du-xi-lie/dong-tai-gui-hua-xiang-jie-jin-jie">动态规划推荐一个讲解的</a><br>正常应该这么做</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span> (N == <span class="number">1</span>|| N == <span class="number">0</span>) <span class="keyword">return</span> N;</span><br><span class="line">       <span class="keyword">return</span> fib(N-<span class="number">1</span>)+fib(N-<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> public int fib(int N) &#123;
+        if (N == 1|| N == 0) return N;
+        return fib(N-1)+fib(N-2);
+
+    &#125;
+</code></pre>
 <p>效率不够高，要用是这个动态规划<br><img src="https://img-blog.csdnimg.cn/20200624135033202.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>dp 数组的迭代解法</strong><br>可以把这个「备忘录」独立出来成为一张表，就叫做 DP table 吧，在这张表上完成「自底向上」的推算岂不美哉！</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">    <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(N + <span class="number">1</span>, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="comment">// base case</span></span><br><span class="line">    dp[<span class="number">1</span>] = dp[<span class="number">2</span>] = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">3</span>; i &lt;= N; i++)</span><br><span class="line">        dp[i] = dp[i - <span class="number">1</span>] + dp[i - <span class="number">2</span>];</span><br><span class="line">    <span class="keyword">return</span> dp[N];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">int fib(int N) &#123;
+    vector&lt;int&gt; dp(N + 1, 0);
+    // base case
+    dp[1] = dp[2] = 1;
+    for (int i = 3; i &lt;= N; i++)
+        dp[i] = dp[i - 1] + dp[i - 2];
+    return dp[N];
+&#125;
+</code></pre>
 <p>画个图就很好理解了，而且你发现这个 DP table 特别像之前那个「剪枝」后的结果，只是反过来算而已。实际上，带备忘录的递归解法中的「备忘录」，最终完成后就是这个 DP table，所以说这两种解法其实是差不多的，大部分情况下，效率也基本相同。<br>最后在优化一个细节，斐波那契数只跟前两个有关系，那么只需要存两个数就完了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> N)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(N == <span class="number">1</span>|| N == <span class="number">0</span>) <span class="keyword">return</span> N;</span><br><span class="line">       <span class="keyword">int</span> pre = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">int</span> next = <span class="number">1</span>;</span><br><span class="line">       <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; N+<span class="number">1</span>; i ++)&#123;</span><br><span class="line">           res = pre + next;</span><br><span class="line">           pre = next;</span><br><span class="line">           next = res;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java"> public int fib(int N) &#123;
+        if(N == 1|| N == 0) return N;
+        int pre = 0;
+        int next = 1;
+        int res = 0;
+        for(int i = 2; i &lt; N+1; i ++)&#123;
+            res = pre + next;
+            pre = next;
+            next = res;
+        &#125;
+        return res;
 
+    &#125;
+</code></pre>
 <blockquote>
 <p>执行用时：<br>0 ms, 在所有 Java 提交中击败了100.00%的用户<br>内存消耗：36.2 MB, 在所有 Java 提交中击败了5.26%的用户</p>
 </blockquote>

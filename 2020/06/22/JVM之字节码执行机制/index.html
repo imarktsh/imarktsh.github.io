@@ -225,9 +225,66 @@
         <h2 id="JVM字节码执行机制"><a href="#JVM字节码执行机制" class="headerlink" title="JVM字节码执行机制"></a>JVM字节码执行机制</h2><h2 id="栈帧结构"><a href="#栈帧结构" class="headerlink" title="栈帧结构"></a>栈帧结构</h2><span id="more"></span>
 <p>每个方法调用开始到退出，都对应着一个“栈帧”进站与出站。<br>运行时栈帧<br>作为虚拟中中方法调用与方法执行的数据结构，它包含方法执行必备的局部变量表、操作数栈、动态链接与方法返回地址等信息。<br>一个方法的执行，可能存在着多层方法调用，对于执行引擎来说，只有当前方法对应的当前栈帧才有效，才是活动的，也就是位于栈顶的栈帧（栈后进先出LIFO）<br><img src="https://img-blog.csdnimg.cn/20200622125958322.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="栈帧-局部变量表"><a href="#栈帧-局部变量表" class="headerlink" title="栈帧-局部变量表"></a>栈帧-局部变量表</h2><p>局部变量表是栈帧中的一部分,是一个变量值存储空间，主要存储方法中的局部变量、方法参数。<br>在class文件编译生成时，（Code属性）就决定了局部变量表的内容、以及最大容量： </p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> m = <span class="number">0</span>;</span><br><span class="line">		inc(m);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">(<span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> f = <span class="number">2</span>;</span><br><span class="line">		<span class="keyword">return</span> incNext(m + f);</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">incNext</span><span class="params">(<span class="keyword">int</span> m)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">int</span> g = <span class="number">2</span>;</span><br><span class="line">		<span class="keyword">return</span> m + g;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="java">public class TestClass &#123;
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">avap -c .\TestClass.class</span><br><span class="line">Compiled from <span class="string">&quot;TestClass.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">zs</span>.<span class="title">jvm</span>.<span class="title">byteCode</span>.<span class="title">TestClass</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.zs.jvm.byteCode.TestClass();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="comment">// Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">1</span>: invokespecial #<span class="number">1</span>                  </span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: iconst_0</span><br><span class="line">       <span class="number">1</span>: istore_1</span><br><span class="line">       <span class="number">2</span>: iload_1</span><br><span class="line">       <span class="comment">// Method inc:(I)I</span></span><br><span class="line">       <span class="number">3</span>: invokestatic  #<span class="number">2</span>                  </span><br><span class="line">       <span class="number">6</span>: pop</span><br><span class="line">       <span class="number">7</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">inc</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: iconst_2</span><br><span class="line">       <span class="number">1</span>: istore_1</span><br><span class="line">       <span class="number">2</span>: iload_0</span><br><span class="line">       <span class="number">3</span>: iload_1</span><br><span class="line">       <span class="number">4</span>: iadd</span><br><span class="line">       <span class="comment">// Method incNext:(I)I</span></span><br><span class="line">       <span class="number">5</span>: invokestatic  #<span class="number">3</span>                  </span><br><span class="line">       <span class="number">8</span>: <span class="function">ireturn</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">incNext</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: iconst_2</span><br><span class="line">       <span class="number">1</span>: istore_1</span><br><span class="line">       <span class="number">2</span>: iload_0</span><br><span class="line">       <span class="number">3</span>: iload_1</span><br><span class="line">       <span class="number">4</span>: iadd</span><br><span class="line">       <span class="number">5</span>: ireturn</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+    public static void main(String[] args) &#123;
+        int m = 0;
+        inc(m);
+    &#125;
+
+    public static int inc(int m) &#123;
+        int f = 2;
+        return incNext(m + f);
+
+    &#125;
+
+    public static int incNext(int m) &#123;
+        int g = 2;
+        return m + g;
+    &#125;
+&#125;
+</code></pre>
+<pre><code class="java">avap -c .\TestClass.class
+Compiled from &quot;TestClass.java&quot;
+public class com.zs.jvm.byteCode.TestClass &#123;
+  public com.zs.jvm.byteCode.TestClass();
+    Code:
+       0: aload_0
+       // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+       1: invokespecial #1                  
+       4: return
+
+  public static void main(java.lang.String[]);
+    Code:
+       0: iconst_0
+       1: istore_1
+       2: iload_1
+       // Method inc:(I)I
+       3: invokestatic  #2                  
+       6: pop
+       7: return
+
+  public static int inc(int);
+    Code:
+       0: iconst_2
+       1: istore_1
+       2: iload_0
+       3: iload_1
+       4: iadd
+       // Method incNext:(I)I
+       5: invokestatic  #3                  
+       8: ireturn
+
+  public static int incNext(int);
+    Code:
+       0: iconst_2
+       1: istore_1
+       2: iload_0
+       3: iload_1
+       4: iadd
+       5: ireturn
+&#125;
+</code></pre>
 <p>局部变量表中以“变量槽”（variable slot）作为存储数据的最小单位，并且每个slot都应该可以存储一个 byte、int、boolean、char、 short、 int、 float、 reference或returnAddress类型的数据（也就是除了double、long的基本变量类型数据和引用类型数据）。</p>
 <p>JVMhotSpot中，通常每个slot是32bit，对于double、long，64bit的数据，jvm会把这两种数据分配在两个连续slot中，每次读（写）会分配为两次读（写）单个slot完成，而且不允许读写操作只执行其中一个slot。另外，因为局部变量表示线程私有的，所以这里对64位数据读写不会有线程安全问题。</p>
 <p>JVM对reference类型的数据没有过多说明，但是一个Reference数据应该保证：<br>1 .通过这个Reference可以间接或者直接找到对应对象在heap中存放的起始地址。<br>2 .通过这个Reference可以间接或直接的找到这个对象在MethodArea区中存储的类型信息。</p>
@@ -247,8 +304,17 @@
 <h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>字节码执行，其实主要是执行方法中指令，如果在编译期就可以确定要执行的具体方法，那么对这类方法的调用的确认成为解析。</p>
 <p>java代码编译后的字节码中，方法调用的代码都是一堆常量池中的符号引用，需要通过解析将符号引用转换为(包含内存的入口的)直接引用。</p>
 <p>在方法调用时有如下几种指令：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//(私有方法、实例构造器、父类方法的调用)</span></span><br><span class="line">invokespecial</span><br><span class="line"><span class="comment">//(静态方法调用)</span></span><br><span class="line">invokestatic</span><br><span class="line"><span class="comment">//(虚方法调用\final修饰的方法调用)</span></span><br><span class="line">invokevirtual</span><br><span class="line"><span class="comment">//(调用接口方法，会在运行时确认一个接口的实现;调用重载方法等产生多态选择的情况)</span></span><br><span class="line">invokeinterface</span><br><span class="line"><span class="comment">//(、、、、、、、)</span></span><br><span class="line">invokedynamic</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">//(私有方法、实例构造器、父类方法的调用)
+invokespecial
+//(静态方法调用)
+invokestatic
+//(虚方法调用\final修饰的方法调用)
+invokevirtual
+//(调用接口方法，会在运行时确认一个接口的实现;调用重载方法等产生多态选择的情况)
+invokeinterface
+//(、、、、、、、)
+invokedynamic
+</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200622130754711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>栈帧是虚拟机栈的栈元素，栈帧存储了局部变量表，操作数栈，动态连接，返回地址等信息。每一个方法的调用都对应着一个栈帧在虚拟机栈中的入栈和出栈。</p>
 <p>局部变量表由方法参数，方法内定义的局部变量组成，容量以变量槽（Slot）为最小单位。如果该方法不是static方法，则局部变量表的第一个索引为该对象的引用，用this可以取到。</p>
 <p>操作数栈最开始为空，由字节码指令往栈中存数据和取数据，方法的返回值也会存到上一个方法的操作数栈中。</p>
@@ -261,11 +327,14 @@
 <h2 id="基于栈的字节码执行引擎"><a href="#基于栈的字节码执行引擎" class="headerlink" title="基于栈的字节码执行引擎"></a>基于栈的字节码执行引擎</h2><p>不管是解释型语言还是编译型语言，机器都无法理解非二进制语言。高级语言转化成机器语言都遵循现代经典编译原理。即执行前对程序源码进行词法和语法分析，构建抽象语法树。C语言等编译型语言会由单独的执行引擎做这些工作，而Java语言等解释型语言语法抽象树由jvm完成。jvm可以选择通过解释器来解释字节码执行还是通过优化器生成机器代码来执行。</p>
 <p>常用的两套指令集架构分别是基于栈的指令集和基于寄存器的指令集。</p>
 <p>基于栈的指令集更多的通过入栈出栈来实现计算功能，例如1+1</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iconst_1  ;将<span class="number">1</span>入栈</span><br><span class="line">iconst_1  ;将<span class="number">1</span>入栈</span><br><span class="line">iadd      ;将栈顶两个元素取出相加并将结果入栈</span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">iconst_1  ;将1入栈
+iconst_1  ;将1入栈
+iadd      ;将栈顶两个元素取出相加并将结果入栈
+</code></pre>
 <p>基于寄存器的指令集更多的是使用寄存器来进行操作，例如1+1</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mov eax,<span class="number">1</span> ;向eax中存<span class="number">1</span></span><br><span class="line"> add eax,<span class="number">1</span> ;eax&lt;-eax+<span class="number">1</span></span><br></pre></td></tr></table></figure>
-
+<pre><code class="java">mov eax,1 ;向eax中存1
+ add eax,1 ;eax&lt;-eax+1
+</code></pre>
 <p>总体来说，基于栈的指令集会慢一些，但是它与寄存器无关，更容易实现到处运行的目标。</p>
 
     </div>
