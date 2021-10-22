@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="HDFSHDFS 全称 Hadoop 分布式文件系统，其最主要的作用是作为 Hadoop 生态中各系统的存储服务。">
@@ -95,7 +95,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -287,8 +287,8 @@
 </ul>
 <p>上面提到 HDFS 中的数据是以 block 的形式分散在 DataNode 中，那什么是 block ，它是如何形成的呢？</p>
 <h2 id="数据块（Block）"><a href="#数据块（Block）" class="headerlink" title="数据块（Block）"></a>数据块（Block）</h2><p>通常，在任何文件系统中，都将<strong>数据存储为 block</strong> 的集合。block 是硬盘上存储数据的最不连续的位置。在 hadoop 集群中，每个 <strong>block 的默认大小为 128M</strong>（此处指 hadoop 2.x 版本，hadoop 1.x 版本为 64M），您也可以通过如下配置配置 block 的大小：</p>
-<pre><code class="java">dfs.block.size 或 dfs.blocksize = 64M
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dfs.block.size 或 dfs.blocksize = 64M</span><br></pre></td></tr></table></figure>
+
 <p>HDFS 不会将每个文件存储在配置的 block 大小的确切倍数中，比如一个 514M 的文件 example.txt，如果上图所示，假设 block 大小为默认的 128M，那么将会创建 5 个block，前 4 个 block 大小为 128M，但是最后一个 block 的大小则仅为 2M。</p>
 <p>那么，为何需要将 block 的大小设置为如此大，比如 128M，而不是更小呢？</p>
 <p>通常我们在谈论 HDFS 的作用的时，都会谈论到<strong>巨大的数据集</strong>，即 Terabytes 和 PB 数据，所以如果我们的 block 大小仅为 4KB，那么将会产生太多的 block，间接导致产生太多的元数据，从而使<strong>管理这些 block 和 元数据会产生巨大的开销</strong>，这样无疑会<strong>增加 Namenode</strong> 和 Datanode 的负载，尤其 Namenode 是一个中心服务器，所以这并不会是我们想要的。</p>
@@ -541,7 +541,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -578,12 +578,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

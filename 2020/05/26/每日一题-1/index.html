@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="寻找两个正序数组的中位数  给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2请你找出这两个正序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))">
@@ -80,7 +80,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -229,42 +229,17 @@
 <span id="more"></span>
 <p>你可以假设 nums1 和 nums2 不会同时为空。</p>
 <p>示例 1:</p>
-<pre><code class="java">nums1 = [1, 3]
-nums2 = [2]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums1 = [<span class="number">1</span>, <span class="number">3</span>]</span><br><span class="line">nums2 = [<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
 <p>则中位数是 2.0<br>示例 2:</p>
-<pre><code class="java">nums1 = [1, 2]
-nums2 = [3, 4]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums1 = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">nums2 = [<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+
 <p>则中位数是 (2 + 3)/2 = 2.5</p>
 <p><strong>参考题解</strong><br>题目限制*O(log(m + n))*的复杂度，直接上二分<br>中位数定义：如果某个有序数组长度是奇数，那么其中位数就是最中间那个，如果是偶数，那么就是最中间两个数字的平均值。<br>定义一个函数找到两个有序元素的第K个元素。</p>
-<pre><code class="java">//i为num1起始位置 j 为num2起始位置
-public int findKth(int[] nums1, int i, int[] nums2, int j, int k)&#123;
-        if( i &gt;= nums1.length) return nums2[j + k - 1];//nums1为空数组
-        if( j &gt;= nums2.length) return nums1[i + k - 1];//nums2为空数组
-        if(k == 1)&#123;
-            return Math.min(nums1[i], nums2[j]);
-        &#125;
-        int midVal1 = (i + k / 2 - 1 &lt; nums1.length) ? nums1[i + k / 2 - 1] : Integer.MAX_VALUE;
-        int midVal2 = (j + k / 2 - 1 &lt; nums2.length) ? nums2[j + k / 2 - 1] : Integer.MAX_VALUE;
-        if(midVal1 &lt; midVal2)&#123;
-            return findKth(nums1, i + k / 2, nums2, j , k - k / 2);
-        &#125;else&#123;
-            return findKth(nums1, i, nums2, j + k / 2 , k - k / 2);
-        &#125;        
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//i为num1起始位置 j 为num2起始位置</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">findKth</span><span class="params">(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span> i, <span class="keyword">int</span>[] nums2, <span class="keyword">int</span> j, <span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>( i &gt;= nums1.length) <span class="keyword">return</span> nums2[j + k - <span class="number">1</span>];<span class="comment">//nums1为空数组</span></span><br><span class="line">        <span class="keyword">if</span>( j &gt;= nums2.length) <span class="keyword">return</span> nums1[i + k - <span class="number">1</span>];<span class="comment">//nums2为空数组</span></span><br><span class="line">        <span class="keyword">if</span>(k == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Math.min(nums1[i], nums2[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> midVal1 = (i + k / <span class="number">2</span> - <span class="number">1</span> &lt; nums1.length) ? nums1[i + k / <span class="number">2</span> - <span class="number">1</span>] : Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">int</span> midVal2 = (j + k / <span class="number">2</span> - <span class="number">1</span> &lt; nums2.length) ? nums2[j + k / <span class="number">2</span> - <span class="number">1</span>] : Integer.MAX_VALUE;</span><br><span class="line">        <span class="keyword">if</span>(midVal1 &lt; midVal2)&#123;</span><br><span class="line">            <span class="keyword">return</span> findKth(nums1, i + k / <span class="number">2</span>, nums2, j , k - k / <span class="number">2</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> findKth(nums1, i, nums2, j + k / <span class="number">2</span> , k - k / <span class="number">2</span>);</span><br><span class="line">        &#125;        </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>找中位数</p>
-<pre><code class="java">class Solution &#123;
-  public double findMedianSortedArrays(int[] nums1, int[] nums2) &#123;
-        int m = nums1.length;
-        int n = nums2.length;
-        int left = (m + n + 1) / 2;
-        int right = (m + n + 2) / 2;
-        //合并奇偶
-        return (findKth(nums1, 0, nums2, 0, left) + findKth(nums1, 0, nums2, 0, right)) / 2.0;
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">findMedianSortedArrays</span><span class="params">(<span class="keyword">int</span>[] nums1, <span class="keyword">int</span>[] nums2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = nums1.length;</span><br><span class="line">        <span class="keyword">int</span> n = nums2.length;</span><br><span class="line">        <span class="keyword">int</span> left = (m + n + <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="keyword">int</span> right = (m + n + <span class="number">2</span>) / <span class="number">2</span>;</span><br><span class="line">        <span class="comment">//合并奇偶</span></span><br><span class="line">        <span class="keyword">return</span> (findKth(nums1, <span class="number">0</span>, nums2, <span class="number">0</span>, left) + findKth(nums1, <span class="number">0</span>, nums2, <span class="number">0</span>, right)) / <span class="number">2.0</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/comments/">leetcode链接</a></p>
 <p>先从简单刷起 以前这是都是背的快忘记了 </p>
 
@@ -434,7 +409,7 @@ public int findKth(int[] nums1, int i, int[] nums2, int j, int k)&#123;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -471,12 +446,8 @@ public int findKth(int[] nums1, int i, int[] nums2, int j, int k)&#123;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

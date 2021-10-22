@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="对java程序员笔试解析 整理(1)">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -229,13 +229,7 @@
 <p>3.指针是所指内容的地址，引用是某块地址的别称。指针可以执行加减运算，引用不行</p>
 <p>4.&amp;和&amp;&amp;的区别<br>&amp;是按位与操作符，a&amp;b就是把ab转为二进制然后按位与的运算，&amp;符号表示相与1&amp;1=1 1&amp;0=0 0&amp;0=0。a&amp;&amp;b就是a和b同时满足为true，一个不满足则为false。<br>5.Java语言中给任何对象赋值null都是合法的。</p>
 <p>6.Java新特性<br>jdk1.7增加了switch语句支持String的特性，他的实现原理：通过对case后面的String调用hashCode()方法，得到一个int类型hash值，然后用这个hash值来匹配所有case。<br>jdk1.7增加了二进制字面量，增加了二进制字面量表示（0B001，ob111），在数字中可以添加分隔符123_456，编译时下划线会被去掉。这样做可以分辨二进制长数字。<br>jdk1.7增加了fork/join框架来增强对多核处理器并行计算的支持，应用场景为把一个应用分为多个子任务，并且组合多个子任务可以得到最终结果。<br>jdk1.8增加了lambda表达式的支持允许把一个函数作为一个方法的参数。例：Arrays.sort(people,(People a,People b) -&gt; a.getAge()-b.getAge());<br>jdk1.8增加了接口的默认方法实现。</p>
-<pre><code class="java">interface Inter8&#123;
-    void f();
-    default void g()&#123;
-         System.out.printIn(&quot;This is default method in interface&quot;)
-     &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Inter8</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">()</span></span>&#123;</span><br><span class="line">         System.out.printIn(<span class="string">&quot;This is default method in interface&quot;</span>)</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>为什么要引入默认接口实现呢，是为了实现接口升级。在原有接口设计中，如果接口要升级需要对类进行修改，实现默认方法可以给升级带来便利。<br>jdk1.8增加方法引用。指可以直接引用Java类或方法。共有下面四种形式：<br>引用构造方法ClassName::new<br>引用类静态方法ClassName::methodName<br>引用特定类的任意对象方法ClassName::methodName<br>引用某对象的方法instanceName::methodName<br>此外还有类型推断</p>
 <p>7.访问修饰符由大到小：public protect default private</p>
 <p>8.面向对象三大特性继承 封装 多态</p>
@@ -418,7 +412,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -455,12 +449,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

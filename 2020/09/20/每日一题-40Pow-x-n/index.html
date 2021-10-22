@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="实现 pow(x, n) ，即计算 x 的 n 次幂函数。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,40 +225,20 @@
 <span id="more"></span>
 
 <p>示例 1:</p>
-<pre><code class="java">输入: 2.00000, 10
-输出: 1024.00000
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">2.00000</span>, <span class="number">10</span></span><br><span class="line">输出: <span class="number">1024.00000</span></span><br></pre></td></tr></table></figure>
+
 <p>示例 2:</p>
-<pre><code class="java">输入: 2.10000, 3
-输出: 9.26100
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">2.10000</span>, <span class="number">3</span></span><br><span class="line">输出: <span class="number">9.26100</span></span><br></pre></td></tr></table></figure>
+
 <p>示例 3:</p>
-<pre><code class="java">输入: 2.00000, -2
-输出: 0.25000
-解释: 2-2 = 1/22 = 1/4 = 0.25
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">2.00000</span>, -<span class="number">2</span></span><br><span class="line">输出: <span class="number">0.25000</span></span><br><span class="line">解释: <span class="number">2</span>-<span class="number">2</span> = <span class="number">1</span>/<span class="number">22</span> = <span class="number">1</span>/<span class="number">4</span> = <span class="number">0.25</span></span><br></pre></td></tr></table></figure>
+
 <p>说明:</p>
-<pre><code class="java">-100.0 &lt; x &lt; 100.0
-n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="number">100.0</span> &lt; x &lt; <span class="number">100.0</span></span><br><span class="line">n 是 <span class="number">32</span> 位有符号整数，其数值范围是 [−<span class="number">231</span>, <span class="number">231</span> − <span class="number">1</span>] 。</span><br></pre></td></tr></table></figure>
+
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/powx-n">https://leetcode-cn.com/problems/powx-n</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <p>每次把指数除以2  递归调用 ，如果为奇数则再乘一个x </p>
-<pre><code class="java">class Solution &#123;
-    public double myPow(double x, int n) &#123;
-        // 迭代法求解快速幂，每次迭代将指数减半，底数变为原来的平方
-        if (n == 0) return 1;
-        if (n == 1) return x;
-        if (n == -1) return 1 / x;
-        //右移一位是除2
-        double res = myPow(x, n  &gt;&gt; 1);
-        //n &amp; 1 判断奇偶数的 因为速度快 装b
-        double mod = myPow(x, n &amp; 1);
-        //每次递归返回 平方加如果奇数多乘一次 偶数则乘的是1
-        return res * res * mod;
-
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">myPow</span><span class="params">(<span class="keyword">double</span> x, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 迭代法求解快速幂，每次迭代将指数减半，底数变为原来的平方</span></span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (n == <span class="number">1</span>) <span class="keyword">return</span> x;</span><br><span class="line">        <span class="keyword">if</span> (n == -<span class="number">1</span>) <span class="keyword">return</span> <span class="number">1</span> / x;</span><br><span class="line">        <span class="comment">//右移一位是除2</span></span><br><span class="line">        <span class="keyword">double</span> res = myPow(x, n  &gt;&gt; <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//n &amp; 1 判断奇偶数的 因为速度快 装b</span></span><br><span class="line">        <span class="keyword">double</span> mod = myPow(x, n &amp; <span class="number">1</span>);</span><br><span class="line">        <span class="comment">//每次递归返回 平方加如果奇数多乘一次 偶数则乘的是1</span></span><br><span class="line">        <span class="keyword">return</span> res * res * mod;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20200920195923230.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -427,7 +407,7 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -464,12 +444,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

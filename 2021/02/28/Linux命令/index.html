@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Linux相关">
@@ -81,7 +81,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -223,28 +223,9 @@
         <p>Linux相关</p>
 <span id="more"></span>
 <p>1.当前目录  <code>./</code>  切换目录 <code>cd</code><br>2.查看当前进程 <code>ps</code>  执行退出 <code>exit</code> 查看当前路径<code>pwd</code><br>3.清屏 <code>clear</code> 退出当前命名 <code>ctrl+c</code> 执行睡眠<code>ctrl+z</code><br>4.查看当前作业<code>jobs</code>  列出进程的PID和作业号<code>jobs -l</code><br>5.软链接    <code>ln -s slink source</code> 相当于快捷方式 硬链接<code>ln link source</code> 相当于copy一份不可跨区<br>6.创建目录<code>mkdir    </code> 创建文件<code>touch  / vi </code> 文件权限修改<code>chmod</code><br>7.查看文件内容的命令：<code>vi 编辑方式查看 可修改 cat 显示文件全部内容 more 、less分页显示 tail仅查看尾部 可指定行数 head 仅查看头部可指定行</code><br>8.删除文件 <code>rm</code> 删除目录下文件 <code>rm -r</code> 删除空文件夹 <code>rmdir</code><br>9.对一个文件的内容进行统计 <code>wc -c 统计字数 -l 统计行数 -w统计字数</code><br>10. <code>grep</code>强大的文本搜索工具，能使用正则表达式搜索文件<br>11. Linux进程的七种状态</p>
-<pre><code class="java">（1）R运行状态（runing）：并不意味着进程一定在运行中，也可以在运行队列里；
-
-（2）S睡眠状态（sleeping）：进程在等待事件完成；（浅度睡眠，可以被唤醒）
-
-（3）D磁盘睡眠状态（Disk sleep）:不可中断睡眠（深度睡眠，不可以被唤醒，通常在磁盘写入时发生）
-
-（4）T停止状态（stopped）：可以通过发送SIGSTOP信号给进程来停止进程，可以发送SIGCONT信号让进程继续运行
-
-（5）X死亡状态（dead）:该状态是返回状态，在任务列表中看不到；
-
-（6）Z僵尸状态（zombie）:子进程退出，父进程还在运行，但是父进程没有读到子进程的退出状态，子进程进入僵尸状态；
-
-（7）t追踪停止状态（trancing stop）
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">（<span class="number">1</span>）R运行状态（runing）：并不意味着进程一定在运行中，也可以在运行队列里；</span><br><span class="line"></span><br><span class="line">（<span class="number">2</span>）S睡眠状态（sleeping）：进程在等待事件完成；（浅度睡眠，可以被唤醒）</span><br><span class="line"></span><br><span class="line">（<span class="number">3</span>）D磁盘睡眠状态（Disk sleep）:不可中断睡眠（深度睡眠，不可以被唤醒，通常在磁盘写入时发生）</span><br><span class="line"></span><br><span class="line">（<span class="number">4</span>）T停止状态（stopped）：可以通过发送SIGSTOP信号给进程来停止进程，可以发送SIGCONT信号让进程继续运行</span><br><span class="line"></span><br><span class="line">（<span class="number">5</span>）X死亡状态（dead）:该状态是返回状态，在任务列表中看不到；</span><br><span class="line"></span><br><span class="line">（<span class="number">6</span>）Z僵尸状态（zombie）:子进程退出，父进程还在运行，但是父进程没有读到子进程的退出状态，子进程进入僵尸状态；</span><br><span class="line"></span><br><span class="line">（<span class="number">7</span>）t追踪停止状态（trancing stop）</span><br></pre></td></tr></table></figure>
 <p>12.查找系统支持所有信号 <code>kill -l</code><br>13.查看磁盘使用情况<code>df -hl</code><br>14.查看网络是否连通<code>netstat</code><br>15.<code>which</code>只能查可执行文件 <code>whereis</code>只能查二进制文件 说明文档源文件等<br>16.Linux的静态库</p>
-<pre><code class="java">库文件是事先编译好的方法的合集
-Linux系统中：
-1.静态库的扩展名为.a；链接时间：静态库的代码是在编译过程中被载入程序中
-链接方式：静态库的链接是将整个函数库的所有数据都整合进目标代码 优点 不需要外部函数库支持 缺点 如果所使用的静态库发生更新改变 程序必须重新编译
-2.动态库的扩展名为.so；链接时间：动态库在编译的时候并没有被编译进目标代码，而是当你的程序执行到相关函数时才调用该库的相应函数 优点 动态库的改变不影响程序，所有动态库升级比较方便
-静态库生成文件远大于动态库生成的文件 缺省方式时动态库
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">库文件是事先编译好的方法的合集</span><br><span class="line">Linux系统中：</span><br><span class="line"><span class="number">1.</span>静态库的扩展名为.a；链接时间：静态库的代码是在编译过程中被载入程序中</span><br><span class="line">链接方式：静态库的链接是将整个函数库的所有数据都整合进目标代码 优点 不需要外部函数库支持 缺点 如果所使用的静态库发生更新改变 程序必须重新编译</span><br><span class="line"><span class="number">2.</span>动态库的扩展名为.so；链接时间：动态库在编译的时候并没有被编译进目标代码，而是当你的程序执行到相关函数时才调用该库的相应函数 优点 动态库的改变不影响程序，所有动态库升级比较方便</span><br><span class="line">静态库生成文件远大于动态库生成的文件 缺省方式时动态库</span><br></pre></td></tr></table></figure>
 <p>17.<code>nm</code>工具作用 是linux下自带的特定文件分析工具，一般用来检查分析二进制文件、库文件、可执行文件中的符号表，返回二进制文件中各段的信息<br>第一列 当前符号的地址 第二列 当前符号的类型 第三列 当前符号名称</p>
 <p>18.<code>ldd</code>工具作用 dd是用来分析程序运行时需要依赖的动态链接库的工具<br>第一列  程序需要依赖什么库 第二列 系统提供的与程序需要的库对应的库名称  第三列：依赖库加载的开始地址</p>
 <p>19.<code>/proc目录</code> Linux内核提供了一种通过/proc文件系统，在运行时访问内核内部数据结构、改变内核设置的机制 存有进程运行时所有信息<br>20. 父进程先结束 子进程会变成孤儿进程 子进程先结束 父进程没有直到 父进程会变成僵尸进程。</p>
@@ -416,7 +397,7 @@ Linux系统中：
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -453,12 +434,8 @@ Linux系统中：
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

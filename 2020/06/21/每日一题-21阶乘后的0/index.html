@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="阶乘后的零给定一个整数 n，返回 n! 结果尾数中零的数量。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,25 +225,16 @@
 <span id="more"></span>
 
 <p>示例 1:</p>
-<pre><code class="java">输入: 3
-输出: 0
-解释: 3! = 6, 尾数中没有零。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">3</span></span><br><span class="line">输出: <span class="number">0</span></span><br><span class="line">解释: <span class="number">3</span>! = <span class="number">6</span>, 尾数中没有零。</span><br></pre></td></tr></table></figure>
+
 <p>示例 2:</p>
-<pre><code class="java">输入: 5
-输出: 1
-解释: 5! = 120, 尾数中有 1 个零.
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">5</span></span><br><span class="line">输出: <span class="number">1</span></span><br><span class="line">解释: <span class="number">5</span>! = <span class="number">120</span>, 尾数中有 <span class="number">1</span> 个零.</span><br></pre></td></tr></table></figure>
+
 <p><strong>说明</strong>: 你算法的时间复杂度应为 <em>O(log n)</em> 。</p>
 <blockquote>
 <p>  首先题目的意思是末尾有几个0<br>    比如6! = 【1* 2* 3* 4* 5* 6】<br>    其中只有2<em>5末尾才有0，所以就可以抛去其他数据 专门看2 5 以及其倍数 毕竟 4 * 25末尾也是0<br>    比如10！ = 【2</em>4<em>5</em>6<em>8</em>10】<br>    其中 4能拆成2<em>2  10能拆成2</em>5<br>    所以10！ = 【2<em>（2</em>2）<em>5</em>（2<em>3）</em>（2<em>2</em>2）<em>（2</em>5）】<br>    一个2和一个5配对 就产生一个0 所以10！末尾2个0<br>    转头一想 2肯定比5多 所以只数5的个数就行了<br>    假若N=31 31里能凑10的5为[5, 2<em>5, 3</em>5, 4<em>5, 25, 6</em>5] 其中 25还能拆为 5<em>2<br>    所以 里面的5的个数为 int(31/(5</em>1)) +  int(31/(5<em>2))<br>    所以 只要先找个一个 5</em>x &lt; n 的x的最大数 然后按上面循环加起来</p>
 </blockquote>
-<pre><code class="java">public int trailingZeroes(int n) &#123;
-        if(n &lt; 5) return 0;
-        else return n / 5 + trailingZeroes(n / 5);
-
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">trailingZeroes</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(n &lt; <span class="number">5</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> n / <span class="number">5</span> + trailingZeroes(n / <span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20200621203828324.png" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/factorial-trailing-zeroes/submissions/">leetcode</a></p>
 <p>虚拟机装了几天跑不起来，明天还是看看论文吧，实操一大半时间都搁这整环境呢。先搞一下理论。</p>
 
@@ -414,7 +405,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -451,12 +442,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

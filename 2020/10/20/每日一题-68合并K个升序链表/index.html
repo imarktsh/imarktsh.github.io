@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给你一个链表数组，每个链表都已经按升序排列。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,110 +225,14 @@
 <span id="more"></span>
 <p>请你将所有链表合并到一个升序链表中，返回合并后的链表。</p>
 <p>示例 1：</p>
-<pre><code class="java">输入：lists = [[1,4,5],[1,3,4],[2,6]]
-输出：[1,1,2,3,4,4,5,6]
-解释：链表数组如下：
-[
-  1-&gt;4-&gt;5,
-  1-&gt;3-&gt;4,
-  2-&gt;6
-]
-将它们合并到一个有序链表中得到。
-1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = [[<span class="number">1</span>,<span class="number">4</span>,<span class="number">5</span>],[<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">2</span>,<span class="number">6</span>]]</span><br><span class="line">输出：[<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">解释：链表数组如下：</span><br><span class="line">[</span><br><span class="line">  <span class="number">1</span>-&gt;<span class="number">4</span>-&gt;<span class="number">5</span>,</span><br><span class="line">  <span class="number">1</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>,</span><br><span class="line">  <span class="number">2</span>-&gt;<span class="number">6</span></span><br><span class="line">]</span><br><span class="line">将它们合并到一个有序链表中得到。</span><br><span class="line"><span class="number">1</span>-&gt;<span class="number">1</span>-&gt;<span class="number">2</span>-&gt;<span class="number">3</span>-&gt;<span class="number">4</span>-&gt;<span class="number">4</span>-&gt;<span class="number">5</span>-&gt;<span class="number">6</span></span><br></pre></td></tr></table></figure>
+
 <p>示例 2：</p>
-<pre><code class="java">输入：lists = []
-输出：[]
-示例 3：
-
-输入：lists = [[]]
-输出：[]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：lists = []</span><br><span class="line">输出：[]</span><br><span class="line">示例 <span class="number">3</span>：</span><br><span class="line"></span><br><span class="line">输入：lists = [[]]</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
 <p>我的理解是先合并两个 然后依次遍历合并n个<br>根据这个思路就是 先写个add2函数然后遍历数组 得到答案 </p>
-<pre><code class="java">/**
- * Definition for singly-linked list.
- * public class ListNode &#123;
- *     int val;
- *     ListNode next;
- *     ListNode() &#123;&#125;
- *     ListNode(int val) &#123; this.val = val; &#125;
- *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;
- * &#125;
- */
-class Solution &#123;
-    public ListNode mergeKLists(ListNode[] lists) &#123;
-        //依次遍历 亮亮合并
-        ListNode res = null;
-        for (ListNode list : lists) &#123;
-            res = add2(res,list);
-        &#125;
-        return res;
-    &#125;
-
-    public ListNode add2(ListNode l1, ListNode l2)&#123;
-        //合并两个有序链表
-        ListNode dum = new ListNode(0);
-        ListNode tail = dum;
-        while (l1 != null &amp;&amp; l2 != null)&#123;
-            if(l1.val &lt; l2.val)&#123;
-                tail.next = l1;
-                l1 = l1.next;
-                tail = tail.next;
-            &#125;else &#123;
-                tail.next = l2;
-                l2 = l2.next;
-                tail = tail.next;
-            &#125;
-            
-        &#125;
-        //长度不一样有链表为空
-        tail.next = l1 == null ? l2 : l1;
-        return dum.next;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeKLists</span><span class="params">(ListNode[] lists)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//依次遍历 亮亮合并</span></span><br><span class="line">        ListNode res = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">for</span> (ListNode list : lists) &#123;</span><br><span class="line">            res = add2(res,list);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">add2</span><span class="params">(ListNode l1, ListNode l2)</span></span>&#123;</span><br><span class="line">        <span class="comment">//合并两个有序链表</span></span><br><span class="line">        ListNode dum = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">        ListNode tail = dum;</span><br><span class="line">        <span class="keyword">while</span> (l1 != <span class="keyword">null</span> &amp;&amp; l2 != <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(l1.val &lt; l2.val)&#123;</span><br><span class="line">                tail.next = l1;</span><br><span class="line">                l1 = l1.next;</span><br><span class="line">                tail = tail.next;</span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                tail.next = l2;</span><br><span class="line">                l2 = l2.next;</span><br><span class="line">                tail = tail.next;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//长度不一样有链表为空</span></span><br><span class="line">        tail.next = l1 == <span class="keyword">null</span> ? l2 : l1;</span><br><span class="line">        <span class="keyword">return</span> dum.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20201020213816688.png#pic_center" alt="在这里插入图片描述"><br>很明显 效率很低 所以有另一种思路并归或者叫分治，每次两两一合并 同时进行</p>
-<pre><code class="java">class Solution &#123;
-
-    public ListNode mergeKLists(ListNode[] lists)&#123;
-        if(lists.length == 0)
-            return null;
-        if(lists.length == 1)
-            return lists[0];
-        if(lists.length == 2)&#123;
-           return mergeTwoLists(lists[0],lists[1]);
-        &#125;
-
-        int mid = lists.length/2;
-        ListNode[] l1 = new ListNode[mid];
-        for(int i = 0; i &lt; mid; i++)&#123;
-            l1[i] = lists[i];
-        &#125;
-
-        ListNode[] l2 = new ListNode[lists.length-mid];
-        for(int i = mid,j=0; i &lt; lists.length; i++,j++)&#123;
-            l2[j] = lists[i];
-        &#125;
-
-        return mergeTwoLists(mergeKLists(l1),mergeKLists(l2));
-
-    &#125;
-    public ListNode mergeTwoLists(ListNode l1, ListNode l2) &#123;
-        if (l1 == null) return l2;
-        if (l2 == null) return l1;
-
-        ListNode head = null;
-        if (l1.val &lt;= l2.val)&#123;
-            head = l1;
-            head.next = mergeTwoLists(l1.next, l2);
-        &#125; else &#123;
-            head = l2;
-            head.next = mergeTwoLists(l1, l2.next);
-        &#125;
-        return head;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeKLists</span><span class="params">(ListNode[] lists)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(lists.length == <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(lists.length == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> lists[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">if</span>(lists.length == <span class="number">2</span>)&#123;</span><br><span class="line">           <span class="keyword">return</span> mergeTwoLists(lists[<span class="number">0</span>],lists[<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = lists.length/<span class="number">2</span>;</span><br><span class="line">        ListNode[] l1 = <span class="keyword">new</span> ListNode[mid];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mid; i++)&#123;</span><br><span class="line">            l1[i] = lists[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ListNode[] l2 = <span class="keyword">new</span> ListNode[lists.length-mid];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = mid,j=<span class="number">0</span>; i &lt; lists.length; i++,j++)&#123;</span><br><span class="line">            l2[j] = lists[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> mergeTwoLists(mergeKLists(l1),mergeKLists(l2));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ListNode <span class="title">mergeTwoLists</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l1 == <span class="keyword">null</span>) <span class="keyword">return</span> l2;</span><br><span class="line">        <span class="keyword">if</span> (l2 == <span class="keyword">null</span>) <span class="keyword">return</span> l1;</span><br><span class="line"></span><br><span class="line">        ListNode head = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (l1.val &lt;= l2.val)&#123;</span><br><span class="line">            head = l1;</span><br><span class="line">            head.next = mergeTwoLists(l1.next, l2);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            head = l2;</span><br><span class="line">            head.next = mergeTwoLists(l1, l2.next);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>偷别人的答案 日后再刷</p>
 
     </div>
@@ -497,7 +401,7 @@ class Solution &#123;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -534,12 +438,8 @@ class Solution &#123;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

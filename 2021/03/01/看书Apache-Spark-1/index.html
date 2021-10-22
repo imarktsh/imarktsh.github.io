@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="看书Apache Spark 1大数据处理框架Apache Spark设计与实现">
@@ -83,7 +83,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,9 +226,7 @@
 <span id="more"></span>
 <p><img src="https://img-blog.csdnimg.cn/20210301092756985.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 <h2 id="第一章-大数据处理框架概览"><a href="#第一章-大数据处理框架概览" class="headerlink" title="第一章 大数据处理框架概览"></a>第一章 大数据处理框架概览</h2><p>1.大数据带来的挑战 数据量大 数据类型多样 产生处理速度快 价值密度低 的4V特性<br>传统处理系统难以在可接受的时间内对数据进行高效处理<br>2.大数据处理框架 2004年Google提出基于分治归并和函数式编程思想的MapReduce分布式计算框架。<br>2007年微软提出Dryad分布式计算框架，它允许用户将任务组织成有向无环图DAG。<br>2012年AMPLab提出基于内存适合于迭代计算的Spark分布式处理框架。<br>3.大数据编程模型 以上处理框架都是基于MapReduce编程模型为基础 其编程模型可被简单表示为：</p>
-<pre><code class="java">map阶段： map&lt;K1,V1&gt; =&gt; list&lt;K2,V2&gt;
-reduce阶段：reduce&lt;K2,list(V2)&gt; =&gt; list&lt;K3,V3&gt;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map阶段： map&lt;K1,V1&gt; =&gt; list&lt;K2,V2&gt;</span><br><span class="line">reduce阶段：reduce&lt;K2,list(V2)&gt; =&gt; list&lt;K3,V3&gt;</span><br></pre></td></tr></table></figure>
 <p>除此之外 Spark设计一些对用户更加友好的操作符 如 <code>flatMap() groupByKey() reduceByKey</code>等 可以表达更复杂的数据处理流程。<br>4.大数据应用可表示为<code>&lt;输入数据  用户代码  配置参数&gt;</code><br>大数据处理框架可表示为<code>&lt;用户层  分布式数据并行处理层  资源管理与任务调度层  物理执行层&gt;</code><br>5.为什么拆分Stage 首先每个操作一次完成当成一个任务效率太低 而且容错困难，划分stage后第一个好处式生成的task不会太大也不会太小便于并行执行 其次多个操作放到一个Task中可以串行 流水线式处理 提高处理效率第三个好处是方便错误容错 可以重新运行stage而不需要整个job。</p>
 
     </div>
@@ -399,7 +397,7 @@ reduce阶段：reduce&lt;K2,list(V2)&gt; =&gt; list&lt;K3,V3&gt;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -436,12 +434,8 @@ reduce阶段：reduce&lt;K2,list(V2)&gt; =&gt; list&lt;K3,V3&gt;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

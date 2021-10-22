@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="安装vmware">
@@ -83,7 +83,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,36 +226,15 @@
 <span id="more"></span>
 <p>新建虚拟机<br>安装Linux<br>初步配置<br>克隆<br>完善配置</p>
 <p>安装好centeros之后设置ip</p>
-<pre><code class="java">设置IP:
-VM:编辑&gt;虚拟网络编辑器
-vi /etc/sysconfig/network-scripts/ifcfg-eth0
-删除UUID和MAC地址
-ONBOOT=yes
-BOOTPROTO=static
-IPADDR=192.168.9.253
-NETMASK=255.255.255.0
-GATEWAY=192.168.9.2
-DNS1=1921.68.9.2
-删除原来网络配置
-rm -fr /etc/udev/rules.d/70-persistent-net.rules
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">设置IP:</span><br><span class="line">VM:编辑&gt;虚拟网络编辑器</span><br><span class="line">vi /etc/sysconfig/network-scripts/ifcfg-eth0</span><br><span class="line">删除UUID和MAC地址</span><br><span class="line">ONBOOT=yes</span><br><span class="line">BOOTPROTO=<span class="keyword">static</span></span><br><span class="line">IPADDR=<span class="number">192.168</span><span class="number">.9</span><span class="number">.253</span></span><br><span class="line">NETMASK=<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></span><br><span class="line">GATEWAY=<span class="number">192.168</span><span class="number">.9</span><span class="number">.2</span></span><br><span class="line">DNS1=<span class="number">1921.68</span><span class="number">.9</span><span class="number">.2</span></span><br><span class="line">删除原来网络配置</span><br><span class="line">rm -fr /etc/udev/rules.d/<span class="number">70</span>-persistent-net.rules</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20200915133559866.png#pic_center" alt="在这里插入图片描述"></p>
-<pre><code class="java">关闭防火墙&amp;Selinux
-service iptables stop
-chkconfig iptables off
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">关闭防火墙&amp;Selinux</span><br><span class="line">service iptables stop</span><br><span class="line">chkconfig iptables off</span><br><span class="line"></span><br><span class="line">vi /etc/selinux/config</span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
 
-vi /etc/selinux/config
-SELINUX=disabled
-</code></pre>
 <p>关机<br>拍摄快照<br>注意：日后，虚拟机一定要用快照克隆</p>
 <p>克隆虚拟机 //疯狂克隆 搞了七台虚拟机 不知道电脑抗不扛得住</p>
 <p>配置IP<br>配置主机名</p>
-<pre><code class="java">vi /etc/sysconfig/network
-HOSTNAME=OOXX
-配置hosts
-vi /etc/hosts      LINUX
-c:/windows/system32/drivers/etc/hosts   
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysconfig/network</span><br><span class="line">HOSTNAME=OOXX</span><br><span class="line">配置hosts</span><br><span class="line">vi /etc/hosts      LINUX</span><br><span class="line">c:/windows/system32/drivers/etc/hosts   </span><br></pre></td></tr></table></figure>
+
 <p><img src="https://img-blog.csdnimg.cn/20200915133755401.png#pic_center" alt="在这里插入图片描述"></p>
 <p>最后关机<br>拍摄快照 防止出错</p>
 
@@ -425,7 +404,7 @@ c:/windows/system32/drivers/etc/hosts
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -462,12 +441,8 @@ c:/windows/system32/drivers/etc/hosts
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

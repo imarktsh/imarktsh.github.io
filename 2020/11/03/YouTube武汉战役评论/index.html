@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="获取YouTube评论有两种方式：">
@@ -86,7 +86,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -228,272 +228,17 @@
         <p>获取YouTube评论有两种方式：</p>
 <span id="more"></span>
 <h2 id="使用Google-API"><a href="#使用Google-API" class="headerlink" title="使用Google API"></a>使用Google API</h2><p>到 <a target="_blank" rel="noopener" href="https://developers.google.com/youtube/v3/quickstart/python">https://developers.google.com/youtube/v3/quickstart/python</a><br>注册谷歌根据教程 创建OAuth 2.0 客户端的时候选择箭头这个，然后类型选其它，之后下载json凭证得到一个文件<br><img src="https://img-blog.csdnimg.cn/20201103120022460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>然后是爬虫代码：</p>
-<pre><code class="python">import csv
-import pickle
-import os
-import google.oauth2.credentials
-from google_auth_httplib2 import Request
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from google_auth_oauthlib.flow import InstalledAppFlow
-# The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
-# the OAuth 2.0 information for this application, including its client_id and
-# client_secret.
-import time
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> google.oauth2.credentials</span><br><span class="line"><span class="keyword">from</span> google_auth_httplib2 <span class="keyword">import</span> Request</span><br><span class="line"><span class="keyword">from</span> googleapiclient.discovery <span class="keyword">import</span> build</span><br><span class="line"><span class="keyword">from</span> googleapiclient.errors <span class="keyword">import</span> HttpError</span><br><span class="line"><span class="keyword">from</span> google_auth_oauthlib.flow <span class="keyword">import</span> InstalledAppFlow</span><br><span class="line"><span class="comment"># The CLIENT_SECRETS_FILE variable specifies the name of a file that contains</span></span><br><span class="line"><span class="comment"># the OAuth 2.0 information for this application, including its client_id and</span></span><br><span class="line"><span class="comment"># client_secret.</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">CLIENT_SECRETS_FILE = <span class="string">&quot;C:\JetBrains\PyCharm_workspace\demo\com\CGTV\client_secret_195872191593-jflo13qo28ipo86fkcn4c5oko5pdbfah.apps.googleusercontent.com.json&quot;</span></span><br><span class="line"><span class="comment"># This OAuth 2.0 access scope allows for full read/write access to the</span></span><br><span class="line"><span class="comment"># authenticated user&#x27;s account and requires requests to use an SSL connection.</span></span><br><span class="line"></span><br><span class="line">SCOPES = [<span class="string">&#x27;https://www.googleapis.com/auth/youtube.force-ssl&#x27;</span>]</span><br><span class="line">API_SERVICE_NAME = <span class="string">&#x27;youtube&#x27;</span></span><br><span class="line">API_VERSION = <span class="string">&#x27;v3&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_authenticated_service</span>():</span></span><br><span class="line">    credentials = <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(<span class="string">&#x27;token.pickle&#x27;</span>):</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;token.pickle&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> token:</span><br><span class="line">            credentials = pickle.load(token)</span><br><span class="line">    <span class="comment">#  Check if the credentials are invalid or do not exist</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> credentials <span class="keyword">or</span> <span class="keyword">not</span> credentials.valid:</span><br><span class="line">        <span class="keyword">if</span> credentials <span class="keyword">and</span> credentials.expired <span class="keyword">and</span> credentials.refresh_token:</span><br><span class="line">            credentials.refresh(Request())</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            flow = InstalledAppFlow.from_client_secrets_file(</span><br><span class="line">                CLIENT_SECRETS_FILE, SCOPES)</span><br><span class="line">            credentials = flow.run_console()</span><br><span class="line">        <span class="comment"># Save the credentials for the next run</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;token.pickle&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> token:</span><br><span class="line">            pickle.dump(credentials, token)</span><br><span class="line">    time.sleep(<span class="number">20</span>)</span><br><span class="line">    <span class="keyword">return</span> build(API_SERVICE_NAME, API_VERSION, credentials=credentials)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_video_comments</span>(<span class="params">service, **kwargs</span>):</span></span><br><span class="line">    comments = []</span><br><span class="line">    time.sleep(<span class="number">20</span>)</span><br><span class="line">    results = service.commentThreads().<span class="built_in">list</span>(**kwargs).execute()</span><br><span class="line">    <span class="keyword">while</span> results:</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> results[<span class="string">&#x27;items&#x27;</span>]:</span><br><span class="line">            comment = item[<span class="string">&#x27;snippet&#x27;</span>][<span class="string">&#x27;topLevelComment&#x27;</span>][<span class="string">&#x27;snippet&#x27;</span>][<span class="string">&#x27;textDisplay&#x27;</span>]</span><br><span class="line">            comments.append(comment)</span><br><span class="line">        <span class="comment"># Check if another page exists</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;nextPageToken&#x27;</span> <span class="keyword">in</span> results:</span><br><span class="line">            kwargs[<span class="string">&#x27;pageToken&#x27;</span>] = results[<span class="string">&#x27;nextPageToken&#x27;</span>]</span><br><span class="line">            results = service.commentThreads().<span class="built_in">list</span>(**kwargs).execute()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> comments</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write_to_csv</span>(<span class="params">comments</span>):</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;comments.csv&#x27;</span>, <span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> comments_file:</span><br><span class="line">        comments_writer = csv.writer(comments_file, delimiter=<span class="string">&#x27;,&#x27;</span>, quotechar=<span class="string">&#x27;&quot;&#x27;</span>, quoting=csv.QUOTE_MINIMAL)</span><br><span class="line">        comments_writer.writerow([<span class="string">&#x27;Video ID&#x27;</span>, <span class="string">&#x27;Title&#x27;</span>, <span class="string">&#x27;Comment&#x27;</span>])</span><br><span class="line">        <span class="keyword">for</span> row <span class="keyword">in</span> comments:</span><br><span class="line">            <span class="comment"># convert the tuple to a list and write to the output file</span></span><br><span class="line">            comments_writer.writerow(<span class="built_in">list</span>(row))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_videos</span>(<span class="params">service, **kwargs</span>):</span></span><br><span class="line">    final_results = []</span><br><span class="line">    time.sleep(<span class="number">20</span>)</span><br><span class="line">    results = service.search().<span class="built_in">list</span>(**kwargs).execute()</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    max_pages = <span class="number">3</span></span><br><span class="line">    <span class="keyword">while</span> results <span class="keyword">and</span> i &lt; max_pages:</span><br><span class="line">        final_results.extend(results[<span class="string">&#x27;items&#x27;</span>])</span><br><span class="line">        <span class="comment"># Check if another page exists</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;nextPageToken&#x27;</span> <span class="keyword">in</span> results:</span><br><span class="line">            kwargs[<span class="string">&#x27;pageToken&#x27;</span>] = results[<span class="string">&#x27;nextPageToken&#x27;</span>]</span><br><span class="line">            results = service.search().<span class="built_in">list</span>(**kwargs).execute()</span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> final_results</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">search_videos_by_keyword</span>(<span class="params">service, **kwargs</span>):</span></span><br><span class="line">    time.sleep(<span class="number">20</span>)</span><br><span class="line">    results = get_videos(service, **kwargs)</span><br><span class="line">    final_result = []</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> results:</span><br><span class="line">        title = item[<span class="string">&#x27;snippet&#x27;</span>][<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">        video_id = item[<span class="string">&#x27;id&#x27;</span>][<span class="string">&#x27;videoId&#x27;</span>]</span><br><span class="line">        comments = get_video_comments(service, part=<span class="string">&#x27;snippet&#x27;</span>, videoId=video_id, textFormat=<span class="string">&#x27;plainText&#x27;</span>)</span><br><span class="line">        <span class="comment"># make a tuple consisting of the video id, title, comment and add the result to</span></span><br><span class="line">        <span class="comment"># the final list</span></span><br><span class="line">        final_result.extend([(video_id, title, comment) <span class="keyword">for</span> comment <span class="keyword">in</span> comments])</span><br><span class="line">    write_to_csv(final_result)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment"># When running locally, disable OAuthlib&#x27;s HTTPs verification. When</span></span><br><span class="line">    <span class="comment"># running in production *do not* leave this option enabled.</span></span><br><span class="line">    os.environ[<span class="string">&#x27;OAUTHLIB_INSECURE_TRANSPORT&#x27;</span>] = <span class="string">&#x27;1&#x27;</span></span><br><span class="line">    service = get_authenticated_service()</span><br><span class="line">    keyword = <span class="built_in">input</span>(<span class="string">&#x27;Enter a keyword: &#x27;</span>)</span><br><span class="line">    search_videos_by_keyword(service, q=keyword, part=<span class="string">&#x27;id,snippet&#x27;</span>, eventType=<span class="string">&#x27;completed&#x27;</span>, <span class="built_in">type</span>=<span class="string">&#x27;video&#x27;</span>)</span><br></pre></td></tr></table></figure>
 
-CLIENT_SECRETS_FILE = &quot;C:\JetBrains\PyCharm_workspace\demo\com\CGTV\client_secret_195872191593-jflo13qo28ipo86fkcn4c5oko5pdbfah.apps.googleusercontent.com.json&quot;
-# This OAuth 2.0 access scope allows for full read/write access to the
-# authenticated user&#39;s account and requires requests to use an SSL connection.
-
-SCOPES = [&#39;https://www.googleapis.com/auth/youtube.force-ssl&#39;]
-API_SERVICE_NAME = &#39;youtube&#39;
-API_VERSION = &#39;v3&#39;
-
-def get_authenticated_service():
-    credentials = None
-    if os.path.exists(&#39;token.pickle&#39;):
-        with open(&#39;token.pickle&#39;, &#39;rb&#39;) as token:
-            credentials = pickle.load(token)
-    #  Check if the credentials are invalid or do not exist
-    if not credentials or not credentials.valid:
-        if credentials and credentials.expired and credentials.refresh_token:
-            credentials.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                CLIENT_SECRETS_FILE, SCOPES)
-            credentials = flow.run_console()
-        # Save the credentials for the next run
-        with open(&#39;token.pickle&#39;, &#39;wb&#39;) as token:
-            pickle.dump(credentials, token)
-    time.sleep(20)
-    return build(API_SERVICE_NAME, API_VERSION, credentials=credentials)
-
-def get_video_comments(service, **kwargs):
-    comments = []
-    time.sleep(20)
-    results = service.commentThreads().list(**kwargs).execute()
-    while results:
-        for item in results[&#39;items&#39;]:
-            comment = item[&#39;snippet&#39;][&#39;topLevelComment&#39;][&#39;snippet&#39;][&#39;textDisplay&#39;]
-            comments.append(comment)
-        # Check if another page exists
-        if &#39;nextPageToken&#39; in results:
-            kwargs[&#39;pageToken&#39;] = results[&#39;nextPageToken&#39;]
-            results = service.commentThreads().list(**kwargs).execute()
-        else:
-            break
-    return comments
-
-
-def write_to_csv(comments):
-    with open(&#39;comments.csv&#39;, &#39;w&#39;) as comments_file:
-        comments_writer = csv.writer(comments_file, delimiter=&#39;,&#39;, quotechar=&#39;&quot;&#39;, quoting=csv.QUOTE_MINIMAL)
-        comments_writer.writerow([&#39;Video ID&#39;, &#39;Title&#39;, &#39;Comment&#39;])
-        for row in comments:
-            # convert the tuple to a list and write to the output file
-            comments_writer.writerow(list(row))
-
-def get_videos(service, **kwargs):
-    final_results = []
-    time.sleep(20)
-    results = service.search().list(**kwargs).execute()
-    i = 0
-    max_pages = 3
-    while results and i &lt; max_pages:
-        final_results.extend(results[&#39;items&#39;])
-        # Check if another page exists
-        if &#39;nextPageToken&#39; in results:
-            kwargs[&#39;pageToken&#39;] = results[&#39;nextPageToken&#39;]
-            results = service.search().list(**kwargs).execute()
-            i += 1
-        else:
-            break
-    return final_results
-
-def search_videos_by_keyword(service, **kwargs):
-    time.sleep(20)
-    results = get_videos(service, **kwargs)
-    final_result = []
-    for item in results:
-        title = item[&#39;snippet&#39;][&#39;title&#39;]
-        video_id = item[&#39;id&#39;][&#39;videoId&#39;]
-        comments = get_video_comments(service, part=&#39;snippet&#39;, videoId=video_id, textFormat=&#39;plainText&#39;)
-        # make a tuple consisting of the video id, title, comment and add the result to
-        # the final list
-        final_result.extend([(video_id, title, comment) for comment in comments])
-    write_to_csv(final_result)
-
-if __name__ == &#39;__main__&#39;:
-    # When running locally, disable OAuthlib&#39;s HTTPs verification. When
-    # running in production *do not* leave this option enabled.
-    os.environ[&#39;OAUTHLIB_INSECURE_TRANSPORT&#39;] = &#39;1&#39;
-    service = get_authenticated_service()
-    keyword = input(&#39;Enter a keyword: &#39;)
-    search_videos_by_keyword(service, q=keyword, part=&#39;id,snippet&#39;, eventType=&#39;completed&#39;, type=&#39;video&#39;)
-</code></pre>
 <p>代码里面 json文件路径替换 视频id也都需要替换<br><img src="https://img-blog.csdnimg.cn/20201103120326928.png#pic_center" alt="在这里插入图片描述"><br>点击这个链接在浏览器登录谷歌账号得到验证码输入就可以了<br>采用这种方式直接被谷歌反爬虫给拒绝连接了，sleep好像都没作用<br>转向第二种方式</p>
 <h2 id="selenium爬取youtube评论"><a href="#selenium爬取youtube评论" class="headerlink" title="selenium爬取youtube评论"></a>selenium爬取youtube评论</h2><blockquote>
 <p>Selenium （WEB自动化工具） 编辑<br>Selenium [1]  是一个用于Web应用程序测试的工具。Selenium测试直接运行在浏览器中，就像真正的用户在操作一样。支持的浏览器包括IE（7, 8, 9, 10, 11），Mozilla Firefox，Safari，Google Chrome，Opera等。这个工具的主要功能包括：测试与浏览器的兼容性——测试你的应用程序看是否能够很好得工作在不同浏览器和操作系统之上。测试系统功能——创建回归测试检验软件功能和用户需求。支持自动录制动作和自动生成 .Net、Java、Perl等不同语言的测试脚本。</p>
 </blockquote>
 <p>下载<a target="_blank" rel="noopener" href="https://sites.google.com/a/chromium.org/chromedriver/downloads">chromeDriver</a> </p>
-<pre><code class="python"># -*- coding: utf-8 -*-
-import time
-
-import selenium
-import csv
-
-from selenium import webdriver
-
-# 视频的链接， 可以从之前爬取的文件中读取
-hrefs = list()
-hrefs.append(&quot;https://www.youtube.com/watch?v=XU9FVqwO4TM&quot;)
-#hrefs.append(&quot;https://www.youtube.com/watch?v=sLdtBBXwdCk&quot;)
-
-# with open(r&quot;../data/5hrefs.txt&quot;) as f:
-#     line = f.readline()
-#     while line:
-#         hrefs.append(str(line).strip())
-#         line = f.readline()
-
-chrome_path = r&quot;D:\IEDownLoad\chromedriver_win32\chromedriver.exe&quot;
-scroll_js_5k = &quot;scrollBy(0, 5000)&quot;
-scroll_js_10w = &quot;scrollBy(0, 100000)&quot;
-
-for i in range(len(hrefs)):
-    file_name = str(i + 3) + &quot;.csv&quot;
-    href = hrefs[i]
-    with open(file_name, &quot;a+&quot;, errors=&quot;ignore&quot;, newline=&#39;&#39;) as f:
-        writer = csv.writer(f)
-
-        # 获取浏览器
-        chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument(&quot;--headless&quot;)
-        prefs = &#123;&#39;profile.managed_default_content_settings.images&#39;: 2&#125;
-        chrome_options.add_experimental_option(&#39;prefs&#39;, prefs)
-        driver = webdriver.Chrome(executable_path=chrome_path, chrome_options=chrome_options)
-        driver.set_window_position(x=400, y=0)
-        driver.get(href)
-        time.sleep(2)
-        driver.execute_script(scroll_js_5k)
-        time.sleep(10)
-
-        # 获取题目、发布时间、观看人数、顶、踩、评论数
-        title = driver.find_element_by_xpath(
-            &quot;//h1[@class=&#39;title style-scope ytd-video-primary-info-renderer&#39;]/yt-formatted-string&quot;).text
-        print(title)
-        publish_time = driver.find_element_by_xpath(
-            &quot;//div[@id=&#39;date&#39;]/yt-formatted-string[@class=&#39;style-scope ytd-video-primary-info-renderer&#39;]&quot;).text
-        watch_count = driver.find_element_by_xpath(
-            &quot;//span[@class=&#39;view-count style-scope yt-view-count-renderer&#39;]&quot;).text
-        print(watch_count)
-        nice_count = driver.find_element_by_xpath(
-            &quot;//div[@id=&#39;menu-container&#39;]/div/ytd-menu-renderer/div/ytd-toggle-button-renderer[1]/a/yt-formatted-string&quot;).text
-        bad_count = driver.find_element_by_xpath(
-            &quot;//div[@id=&#39;menu-container&#39;]/div/ytd-menu-renderer/div/ytd-toggle-button-renderer[2]/a/yt-formatted-string&quot;).text
-        comment_count = driver.find_element_by_xpath(
-            &quot;//yt-formatted-string[@class=&#39;count-text style-scope ytd-comments-header-renderer&#39;]&quot;).text
-        writer.writerow([title, publish_time, watch_count, nice_count, bad_count, comment_count])
-
-        # 获取排序方式按钮并点击
-        # order_btn = driver.find_element_by_xpath(&quot;//div[@id=&#39;icon-label&#39; and @class=&#39;style-scope yt-dropdown-menu&#39;]&quot;)
-        # order_btn.click()
-        # time.sleep(2)
-
-        # # 按时间排序
-        # time_comment_btn = driver.find_element_by_xpath(
-        #     &quot;//a[@class=&#39;yt-simple-endpoint style-scope yt-dropdown-menu&#39;]/paper-item/paper-item-body/&quot;
-        #     &quot;div[@class=&#39;item style-scope yt-dropdown-menu&#39;]&quot;)
-        # time_comment_btn.click()
-        # time.sleep(1)
-
-        # 用来判断是否到底
-        count_1 = 0
-        now_height = 0
-        pre_height = 0
-
-        count_2 = 0  # 每隔100条输出一下评论数
-        count_3 = 0  # 计数器，记住当前爬取的评论数
-        while True:
-            driver.execute_script(scroll_js_10w)
-            time.sleep(2)
-
-            # 向下滑动
-            count_1 += 1
-            count_2 += 1
-            if count_1 % 20 == 0:
-                now_height = driver.execute_script(&quot;return document.documentElement.scrollHeight;&quot;)
-                if now_height == pre_height:
-                    break
-                pre_height = now_height
-
-            # 获取评论数量
-            comments = driver.find_elements_by_xpath(
-                &quot;//div[@id=&#39;contents&#39;]/ytd-comment-thread-renderer[@class=&#39;style-scope ytd-item-section-renderer&#39;]&quot;)
-            if count_2 % 5 == 0:
-                print(&quot;评论数：&quot; + str(len(comments)))
-
-            # 循环获取评论信息并写入文件
-            for j in range(count_3, len(comments)):
-                try:
-                    if j % 20 == 0:
-                        print(j)
-                    # 点赞数
-                    ok_count = driver.find_element_by_xpath(
-                        &quot;//div[@id=&#39;contents&#39;]/ytd-comment-thread-renderer[@class=&#39;style-scope &quot;
-                        &quot;ytd-item-section-renderer&#39;][&quot; +
-                        str(j + 1) + &quot;]/ytd-comment-renderer/div[@id=&#39;body&#39;]/div[@id=&#39;main&#39;]&quot;
-                                     &quot;/ytd-comment-action-buttons-&quot;
-                                     &quot;renderer/div[@id=&#39;toolbar&#39;]/span[@id=&#39;vote-count-middle&#39;]&quot;).text
-                    ok_count = str(ok_count).strip()
-
-                    # 评论人的名
-                    comment_name = driver.find_element_by_xpath(
-                        &quot;//div[@id=&#39;contents&#39;]/ytd-comment-thread-renderer[@class=&#39;style-scope &quot;
-                        &quot;ytd-item-section-renderer&#39;][&quot; +
-                        str(j + 1) + &quot;]/ytd-comment-renderer/div[@id=&#39;body&#39;]/div[@id=&#39;main&#39;]/div[@id=&#39;header&#39;]/&quot;
-                                     &quot;div[@id=&#39;header-author&#39;]/a/span[@class=&#39;style-scope ytd-comment-renderer&#39;]&quot;).text
-                    comment_name = str(comment_name).strip()
-
-                    # 评论时间
-                    comment_time = driver.find_element_by_xpath(
-                        &quot;//div[@id=&#39;contents&#39;]/ytd-comment-thread-renderer[@class=&#39;style-scope &quot;
-                        &quot;ytd-item-section-renderer&#39;][&quot; +
-                        str(j + 1) + &quot;]/ytd-comment-renderer/div[@id=&#39;body&#39;]/div[@id=&#39;main&#39;]/div[@id=&#39;header&#39;]/&quot;
-                                     &quot;div[@id=&#39;header-author&#39;]/yt-formatted-string/a[@class=&#39;yt-simple-endpoint &quot;
-                                     &quot;style-scope yt-formatted-string&#39;]&quot;).text
-                    comment_time = str(comment_time).strip()
-
-                    # 评论内容
-                    comment_content = driver.find_element_by_xpath(
-                        &quot;//div[@id=&#39;contents&#39;]/ytd-comment-thread-renderer[@class=&#39;style-scope &quot;
-                        &quot;ytd-item-section-renderer&#39;][&quot; +
-                        str(j + 1) + &quot;]/ytd-comment-renderer/div[@id=&#39;body&#39;]/div[@id=&#39;main&#39;]/ytd-expander&quot;
-                                     &quot;[@id=&#39;expander&#39;]/&quot;
-                                     &quot;div[@id=&#39;content&#39;]/yt-formatted-string[@id=&#39;content-text&#39;]&quot;).text
-                    comment_content = str(comment_content).strip()
-
-                    writer.writerow([comment_content])
-                except Exception as e:
-                    print(e)
-            count_3 = len(comments)
-            time.sleep(2)
-        driver.close()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> selenium</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"><span class="comment"># 视频的链接， 可以从之前爬取的文件中读取</span></span><br><span class="line">hrefs = <span class="built_in">list</span>()</span><br><span class="line">hrefs.append(<span class="string">&quot;https://www.youtube.com/watch?v=XU9FVqwO4TM&quot;</span>)</span><br><span class="line"><span class="comment">#hrefs.append(&quot;https://www.youtube.com/watch?v=sLdtBBXwdCk&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># with open(r&quot;../data/5hrefs.txt&quot;) as f:</span></span><br><span class="line"><span class="comment">#     line = f.readline()</span></span><br><span class="line"><span class="comment">#     while line:</span></span><br><span class="line"><span class="comment">#         hrefs.append(str(line).strip())</span></span><br><span class="line"><span class="comment">#         line = f.readline()</span></span><br><span class="line"></span><br><span class="line">chrome_path = <span class="string">r&quot;D:\IEDownLoad\chromedriver_win32\chromedriver.exe&quot;</span></span><br><span class="line">scroll_js_5k = <span class="string">&quot;scrollBy(0, 5000)&quot;</span></span><br><span class="line">scroll_js_10w = <span class="string">&quot;scrollBy(0, 100000)&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(hrefs)):</span><br><span class="line">    file_name = <span class="built_in">str</span>(i + <span class="number">3</span>) + <span class="string">&quot;.csv&quot;</span></span><br><span class="line">    href = hrefs[i]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(file_name, <span class="string">&quot;a+&quot;</span>, errors=<span class="string">&quot;ignore&quot;</span>, newline=<span class="string">&#x27;&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        writer = csv.writer(f)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取浏览器</span></span><br><span class="line">        chrome_options = webdriver.ChromeOptions()</span><br><span class="line">        <span class="comment"># chrome_options.add_argument(&quot;--headless&quot;)</span></span><br><span class="line">        prefs = &#123;<span class="string">&#x27;profile.managed_default_content_settings.images&#x27;</span>: <span class="number">2</span>&#125;</span><br><span class="line">        chrome_options.add_experimental_option(<span class="string">&#x27;prefs&#x27;</span>, prefs)</span><br><span class="line">        driver = webdriver.Chrome(executable_path=chrome_path, chrome_options=chrome_options)</span><br><span class="line">        driver.set_window_position(x=<span class="number">400</span>, y=<span class="number">0</span>)</span><br><span class="line">        driver.get(href)</span><br><span class="line">        time.sleep(<span class="number">2</span>)</span><br><span class="line">        driver.execute_script(scroll_js_5k)</span><br><span class="line">        time.sleep(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取题目、发布时间、观看人数、顶、踩、评论数</span></span><br><span class="line">        title = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//h1[@class=&#x27;title style-scope ytd-video-primary-info-renderer&#x27;]/yt-formatted-string&quot;</span>).text</span><br><span class="line">        <span class="built_in">print</span>(title)</span><br><span class="line">        publish_time = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//div[@id=&#x27;date&#x27;]/yt-formatted-string[@class=&#x27;style-scope ytd-video-primary-info-renderer&#x27;]&quot;</span>).text</span><br><span class="line">        watch_count = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//span[@class=&#x27;view-count style-scope yt-view-count-renderer&#x27;]&quot;</span>).text</span><br><span class="line">        <span class="built_in">print</span>(watch_count)</span><br><span class="line">        nice_count = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//div[@id=&#x27;menu-container&#x27;]/div/ytd-menu-renderer/div/ytd-toggle-button-renderer[1]/a/yt-formatted-string&quot;</span>).text</span><br><span class="line">        bad_count = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//div[@id=&#x27;menu-container&#x27;]/div/ytd-menu-renderer/div/ytd-toggle-button-renderer[2]/a/yt-formatted-string&quot;</span>).text</span><br><span class="line">        comment_count = driver.find_element_by_xpath(</span><br><span class="line">            <span class="string">&quot;//yt-formatted-string[@class=&#x27;count-text style-scope ytd-comments-header-renderer&#x27;]&quot;</span>).text</span><br><span class="line">        writer.writerow([title, publish_time, watch_count, nice_count, bad_count, comment_count])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取排序方式按钮并点击</span></span><br><span class="line">        <span class="comment"># order_btn = driver.find_element_by_xpath(&quot;//div[@id=&#x27;icon-label&#x27; and @class=&#x27;style-scope yt-dropdown-menu&#x27;]&quot;)</span></span><br><span class="line">        <span class="comment"># order_btn.click()</span></span><br><span class="line">        <span class="comment"># time.sleep(2)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># # 按时间排序</span></span><br><span class="line">        <span class="comment"># time_comment_btn = driver.find_element_by_xpath(</span></span><br><span class="line">        <span class="comment">#     &quot;//a[@class=&#x27;yt-simple-endpoint style-scope yt-dropdown-menu&#x27;]/paper-item/paper-item-body/&quot;</span></span><br><span class="line">        <span class="comment">#     &quot;div[@class=&#x27;item style-scope yt-dropdown-menu&#x27;]&quot;)</span></span><br><span class="line">        <span class="comment"># time_comment_btn.click()</span></span><br><span class="line">        <span class="comment"># time.sleep(1)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 用来判断是否到底</span></span><br><span class="line">        count_1 = <span class="number">0</span></span><br><span class="line">        now_height = <span class="number">0</span></span><br><span class="line">        pre_height = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        count_2 = <span class="number">0</span>  <span class="comment"># 每隔100条输出一下评论数</span></span><br><span class="line">        count_3 = <span class="number">0</span>  <span class="comment"># 计数器，记住当前爬取的评论数</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            driver.execute_script(scroll_js_10w)</span><br><span class="line">            time.sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 向下滑动</span></span><br><span class="line">            count_1 += <span class="number">1</span></span><br><span class="line">            count_2 += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> count_1 % <span class="number">20</span> == <span class="number">0</span>:</span><br><span class="line">                now_height = driver.execute_script(<span class="string">&quot;return document.documentElement.scrollHeight;&quot;</span>)</span><br><span class="line">                <span class="keyword">if</span> now_height == pre_height:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                pre_height = now_height</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 获取评论数量</span></span><br><span class="line">            comments = driver.find_elements_by_xpath(</span><br><span class="line">                <span class="string">&quot;//div[@id=&#x27;contents&#x27;]/ytd-comment-thread-renderer[@class=&#x27;style-scope ytd-item-section-renderer&#x27;]&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> count_2 % <span class="number">5</span> == <span class="number">0</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;评论数：&quot;</span> + <span class="built_in">str</span>(<span class="built_in">len</span>(comments)))</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 循环获取评论信息并写入文件</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(count_3, <span class="built_in">len</span>(comments)):</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    <span class="keyword">if</span> j % <span class="number">20</span> == <span class="number">0</span>:</span><br><span class="line">                        <span class="built_in">print</span>(j)</span><br><span class="line">					<span class="comment"># 点赞数</span></span><br><span class="line">                    ok_count = driver.find_element_by_xpath(</span><br><span class="line">                        <span class="string">&quot;//div[@id=&#x27;contents&#x27;]/ytd-comment-thread-renderer[@class=&#x27;style-scope &quot;</span></span><br><span class="line">                        <span class="string">&quot;ytd-item-section-renderer&#x27;][&quot;</span> +</span><br><span class="line">                        <span class="built_in">str</span>(j + <span class="number">1</span>) + <span class="string">&quot;]/ytd-comment-renderer/div[@id=&#x27;body&#x27;]/div[@id=&#x27;main&#x27;]&quot;</span></span><br><span class="line">                                     <span class="string">&quot;/ytd-comment-action-buttons-&quot;</span></span><br><span class="line">                                     <span class="string">&quot;renderer/div[@id=&#x27;toolbar&#x27;]/span[@id=&#x27;vote-count-middle&#x27;]&quot;</span>).text</span><br><span class="line">                    ok_count = <span class="built_in">str</span>(ok_count).strip()</span><br><span class="line"></span><br><span class="line">					<span class="comment"># 评论人的名</span></span><br><span class="line">                    comment_name = driver.find_element_by_xpath(</span><br><span class="line">                        <span class="string">&quot;//div[@id=&#x27;contents&#x27;]/ytd-comment-thread-renderer[@class=&#x27;style-scope &quot;</span></span><br><span class="line">                        <span class="string">&quot;ytd-item-section-renderer&#x27;][&quot;</span> +</span><br><span class="line">                        <span class="built_in">str</span>(j + <span class="number">1</span>) + <span class="string">&quot;]/ytd-comment-renderer/div[@id=&#x27;body&#x27;]/div[@id=&#x27;main&#x27;]/div[@id=&#x27;header&#x27;]/&quot;</span></span><br><span class="line">                                     <span class="string">&quot;div[@id=&#x27;header-author&#x27;]/a/span[@class=&#x27;style-scope ytd-comment-renderer&#x27;]&quot;</span>).text</span><br><span class="line">                    comment_name = <span class="built_in">str</span>(comment_name).strip()</span><br><span class="line"></span><br><span class="line">					<span class="comment"># 评论时间</span></span><br><span class="line">                    comment_time = driver.find_element_by_xpath(</span><br><span class="line">                        <span class="string">&quot;//div[@id=&#x27;contents&#x27;]/ytd-comment-thread-renderer[@class=&#x27;style-scope &quot;</span></span><br><span class="line">                        <span class="string">&quot;ytd-item-section-renderer&#x27;][&quot;</span> +</span><br><span class="line">                        <span class="built_in">str</span>(j + <span class="number">1</span>) + <span class="string">&quot;]/ytd-comment-renderer/div[@id=&#x27;body&#x27;]/div[@id=&#x27;main&#x27;]/div[@id=&#x27;header&#x27;]/&quot;</span></span><br><span class="line">                                     <span class="string">&quot;div[@id=&#x27;header-author&#x27;]/yt-formatted-string/a[@class=&#x27;yt-simple-endpoint &quot;</span></span><br><span class="line">                                     <span class="string">&quot;style-scope yt-formatted-string&#x27;]&quot;</span>).text</span><br><span class="line">                    comment_time = <span class="built_in">str</span>(comment_time).strip()</span><br><span class="line"></span><br><span class="line">					<span class="comment"># 评论内容</span></span><br><span class="line">                    comment_content = driver.find_element_by_xpath(</span><br><span class="line">                        <span class="string">&quot;//div[@id=&#x27;contents&#x27;]/ytd-comment-thread-renderer[@class=&#x27;style-scope &quot;</span></span><br><span class="line">                        <span class="string">&quot;ytd-item-section-renderer&#x27;][&quot;</span> +</span><br><span class="line">                        <span class="built_in">str</span>(j + <span class="number">1</span>) + <span class="string">&quot;]/ytd-comment-renderer/div[@id=&#x27;body&#x27;]/div[@id=&#x27;main&#x27;]/ytd-expander&quot;</span></span><br><span class="line">                                     <span class="string">&quot;[@id=&#x27;expander&#x27;]/&quot;</span></span><br><span class="line">                                     <span class="string">&quot;div[@id=&#x27;content&#x27;]/yt-formatted-string[@id=&#x27;content-text&#x27;]&quot;</span>).text</span><br><span class="line">                    comment_content = <span class="built_in">str</span>(comment_content).strip()</span><br><span class="line"></span><br><span class="line">                    writer.writerow([comment_content])</span><br><span class="line">                <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                    <span class="built_in">print</span>(e)</span><br><span class="line">            count_3 = <span class="built_in">len</span>(comments)</span><br><span class="line">            time.sleep(<span class="number">2</span>)</span><br><span class="line">        driver.close()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>写入path和视频链接就可<br>最后拿到两份文件<br>带名称时间点赞数量的评论：大概1600条<br><img src="https://img-blog.csdnimg.cn/20201103120947900.png#pic_center" alt="在这里插入图片描述"><br>单评论：大概1600条<br><img src="https://img-blog.csdnimg.cn/20201103121145360.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>如果使用机器学习来分类积极评论和消极评论 需要对这一千多条数据进行标记，<br>一千多条的分类也要用机器学习 是不是杀鸡用牛刀？</p>
 <h2 id="词云"><a href="#词云" class="headerlink" title="词云"></a>词云</h2><p>网上找了一圈在线词云 要不是收费 登录 免费的还不能超过一万词，都是什么臭鱼烂虾<br>python写词云只需要几行代码</p>
-<pre><code class="python">import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-#加载文件
-filename = &quot;3.csv&quot;
-with open(filename) as f:
- mytext = f.read()
-#调用
-wordcloud = WordCloud().generate(mytext)
-#画图
-plt.imshow(wordcloud, interpolation=&#39;bilinear&#39;)
-plt.axis(&quot;off&quot;)
-plt.show()
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud</span><br><span class="line"><span class="comment">#加载文件</span></span><br><span class="line">filename = <span class="string">&quot;3.csv&quot;</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(filename) <span class="keyword">as</span> f:</span><br><span class="line"> mytext = f.read()</span><br><span class="line"><span class="comment">#调用</span></span><br><span class="line">wordcloud = WordCloud().generate(mytext)</span><br><span class="line"><span class="comment">#画图</span></span><br><span class="line">plt.imshow(wordcloud, interpolation=<span class="string">&#x27;bilinear&#x27;</span>)</span><br><span class="line">plt.axis(<span class="string">&quot;off&quot;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20201103131634381.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -663,7 +408,7 @@ plt.show()
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -700,12 +445,8 @@ plt.show()
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="随机森林随机森林就是通过集成学习的思想将多棵树集成的一种算法，它的基本单元是决策树，而它的本质属于机器学习的一大分支——集成学习（Ensemble Learning）方法。随机森林的名称中有两个关键词，一个是“随机”，一个就是“森林”。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,69 +247,7 @@
 <p>　　2）然后以简单多数投票作为该样本的分类结果；</p>
 <p>　　3）最后用误分个数占样本总数的比率作为随机森林的oob误分率。</p>
 <h3 id="随机森林的实现"><a href="#随机森林的实现" class="headerlink" title="随机森林的实现"></a>随机森林的实现</h3><p>这里贴出一个基于spark的随机森林实现</p>
-<pre><code class="java">package com.iGOAFR;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import scala.Tuple2;
-
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.mllib.regression.LabeledPoint;
-import org.apache.spark.mllib.tree.RandomForest;
-import org.apache.spark.mllib.tree.model.RandomForestModel;
-import org.apache.spark.mllib.util.MLUtils;
-
-/**
- * 采用基于RDD的mllin库
- * 官网 对于随机森林分类的例
- * @author imarktsh
- *
- */
-public class FR_Classification &#123;
-    public static void main(String[] args) &#123;
-        SparkConf sparkConf = new SparkConf()
-                .setAppName(&quot;JavaGradientBoostedTreesClassification&quot;)
-                .setMaster(&quot;local[4]&quot;);
-        JavaSparkContext jsc = new JavaSparkContext(sparkConf);
-        jsc.setLogLevel(&quot;ERROR&quot;);
-        // 加载数据
-        String datapath = &quot;C:\\ecpliseSpace\\random_forest\\src\\main\\resources\\iris.txt&quot;;
-        JavaRDD&lt;LabeledPoint&gt; data = MLUtils.loadLibSVMFile(jsc.sc(), datapath).toJavaRDD();
-        // 73切分数据集 训练集和测试集
-        JavaRDD&lt;LabeledPoint&gt;[] splits = data.randomSplit(new double[]&#123;0.8, 0.2&#125;);
-        JavaRDD&lt;LabeledPoint&gt; trainingData = splits[0];
-        JavaRDD&lt;LabeledPoint&gt; testData = splits[1];
-        // 训练随机森林模型
-        // Empty categoricalFeaturesInfo indicates all features are continuous.
-        int numClasses = 3;
-        Map&lt;Integer, Integer&gt; categoricalFeaturesInfo = new HashMap&lt;&gt;();
-        int numTrees = 1; // 树的数量
-        String featureSubsetStrategy = &quot;auto&quot;; // Let the algorithm choose.
-        String impurity = &quot;gini&quot;;
-        int maxDepth = 5;
-        int maxBins = 32;
-        int seed = 12345;
-        //训练模型
-        RandomForestModel model = RandomForest.trainClassifier(trainingData, numClasses,
-          categoricalFeaturesInfo, numTrees, featureSubsetStrategy, impurity, maxDepth, maxBins,
-          seed);
-        // 在测试实例上评估模型并计算测试错误
-        JavaPairRDD&lt;Double, Double&gt; predictionAndLabel =
-          testData.mapToPair(p -&gt; new Tuple2&lt;&gt;(model.predict(p.features()), p.label()));
-        double testErr = predictionAndLabel
-                .filter(pl -&gt; !pl._1().equals(pl._2()))
-                .count() / (double) testData
-                .count();
-        System.out.println(&quot;Test 准确率: &quot; + (1 - testErr));
-        
-    &#125;
-
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.iGOAFR;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scala.Tuple2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.SparkConf;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaPairRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaRDD;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.api.java.JavaSparkContext;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.regression.LabeledPoint;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.tree.RandomForest;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.tree.model.RandomForestModel;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.mllib.util.MLUtils;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 采用基于RDD的mllin库</span></span><br><span class="line"><span class="comment"> * 官网 对于随机森林分类的例</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> imarktsh</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FR_Classification</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		SparkConf sparkConf = <span class="keyword">new</span> SparkConf()</span><br><span class="line">				.setAppName(<span class="string">&quot;JavaGradientBoostedTreesClassification&quot;</span>)</span><br><span class="line">				.setMaster(<span class="string">&quot;local[4]&quot;</span>);</span><br><span class="line">		JavaSparkContext jsc = <span class="keyword">new</span> JavaSparkContext(sparkConf);</span><br><span class="line">		jsc.setLogLevel(<span class="string">&quot;ERROR&quot;</span>);</span><br><span class="line">		<span class="comment">// 加载数据</span></span><br><span class="line">		String datapath = <span class="string">&quot;C:\\ecpliseSpace\\random_forest\\src\\main\\resources\\iris.txt&quot;</span>;</span><br><span class="line">		JavaRDD&lt;LabeledPoint&gt; data = MLUtils.loadLibSVMFile(jsc.sc(), datapath).toJavaRDD();</span><br><span class="line">		<span class="comment">// 73切分数据集 训练集和测试集</span></span><br><span class="line">		JavaRDD&lt;LabeledPoint&gt;[] splits = data.randomSplit(<span class="keyword">new</span> <span class="keyword">double</span>[]&#123;<span class="number">0.8</span>, <span class="number">0.2</span>&#125;);</span><br><span class="line">		JavaRDD&lt;LabeledPoint&gt; trainingData = splits[<span class="number">0</span>];</span><br><span class="line">		JavaRDD&lt;LabeledPoint&gt; testData = splits[<span class="number">1</span>];</span><br><span class="line">		<span class="comment">// 训练随机森林模型</span></span><br><span class="line">		<span class="comment">// Empty categoricalFeaturesInfo indicates all features are continuous.</span></span><br><span class="line">		<span class="keyword">int</span> numClasses = <span class="number">3</span>;</span><br><span class="line">		Map&lt;Integer, Integer&gt; categoricalFeaturesInfo = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">		<span class="keyword">int</span> numTrees = <span class="number">1</span>; <span class="comment">// 树的数量</span></span><br><span class="line">		String featureSubsetStrategy = <span class="string">&quot;auto&quot;</span>; <span class="comment">// Let the algorithm choose.</span></span><br><span class="line">		String impurity = <span class="string">&quot;gini&quot;</span>;</span><br><span class="line">		<span class="keyword">int</span> maxDepth = <span class="number">5</span>;</span><br><span class="line">		<span class="keyword">int</span> maxBins = <span class="number">32</span>;</span><br><span class="line">		<span class="keyword">int</span> seed = <span class="number">12345</span>;</span><br><span class="line">        <span class="comment">//训练模型</span></span><br><span class="line">		RandomForestModel model = RandomForest.trainClassifier(trainingData, numClasses,</span><br><span class="line">		  categoricalFeaturesInfo, numTrees, featureSubsetStrategy, impurity, maxDepth, maxBins,</span><br><span class="line">		  seed);</span><br><span class="line">		<span class="comment">// 在测试实例上评估模型并计算测试错误</span></span><br><span class="line">		JavaPairRDD&lt;Double, Double&gt; predictionAndLabel =</span><br><span class="line">		  testData.mapToPair(p -&gt; <span class="keyword">new</span> Tuple2&lt;&gt;(model.predict(p.features()), p.label()));</span><br><span class="line">		<span class="keyword">double</span> testErr = predictionAndLabel</span><br><span class="line">				.filter(pl -&gt; !pl._1().equals(pl._2()))</span><br><span class="line">				.count() / (<span class="keyword">double</span>) testData</span><br><span class="line">				.count();</span><br><span class="line">		System.out.println(<span class="string">&quot;Test 准确率: &quot;</span> + (<span class="number">1</span> - testErr));</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>导包就可以直接运行 这几天搞优化算法跟随机森林结合 发现一直运行报错，后来发现 是spark平台不能进行嵌套，在spark运行期间不能再次调用spark进行计算，那这思路又是错的，需要想别的思路</p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/maybe2030/p/4585705.html">随机森林链接</a></p>
 
@@ -480,7 +418,7 @@ public class FR_Classification &#123;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -517,12 +455,8 @@ public class FR_Classification &#123;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

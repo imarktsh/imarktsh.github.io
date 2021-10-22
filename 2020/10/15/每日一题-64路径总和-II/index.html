@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,54 +225,10 @@
 <span id="more"></span>
 <p>说明: 叶子节点是指没有子节点的节点。</p>
 <p>示例:</p>
-<pre><code class="java">给定如下二叉树，以及目标和 sum = 22，
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">给定如下二叉树，以及目标和 sum = <span class="number">22</span>，</span><br><span class="line"></span><br><span class="line">              <span class="number">5</span></span><br><span class="line">             / \</span><br><span class="line">            <span class="number">4</span>   <span class="number">8</span></span><br><span class="line">           /   / \</span><br><span class="line">          <span class="number">11</span>  <span class="number">13</span>  <span class="number">4</span></span><br><span class="line">         /  \    / \</span><br><span class="line">        <span class="number">7</span>    <span class="number">2</span>  <span class="number">5</span>   <span class="number">1</span></span><br><span class="line">返回:</span><br><span class="line"></span><br><span class="line">[</span><br><span class="line">   [<span class="number">5</span>,<span class="number">4</span>,<span class="number">11</span>,<span class="number">2</span>],</span><br><span class="line">   [<span class="number">5</span>,<span class="number">8</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-              5
-             / \
-            4   8
-           /   / \
-          11  13  4
-         /  \    / \
-        7    2  5   1
-返回:
-
-[
-   [5,4,11,2],
-   [5,8,4,5]
-]
-</code></pre>
 <p>又是回溯 写了一遍错了<br>评论区再来一遍<br>百遍一定会</p>
-<pre><code class="java">    /**
-     * Definition for a binary tree node.
-     * public class TreeNode &#123;
-     *     int val;
-     *     TreeNode left;
-     *     TreeNode right;
-     *     TreeNode(int x) &#123; val = x; &#125;
-     * &#125;
-     */
-    class Solution &#123;
-        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
-        public List&lt;List&lt;Integer&gt;&gt; pathSum(TreeNode root, int sum) &#123;
-           List&lt;Integer&gt; cur = new ArrayList&lt;&gt;();
-           dfs(root,cur,0,sum);
-            return  res;
-        &#125;
-        public void dfs(TreeNode root, List&lt;Integer&gt; cur,int sum,int target)&#123;
-            if(root == null) return;
-            if(root.left == null &amp;&amp; root.right == null &amp;&amp; root.val + sum == target)&#123;
-                cur.add(root.val);
-                res.add(new ArrayList&lt;Integer&gt;(cur));
-                cur.remove(cur.size()-1);
-                return;
-            &#125;
-            cur.add(root.val);
-            dfs(root.left,cur,sum+root.val,target);
-            dfs(root.right,cur,sum+root.val,target);
-            cur.remove(cur.size()-1);
-        &#125;
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for a binary tree node.</span></span><br><span class="line"><span class="comment"> * public class TreeNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     TreeNode left;</span></span><br><span class="line"><span class="comment"> *     TreeNode right;</span></span><br><span class="line"><span class="comment"> *     TreeNode(int x) &#123; val = x; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; pathSum(TreeNode root, <span class="keyword">int</span> sum) &#123;</span><br><span class="line">       List&lt;Integer&gt; cur = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       dfs(root,cur,<span class="number">0</span>,sum);</span><br><span class="line">        <span class="keyword">return</span>  res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(TreeNode root, List&lt;Integer&gt; cur,<span class="keyword">int</span> sum,<span class="keyword">int</span> target)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(root == <span class="keyword">null</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">if</span>(root.left == <span class="keyword">null</span> &amp;&amp; root.right == <span class="keyword">null</span> &amp;&amp; root.val + sum == target)&#123;</span><br><span class="line">            cur.add(root.val);</span><br><span class="line">            res.add(<span class="keyword">new</span> ArrayList&lt;Integer&gt;(cur));</span><br><span class="line">            cur.remove(cur.size()-<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cur.add(root.val);</span><br><span class="line">        dfs(root.left,cur,sum+root.val,target);</span><br><span class="line">        dfs(root.right,cur,sum+root.val,target);</span><br><span class="line">        cur.remove(cur.size()-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20201015210032718.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -441,7 +397,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -478,12 +434,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

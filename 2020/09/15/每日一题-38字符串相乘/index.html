@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。">
@@ -83,7 +83,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,13 +226,11 @@
 <span id="more"></span>
 
 <p>示例 1:</p>
-<pre><code class="java">输入: num1 = &quot;2&quot;, num2 = &quot;3&quot;
-输出: &quot;6&quot;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: num1 = <span class="string">&quot;2&quot;</span>, num2 = <span class="string">&quot;3&quot;</span></span><br><span class="line">输出: <span class="string">&quot;6&quot;</span></span><br></pre></td></tr></table></figure>
+
 <p>示例 2:</p>
-<pre><code class="java">输入: num1 = &quot;123&quot;, num2 = &quot;456&quot;
-输出: &quot;56088&quot;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: num1 = <span class="string">&quot;123&quot;</span>, num2 = <span class="string">&quot;456&quot;</span></span><br><span class="line">输出: <span class="string">&quot;56088&quot;</span></span><br></pre></td></tr></table></figure>
+
 <p>说明：</p>
 <ul>
 <li>num1 和 num2 的长度小于110。</li>
@@ -241,52 +239,7 @@
 <li>不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。</li>
 </ul>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/multiply-strings">https://leetcode-cn.com/problems/multiply-strings</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。<img src="https://img-blog.csdnimg.cn/20200915141336101.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>用加法加吧</p>
-<pre><code class="java">class Solution &#123;
-    public String multiply(String num1, String num2) &#123;
-        if (num1.equals(&quot;0&quot;) || num2.equals(&quot;0&quot;)) &#123;
-            return &quot;0&quot;;
-        &#125;
-        String ans = &quot;0&quot;;
-        int m = num1.length(), n = num2.length();
-        for(int i = n - 1; i &gt;= 0; i --)&#123;
-            StringBuffer cur = new StringBuffer();
-            int add = 0;
-            for(int j = n-1; j &gt; i; j --)&#123;
-                cur.append(0);//最后一位补0
-            &#125;
-            int y = num2.charAt(i) - &#39;0&#39;;
-            for(int j = m - 1; j &gt;= 0; j --)&#123;
-                int x = num1.charAt(j) - &#39;0&#39;;
-                int product = x * y + add;
-                cur.append(product % 10);
-                add = product / 10;
-            &#125;
-            if(add != 0)&#123;
-                cur.append(add % 10);
-            &#125;
-            ans = addStrings(ans, cur.reverse().toString());
-        &#125;
-        return ans;
-    &#125;
-    //把两个字符串结果相加，从最后一位开始相加得到进位和余数 ，余数直接加入StringBuffer 进位参加下一次加法
-    public String addStrings(String num1, String num2)&#123;
-         int i = num1.length() - 1, j = num2.length() - 1, add = 0;
-         StringBuffer ans = new StringBuffer();
-         while(i &gt;= 0 || j &gt;= 0 || add != 0)&#123;
-            int x = i &gt;= 0 ? num1.charAt(i) - &#39;0&#39; : 0;
-            int y = j &gt;= 0 ? num2.charAt(j) - &#39;0&#39; : 0;
-            int result = x + y + add;
-            ans.append(result % 10);//余数加入结果
-            add = result / 10;//进位保留
-            i --;
-            j --;
-        &#125;
-        ans.reverse();
-        return ans.toString();
-    &#125;
-&#125;
-
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">multiply</span><span class="params">(String num1, String num2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (num1.equals(<span class="string">&quot;0&quot;</span>) || num2.equals(<span class="string">&quot;0&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String ans = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">        <span class="keyword">int</span> m = num1.length(), n = num2.length();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = n - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i --)&#123;</span><br><span class="line">            StringBuffer cur = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">            <span class="keyword">int</span> add = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = n-<span class="number">1</span>; j &gt; i; j --)&#123;</span><br><span class="line">                cur.append(<span class="number">0</span>);<span class="comment">//最后一位补0</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> y = num2.charAt(i) - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j = m - <span class="number">1</span>; j &gt;= <span class="number">0</span>; j --)&#123;</span><br><span class="line">                <span class="keyword">int</span> x = num1.charAt(j) - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                <span class="keyword">int</span> product = x * y + add;</span><br><span class="line">                cur.append(product % <span class="number">10</span>);</span><br><span class="line">                add = product / <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(add != <span class="number">0</span>)&#123;</span><br><span class="line">                cur.append(add % <span class="number">10</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            ans = addStrings(ans, cur.reverse().toString());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//把两个字符串结果相加，从最后一位开始相加得到进位和余数 ，余数直接加入StringBuffer 进位参加下一次加法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">addStrings</span><span class="params">(String num1, String num2)</span></span>&#123;</span><br><span class="line">         <span class="keyword">int</span> i = num1.length() - <span class="number">1</span>, j = num2.length() - <span class="number">1</span>, add = <span class="number">0</span>;</span><br><span class="line">         StringBuffer ans = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">         <span class="keyword">while</span>(i &gt;= <span class="number">0</span> || j &gt;= <span class="number">0</span> || add != <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">int</span> x = i &gt;= <span class="number">0</span> ? num1.charAt(i) - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> y = j &gt;= <span class="number">0</span> ? num2.charAt(j) - <span class="string">&#x27;0&#x27;</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> result = x + y + add;</span><br><span class="line">            ans.append(result % <span class="number">10</span>);<span class="comment">//余数加入结果</span></span><br><span class="line">            add = result / <span class="number">10</span>;<span class="comment">//进位保留</span></span><br><span class="line">            i --;</span><br><span class="line">            j --;</span><br><span class="line">        &#125;</span><br><span class="line">        ans.reverse();</span><br><span class="line">        <span class="keyword">return</span> ans.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>看起来不难 写起来好难 抄都抄错几次了，<br><img src="https://img-blog.csdnimg.cn/20200915144725239.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -455,7 +408,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -492,12 +445,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

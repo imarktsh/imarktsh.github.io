@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="这次安装Hadoop3.2 + spark3.0.1 碰到一些问题">
@@ -84,7 +84,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -228,908 +228,7 @@
 <p>现在百度上的博客质量真的不行，看了几篇博客搭建Hadoop一直报错 查询错误也是你抄我的 我抄你的 没有什么有价值的东西<br> 重装两次都没成功 昨天头疼都睡不着<br> 今天再b站找到一个视频按照安装文档成功装上 主要是Hadoop3比2的版本多了权限管理，需要设置用户要不然就会报错集群不能启动<br> 说一下昨天的错误吧<br> <img src="https://img-blog.csdnimg.cn/20201028133036523.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 <p>说的很明显就是权限问题，为啥我在启动脚本加入了root用户还是启动不了<br>可能是某个脚本没有改好导致集群不能启动<br>这个安装文档把需要的用户创建好了加入到root组里面就可以正常启动<br><img src="https://img-blog.csdnimg.cn/2020102813341698.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"></p>
 <p> 安装文档贴出来：完全可用</p>
-<pre><code class="python">本文档推荐用word打开（wps也可以，就是各级目录不好展开合上），另外zookeeper和spark的IEDA部署和API编程后续也会尽快录制视频上传。
-                    ——compiled by：郑慧乐
-
-参考pdf：《大数据技术基础系统部署指南v3》（更详细，可对照结果截图，但有部分歧义）
-
-b站配套视频：
-①Virtualbox&amp;Centos7 hadoop-3.2.1三台主机伪分布式、完全分布式配置安装教程：https://www.bilibili.com/video/BV1kE411c7KG/
-②Virtualbox&amp;Centos7  三台主机zookeeper集群和spark集群配置安装教程：
-https://www.bilibili.com/video/BV1k7411y7SD/
-
-1.    Hadoop
-注：1.1~1.3无特殊说明三台服务器（zhl-1~zhl-3）在xshell6上一起操作运行；1.4~1.5无特殊说明xshell6先只在一台服务器（zhl-1）上运行，后通过scp同步到其它服务器（zhl-2、zhl-3上）；以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段
-
-1.1安装OpenJDK1.8
-1.安装 jdk1.8
-yum install java-1.8.0-openjdk-devel -y
-
-2. whereis 命令查找 java 安装的真实所在位置，设置jdk环境变量
-whereis java
-这里我的路径：
-/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-3.下载vim
-yum install vim -y
-vim可以完全替代vi，用于编辑vim直观好处是代码是彩色的，vi只是一片白色
-
-4.★将步骤2中找到具体路径添加到系统环境变量中
-vim /etc/profile
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-export JRE_HOME=$&#123;JAVA_HOME&#125;/jre
-export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib/dt.jar:$&#123;JAVA_HOME&#125;/lib/tools.jar:$&#123;JRE_HOME&#125;/lib/rt.jar
-export HADOOP_HOME=/usr/local/hadoop-3.2.1
-export PATH=$&#123;PATH&#125;:$&#123;JAVA_HOME&#125;/bin:$&#123;HADOOP_HOME&#125;/bin
-source /etc/profile
-第1段代码vim进入文本进行编辑
-第2段代码输入前按i，进入可编辑模式（下面会有INSERT显示）；代码输入完后按键盘左上角esc键，退出可编辑模式，然后输入:wq!保存强制退出，后面所有vim均是如此（如果只是输入:q，则会不保存退出）
-第3段上面的source /etc/profile指令使得jdk环境生效
-后面黑色加深意思为三台都先加上，后面完全分布式hadoop会有用。
-5.查看jdk环境是否添加成功
-java -version
-
-1.2建立Hadoop用户
-1. groupadd 命令建立新用户组
-groupadd hadoop 
-groupadd hdfs 
-groupadd hbase 
-groupadd hive
-groupadd spark 
-
-2. 将组名（如hadoop）添加到用户组（如root）中
-usermod -a -G hadoop root
-usermod -a -G hdfs root
-usermod -a -G hbase root
-usermod -a -G hive root
-usermod -a -G spark root
-cat /etc/group
-其中cat /etc/group是查询是否添加成功（也可不执行）
-1.3设置集群环境
-1. ★将集群的各台主机添加到各台主机的 hosts 列表中
-vim /etc/hosts
-192.168.1.11 zhl-1
-192.168.1.12 zhl-2
-192.168.1.13 zhl-3
-
-2.重启服务器，检查network服务是否生效
-reboot
-此时会发现xshell6断开连接（变红），等虚拟机重新加载显示出login登录界面，再在xshell6处重新连接即可（变绿）。
-
-3. ★用ping检查各虚拟机是否互联
-ping zhl-1
-ping zhl-2
-ping zhl-3
-ping下发现正常就直接用ctrl+Z中止进程
-
-4.关闭服务器防火墙
-systemctl status firewalld.service
-systemctl disable firewalld.service
-systemctl stop firewalld.service
-systemctl status firewalld.service
-第1段代码块：查看当前系统中的防火墙服务的状态，查看是否关闭
-若systemctl status firewalld.service显示为inactive状态，后三段代码块可以忽略不执行
-第2段代码块：取消开机启动防火墙，确保重启后防火墙为关闭状态
-第3段代码块：关闭当前系统中的防火墙服务
-第4段代码块：查看当前系统中的防火墙服务的状态，查看是否关闭
-
-5. 设置 selinux 将 SELINUX 改为 disabled
-vim /etc/selinux/config
-SELINUX=enforcing改成SELINUX= disabled
-
-6. ★配置SSH无密钥登陆
-ssh-keygen -t rsa
-ssh-copy-id zhl-1
-ssh-copy-id zhl-2
-ssh-copy-id zhl-3
-每执行完一次ssh-copy-id zhl-1，输入yes，接着再输入密码，然后再执行ssh-copy-id zhl-2，同理再执行ssh-copy-id zhl-3
-
-7. ★检查无密钥登录配置成功
-ssh zhl-1
-exit
-ssh zhl-2
-exit
-ssh zhl-3
-exit
-
-1.4安装Hadoop
-从这里开始只操作zhl-1一台,无特殊说明zhl-2、zhl-3暂不操作，等zhl-1配置完后后期需要时候会通过scp同步到另外两台服务器上
-1. 安装wget指令
-yum install wget -y
-wget 是一个从网络上自动下载文件的自由工具
-
-2. 下载 hadoop 软件包
-wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/stable/hadoop-3.2.1.tar.gz
-
-3. 将 hadoop 安装包放入/usr/local 中并解压
-chown -R root /usr/local
-tar zxvf hadoop-3.2.1.tar.gz -C /usr/local
-cd /usr/local
-ll
-
-4.检查安装成功
-cd /usr/local/hadoop-3.2.1
-bin/hadoop version
-这里直接cd或者cd ~可以返回到底，cd ..可以返回上一个文件目录，ls是仅列出当前目录下的所有文件名，ll则是详细列出，运行不了就cd /usr/local/hadoop-3.2.1到这个目录下，就能运行了，后面很多都是要cd xxx(具体目录)下操作的
-1.5运行hadoop
-无特殊说明只操作zhl-1，而zhl-2、zhl-3暂不操作
-Hadoop安装分为3种：
-①单机模式:单机模式: Hadoop默认模式为非分布式模式(本地模式) ，无需进行其他配置即可运行。非分布式即单Java进程，方便进行调试。
-②伪分布式模式: Hadoop可以在单节点上以伪分布式的方式运行，Hadoop 进程以分离的Java进程来运行，节点既作为NameNode也作为DataNode,同时，读取的是HDFS中的文件。
-③完全分布式模式:使用多个节点构成集群环境来运行Hadoop。
-实际使用的话是完全分布式，因此不是出于初学目的的话下面可以略过1.5.1和1.5.2有关本地模式和伪分布式的操作，省时间直接进行1.5.3完全分布式最终完成hadoop的3台集群工作任务
-1.5.1    本地运行hadoop（单机模式） 
-1. 运行 hadoop 例子的 jar 包，查看有哪些例程。
-cd /usr/local/hadoop-3.2.1
-bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar
-
-2. 在本地模式下运行grep例程
-mkdir input
-bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar grep input output &#39;per[a-z.]+&#39;
-上述mkdir input的意为新建一个名叫input的目录
-
-3. 查看输出 output 目录中的结果
-cd output
-ls
-cat part-r-00000
-
-1.5.2    伪分布式hadoop 
-进行伪分布式hadoop前在这里可以考虑给zhl-1、zhl-2、zhl-3系统三个都各自备份；
-操作完伪分布式后可以给zhl-1再次备份然后zhl-1回档到第一次备份（可以两次都不备份不回档直接做），zhl-2、zhl-3不用操作
-理由：后面的1.5.3完全分布式hadoop修改的文件跟伪分布式有重叠，只是内容不一样，当然直接再改也行；另外养成系统备份的好习惯，出了问题好回档，不用全部重做一遍
-1.5.2.1伪分布式运行HDFS
-1. 配置core-site.xml
-vim /usr/local/hadoop-3.2.1/etc/hadoop/core-site.xml
-  &lt;property&gt; 
-    &lt;name&gt;fs.defaultFS&lt;/name&gt; 
-    &lt;value&gt;hdfs://localhost:9000&lt;/value&gt; 
-    &lt;final&gt;true&lt;/final&gt; 
-  &lt;/property&gt;
-第二段代码块在&lt;configuration&gt;和&lt;/configuration&gt;之间添加！！（下面带&lt;property&gt;和&lt;/property&gt;的均如此）
-上面localhost就可以了，不用改成zhl-1
-
-2. 配置hdfs-site.xml 
-vim /usr/local/hadoop-3.2.1/etc/hadoop/hdfs-site.xml
-  &lt;property&gt; 
-    &lt;name&gt;dfs.replication&lt;/name&gt; 
-    &lt;value&gt;1&lt;/value&gt; 
-  &lt;/property&gt;
-输入了vim后如果跳出[O]pen Read-Only, (E)dit anyway, (R)ecover, (Q)uit, (A)bort的界面，按键盘E编辑就行了
-
-3.初始化名称节点
-cd /usr/local/hadoop-3.2.1
-bin/hdfs namenode -format
-
-4.★ 给当前用户配置为 root,随后开启hdfs服务守护进程
-export HDFS_NAMENODE_USER=root
-export HDFS_DATANODE_USER=root
-export HDFS_SECONDARYNAMENODE_USER=root
-vim /usr/local/hadoop-3.2.1/etc/hadoop/hadoop-env.sh
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-sbin/start-dfs.sh
-
-5. jps查看JVM 中的hadoop进程
-jps
-
-6. 伪分布式模式运行wordcount例程：先上传文本文件到 hdfs 上的相应的文件目录下
-bin/hdfs dfs -mkdir /user
-bin/hdfs dfs -mkdir /user/root
-bin/hdfs dfs -mkdir input
-bin/hdfs dfs -put etc/hadoop/*.xml input
-下面一直ls的步骤可跳过
-ls
-bin/hdfs dfs -ls 
-bin/hdfs dfs -ls /user
-bin/hdfs dfs -ls /user/root
-bin/hdfs dfs -ls /user/root/input
-
-7. 运行grep例程
-bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar grep input output &#39;dfs[a-z.]+&#39;
-查找当前用户在 hdfs 文件系统中默认目录下的 input 目录中的文本文件中包含有 dfs 的单词，并输出至默认目录/user/root下的 output 目录中
-
-8.运行成功后查看 output 目录中的结果
-bin/hdfs dfs -ls /user/root/output
-bin/hdfs dfs -cat output/*
-下面也可以将结果传回到本地文件系统（可跳过）
-bin/hdfs dfs -get output output
-ls
-ls output/*
-cat output/*
-
-9.关闭伪分布式 HDFS
-sbin/stop-dfs.sh
-jps
-
-1.5.2.2伪分布式运行YARN
-1. 配置mapred-site.xml
-vim etc/hadoop/mapred-site.xml
-  &lt;property&gt; 
-    &lt;name&gt;mapreduce.framework.name&lt;/name&gt; 
-    &lt;value&gt;yarn&lt;/value&gt;
-  &lt;/property&gt; 
-  &lt;property&gt; 
-    &lt;name&gt;mapreduce.application.classpath&lt;/name&gt; 
-    &lt;value&gt;$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*&lt;/value&gt;
-  &lt;/property&gt;
-
-2.配置yarn-site.xml
-vim etc/hadoop/yarn-site.xml
-  &lt;property&gt; 
-    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt; 
-    &lt;value&gt;mapreduce_shuffle&lt;/value&gt; 
-  &lt;/property&gt; 
-  &lt;property&gt; 
-    &lt;name&gt;yarn.nodemanager.env-whitelist&lt;/name&gt; 
-    &lt;value&gt;JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME&lt;/value&gt; 
-  &lt;/property&gt;
-
-3.启动 YARN 服务守护进程
-export YARN_RESOURCEMANAGER_USER=root
-export YARN_NODEMANAGER_USER=root
-sbin/start-yarn.sh
-
-4.关闭伪分布式YARN
-jps 
-sbin/stop-yarn.sh
-jps
-
-1.5.3    完全分布式hadoop 
-（做过1.5.2伪分布式的无视这里）：如果跳过了1.52伪分布式，则在这里系统备份zhl-1、zhl-2、zhl-3（养成系统备份的好习惯，出了问题好回档，不用全部重做一遍）
-
-下面依旧是只操作zhl-1，无特殊提示zhl-2、zhl-3不操作
-
-1.★ 配置hadoop-env.sh运行环境
-vim /usr/local/hadoop-3.2.1/etc/hadoop/hadoop-env.sh
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-export HDFS_NAMENODE_USER=root
-export HDFS_DATANODE_USER=root
-export HDFS_SECONDARYNAMENODE_USER=root
-
-2.★配置core-site.xml(下面&lt;value&gt;hdfs://zhl-1:9000&lt;/value&gt;改成自己的)
-vim /usr/local/hadoop-3.2.1/etc/hadoop/core-site.xml
-  &lt;property&gt;
-    &lt;!-- 必须设置：默认文件系统（存储层和运算层解耦 --&gt; 
-    &lt;!-- 此处值为uri结构：使用内置的hdfs系统 端口号一般都是9000 --&gt;
-    &lt;name&gt;fs.defaultFS&lt;/name&gt; 
-    &lt;value&gt;hdfs://zhl-1:9000&lt;/value&gt; 
-    &lt;final&gt;true&lt;/final&gt; 
-  &lt;/property&gt;
-  &lt;property&gt; 
-    &lt;!-- 必须设置：hadoop在本地的工作目录，用于放hadoop进程的临时数据，可以自己指定 --&gt;
-    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt; 
-    &lt;value&gt;/root/hadoop/tmp&lt;/value&gt; 
-  &lt;/property&gt;
-&lt;property&gt;和&lt;/property&gt;均在&lt;configuration&gt;&lt;/configuration&gt;之间添加！！
-
-3.★配置hdfs-site.xml（下面&lt;value&gt;zhl-1:9870&lt;/value&gt;改成自己的）
-vim /usr/local/hadoop-3.2.1/etc/hadoop/hdfs-site.xml
-  &lt;property&gt;
-    &lt;!-- hdfs保存namenode当前数据的路径，默认值需要配环境变量，建议使用自己创建的路径, 方便管理--&gt;
-    &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt; 
-    &lt;value&gt;/root/hadoop/dfs/name&lt;/value&gt; 
-    &lt;final&gt;true&lt;/final&gt; 
-  &lt;/property&gt; 
-  &lt;property&gt; 
-    &lt;!-- hdfs保存datanode当前数据的路径，默认值需要配环境变量，建议使用自己创建的路径, 方便管理--&gt;
-    &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt; 
-    &lt;value&gt;/root/hadoop/dfs/data&lt;/value&gt;
-    &lt;final&gt;true&lt;/final&gt; 
-  &lt;/property&gt; 
-  &lt;property&gt; 
-    &lt;!-- hdfs存储数据的副本数量（避免一台宕机），可以不设置，默认值是3--&gt; 
-    &lt;name&gt;dfs.replication&lt;/name&gt; 
-    &lt;value&gt;3&lt;/value&gt; 
-  &lt;/property&gt; 
-  &lt;property&gt;
-   &lt;!-- hdfs监听namenode的web的地址，默认就是9870端口，如果不改端口也可以不设置--&gt; 
-    &lt;name&gt;dfs.namenode.http-address&lt;/name&gt; 
-    &lt;value&gt;zhl-1:9870&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;!-- 配置为false后，可以允许不要检查权限就生成dfs上的文件，方便倒是方便了，但是你需要防止误删除 --&gt;
-    &lt;name&gt;dfs.permissions&lt;/name&gt;
-    &lt;value&gt;false&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;
-    &lt;value&gt;true&lt;/value&gt;
-  &lt;/property&gt;
-
-4.★配置mapred-site.xml（修改2处：&lt;value&gt;zhl-1:10020&lt;/value&gt;和&lt;value&gt;zhl-1:19888&lt;/value&gt;改成自己的）
-vim /usr/local/hadoop-3.2.1/etc/hadoop/mapred-site.xml
-  &lt;property&gt; 
-  &lt;!-- 必须设置，mapreduce程序使用的资源调度平台，默认值是local,若不改就只能单机运行，不会到集群上了 --&gt;
-    &lt;name&gt;mapreduce.framework.name&lt;/name&gt; 
-    &lt;value&gt;yarn&lt;/value&gt; 
-  &lt;/property&gt;
-  &lt;property&gt; 
-  &lt;!-- 这是3.2以上版本需要增加配置的，不配置运行mapreduce任务可能会有问题，记得使用自己的路径 --&gt; 
-    &lt;name&gt;mapreduce.application.classpath&lt;/name&gt; 
-    &lt;value&gt;$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt; 
-    &lt;value&gt;zhl-1:10020&lt;/value&gt; 
-  &lt;/property&gt;
-  &lt;property&gt; 
-    &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;
-    &lt;value&gt;zhl-1:19888&lt;/value&gt; 
-  &lt;/property&gt;
-
-5.★配置yarn-site.xml（&lt;value&gt;zhl-1&lt;/value&gt;改成自己的）
-vim /usr/local/hadoop-3.2.1/etc/hadoop/yarn-site.xml
-  &lt;property&gt;
-    &lt;!-- 必须配置指定YARN的老大(ResourceManager)在哪一台主机 --&gt;
-    &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
-    &lt;value&gt;zhl-1&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;!-- 必须配置提供mapreduce程序获取数据的方式默认为空 --&gt;
-    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
-    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;name&gt;yarn.nodemanager.env-whitelist&lt;/name&gt;
-    &lt;value&gt;JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME&lt;/value&gt;
-  &lt;/property&gt;
-  &lt;property&gt;
-    &lt;!--忽略虚拟内存的检查，如果你是安装在虚拟机上，这个配置很有用，配上去之后后续操作不容易出问题。 --&gt;
-    &lt;name&gt;yarn.nodemanager.vmem-check-enabled&lt;/name&gt;
-    &lt;value&gt;false&lt;/value&gt;
-  &lt;/property&gt;
-
-6.★修改 workers,将localhost删除，zhl-1、zhl-2、zhl-3添加进去
-vim /usr/local/hadoop-3.2.1/etc/hadoop/workers
-zhl-1
-zhl-2
-zhl-3
-cat查看添加是否成功（可跳过）
-cat /usr/local/hadoop-3.2.1/etc/hadoop/workers
-
-7. 配置 hadoop 中/sbin 中的各项文件
-①修改start-dfs.sh
-vim /usr/local/hadoop-3.2.1/sbin/start-dfs.sh
-HDFS_DATANODE_USER=root
-HDFS_DATANODE_SECURE_USER=hdfs
-HDFS_NAMENODE_USER=root
-HDFS_SECONDARYNAMENODE_USER=root
-
-②修改stop-dfs.sh
-vim /usr/local/hadoop-3.2.1/sbin/stop-dfs.sh
-HDFS_DATANODE_USER=root
-HDFS_DATANODE_SECURE_USER=hdfs
-HDFS_NAMENODE_USER=root
-HDFS_SECONDARYNAMENODE_USER=root
-
-③修改start-yarn.sh
-vim /usr/local/hadoop-3.2.1/sbin/start-yarn.sh
-YARN_RESOURCEMANAGER_USER=root
-HADOOP_SECURE_DN_USER=yarn
-YARN_NODEMANAGER_USER=root
-
-④修改stop-yarn.sh
-vim /usr/local/hadoop-3.2.1/sbin/stop-yarn.sh
-YARN_RESOURCEMANAGER_USER=root
-HADOOP_SECURE_DN_USER=yarn
-YARN_NODEMANAGER_USER=root
-
-⑤★scp复制 hadoop-3.2.1 到zhl-2、zhl-3上（这里就解释了为什么一直以来只操作zhl-1，而zhl-2和zhl-3不用操作，因为一台配置好了同步到其它台就ok了）
-for A in &#123;2..3&#125;; do scp -r /usr/local/hadoop-3.2.1 zhl-$A:/usr/local;done
-注意上面代码2、3和zhl-，根据自己情况具体修改，因为现在只在操作zhl-1，所以要scp复制同步到zhl-2、zhl-3上
-
-8.启动集群
-①初始化集群的名称节点（format只执行一次，别重复执行！）
-/usr/local/hadoop-3.2.1/bin/hdfs namenode -format
-（正常情况不执行）如果不小心多次format出问题了，执行下面六步：
-cd /usr/local/hadoop-3.2.1
-sbin/stop-all.sh
-rm -rf /root/hadoop/dfs/name
-rm -rf /root/hadoop/dfs/data
-rm -rf hadoop.tmp.dir
-/usr/local/hadoop-3.2.1/bin/hdfs namenode -format
-sbin/start-all.sh
-
-②启动 hadoop 集群
-cd /usr/local/hadoop-3.2.1
-sbin/start-all.sh
-如果warning说logs does not exist.无视掉就好，logs日志可以没有的
-一旦使用了sbin/start-all.sh后要切记：任何时候关闭虚拟机前先sbin/stop-all.sh，否则下次可能报错，集群失败，又要重新格式化啥的很麻烦
-
-9.检查集群情况
-①在zhl-1、zhl-2、zhl-3中同时输入
-jps
-查看每台服务器上JVM 中 hadoop 进程运行情况，了解hadoop各组件在服务器集群中的分布情况
-   
-②★在浏览器中输入
-http://192.168.1.11:9870/
-
-点击顶部“Datanodes”下翻找到：
- 
-监控datanode 的状态（出现了3个绿√代表hadoop集群已经配置成功）
-
-③★在浏览器中输入
-http://192.168.1.11:8088/
-
-能看到集群管理页面
- 配置是成功的
-
-④只操作zhl-1，关闭 hadoop 集群（该步骤非常重要，start后关机前一定要先stop集群！！）
-cd /usr/local/hadoop-3.2.1
-sbin/stop-all.sh
-
-这里就3台hadoop完全式分布集群安装就已经成功了，下面的都是用这个集群去运行例程，可以跳过不做，这里总结下：上面在操作的时候，一直在zhl-1上操作，最后scp同步到zhl-2、zhl-3时这么多的配置文件里的zhl-1要改成zhl-2或zhl-3吗？答案是不用的，其他的里面都会是zhl-1，这才是正常的。原先一直用3台xshell6一起操作，导致后面一直被坑出问题，其实只用操作一台，注意避坑。
-
-10.例程1（省时间可不做跳过，建议做一下）：完全分布式运行wordcount
-①在此之前先调整时间，避免后面报错
-时间同步调整博客：https://blog.csdn.net/selectdb/article/details/81735104
-yum install ntp -y
-systemctl enable ntpd.service
-vim /etc/sysconfig/ntpd
-上面的vim添加-g -x参数
-systemctl restart ntpd.service
-ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-date
-
-②上传文本文件到 HDFS 中
-cd
-/usr/local/hadoop-3.2.1/sbin/start-all.sh 
-hdfs dfs -mkdir /test
-hdfs dfs -put /etc/profile /test/input
-hdfs dfs -ls /test/input
-hdfs dfs -ls /test/input用于查看(非必要步骤可跳)
-mkdir用于新建
-/etc/profile是随意选的一个文件
-/test和/test/input是自己可以随意起的文件名
-注意上面第三步又开启了集群，后面不用时要关掉
-（正常情况下不用执行）如果前面有过多次format的行为，第四步会报错，要先离开安全模式，再执行/usr/local/hadoop-3.2.1/bin/hdfs dfs -put test1 /tmp
-hadoop dfsadmin -safemode leave
-
-★接下来再次进入：
-http://192.168.1.11:9870/
-
-然后点击右上角UtilitiesBrowse the file system
- 
-③运行 wordcount 例程
-hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar wordcount /test/input /test/output
-
-★接下来再次进入：
-http://192.168.1.11:8088/
-
- 
-看到多出了这个，wordcount例程到此完美结束
-
-10.★例程2（省时间可不做跳过，建议做一下）：完全分布式运行蒙特卡洛方法计算圆周率
-hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-3.2.1.jar pi 10 1000
- 
-最后Π结果得出3.1408，想要更精确可以把数字调高，就是运行会变慢
-运行时会发现有 
-这里的map和reduce有进度条原因是这样的：hadoop的分布式计算框架分为两个阶段，第一个是map阶段，第二个是reduce阶段。map阶段负责对输入文件进行切分处理，然后汇总再分组给reduce进行处理，以达到高效的分布式计算效率
-
-★同样进入：
-http://192.168.1.11:8088/
-
- 
-看到多出了这个，蒙特卡洛方法计算圆周率例程到此完美结束
-至此，hadoop全部配置、例程结束，别忘了输入:    :
-/usr/local/hadoop-3.2.1/sbin/stop-all.sh
-
-2.    Zookeeper 
-注：无特殊说明只操作zhl-1，而zhl-2、zhl-3不操作。
-以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段
-
-2.1 Zookeeper部署
-1. 从 zookeeper 官网下载最新版本的安装包。http://zookeeper.apache.org/
-cd
-wget http://mirror.bit.edu.cn/apache/zookeeper/stable/apache-zookeeper-3.5.7-bin.tar.gz
-
-2. 解压安装 zookeeper，随后查看
-tar zxvf apache-zookeeper-3.5.7-bin.tar.gz -C /usr/local/
-ls /usr/local/
-
-3. 修改配置文件 zoo.cfg
-ls /usr/local/apache-zookeeper-3.5.7-bin/conf/
-cp /usr/local/apache-zookeeper-3.5.7-bin/conf/zoo_sample.cfg /usr/local/apache-zookeeper-3.5.7-bin/conf/zoo.cfg
-ls /usr/local/apache-zookeeper-3.5.7-bin/conf/
-vim /usr/local/apache-zookeeper-3.5.7-bin/conf/zoo.cfg
-dataDir=/usr/local/apache-zookeeper-3.5.7-bin/zkData
-第二段代码：cp zoo_sample.cfg zoo.cfg将zoo_sample.cfg复制到同目录下，并将名称改为zoo.cfg
-最后vim是将原有的dataDir替换掉
-
-4.新建集群数据目录
-mkdir /usr/local/apache-zookeeper-3.5.7-bin/zkData
-ls /usr/local/apache-zookeeper-3.5.7-bin/
-
-5.启动Zookeeper服务进程
-ll /usr/local/apache-zookeeper-3.5.7-bin/bin
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh start
-jps
-
-6.查看Zookeeper服务状态
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-
-7.启动 Zookeeper 客户端连接服务
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkCli.sh
-
-8.查看Zookeeper的目录
-ls /
-
-9. 退出Zookeeper客户端
-quit
-
-10.退出Zookeeper服务
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-jps
-
-11. 修改集群配置文件
-在 zookeeper 的数据目录 zkData 中创建 myid 文件：
-touch /usr/local/apache-zookeeper-3.5.7-bin/zkData/myid
-touch 命令主要用于创建普通文件，如果文件存在，表示修改当前文件时间
-
-★然后修改 zoo.cfg 配置文件(第一行加入即可)：
-vim /usr/local/apache-zookeeper-3.5.7-bin/conf/zoo.cfg
-#cluster configuration
-server.1=zhl-1:2888:3888
-server.2=zhl-2:2888:3888
-server.3=zhl-3:2888:3888
-这里有一个天坑！注意zhl-1:2888:3888和zhl-2:2888:3888和zhl-3:2888:3888最后一个8后面不要留空格，不要留空格，不要留空格，服务端口号后留了空格非常难检查出来，后面会直接导致zookeeper在解析端口号的时候出现异常，从而使：
-这里13. 分别在各个服务器上启动 Zookeeper 服务 
-出现FAILED而不是STARTED  启动失败！
-
-12. ★分布式部署 Zookeeper(3台)
-将zhl-1配置好的软件包复制到zhl-2、zhl-3上（只操作zhl-1）
-for i in &#123;2..3&#125;;do scp -r /usr/local/apache-zookeeper-3.5.7-bin zhl-$i:/usr/local;done
-可以在zhl-2、zhl-3中输入：
-ls /usr/local
-查看到：apache-zookeeper-3.5.7-bin 则复制成功
-
-★在下一步开启zookeeper前请务必注意！
-仅操作zhl-1：
-vim /usr/local/apache-zookeeper-3.5.7-bin/zkData/myid
-1
-
-仅操作zhl-2：
-vim /usr/local/apache-zookeeper-3.5.7-bin/zkData/myid
-2
-
-仅操作zhl-3：
-vim /usr/local/apache-zookeeper-3.5.7-bin/zkData/myid
-3
-
-13.分别在各个服务器上启动 Zookeeper 服务（若启动失败回看11. ★修改集群配置文件 后面警告）
-（jps如果显示有了QuorumPeerMain就不执行）zhl-1、zhl-2、zhl-3一起操作：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh start
-
-14.查看各个服务状态
-zhl-1、zhl-2、zhl-3一起操作：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-
-15. 测试故障重新选举 Leader
-在步骤14中zhl-1、zhl-2、zhl-3谁显示leader先操作谁，其余两个原follower之后顺序随意
-这里是zhl-3是leader，则仅操作zhl-3：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh restart
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-
-接下来仅操作zhl-1：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-
-仅操作zhl-2：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-这里显示zhl-2变成了leader
-结论：原先的leader在restart即故障后，即使重新恢复正常，也不再是leader了，而是由剩下的正常的follower之一继承了leader之位（3台情况下zhl-3不是leader后zhl-2会继承）
-
-16. 测试HA(High Available缩写，指高可用性集群)
-关闭zhl-3的Zookeeper 服务，Zookeeper 集群服务仍然可以工作（半数以上服务器有效）
-仅操作zhl-3：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-接下来仅操作zhl-1，查看zookeeper集群是否仍能工作
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-
-再关闭zhl-2的Zookeeper服务，整个Zookeeper集群服务失效（低于半数服务器失效）
-仅操作zhl-2:
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-接下来仅操作zhl-1，查看zookeeper集群是否仍能工作
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh status
-虽然集群失效了，但是仍然开启的服务器用jps能够观察的到
-
-（正常不执行）最后zhl-1、zhl-2、zhl-3一起操作：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-zookeeper的集群部署和测试到此完美结束，下面是zookeeper的使用（建议做一下，节省时间可跳过，直接进行spark，不影响）
-
-2.2 Zookeeper使用（省时间可跳过直接spark，不影响）
-2.2.1 Zookeeper shell
-1. 
-zhl-1、zhl-2、zhl-3一起打开集群，后面无特殊说明仅在zhl-1上操作：
-（jps如果显示有了QuorumPeerMain就不执行start）
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh start
-启动客户端连接 Zookeeper 集群
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkCli.sh
-ls /
-其中ls查看当前 znode 中所包含的内容
-
-2. 测试shell命令：help列出所有可用命令及用法。
-help
-ls -s /
-
-①创建普通节点（创建时要写入数据）
-create /testroot
-ls /
-ls -s /testroot
-create /testroot/test1
-ls /testroot
-create /testroot/test2
-ls /testroot
-
-②更新和读取节点目录中的数据
-set /testroot/test1 &quot;Hello test1&quot;
-set /testroot/test2 &quot;Hello test2&quot;
-get /testroot 
-get /testroot/test1
-get /testroot/test2
-quit关闭客户端，/usr/local/apache-zookeeper-3.5.7-bin/bin/zkCli.sh + 回车 则是启动客户端
-
-③创建带有序号的znode目录
-create -s /testroot/test3
-ls /testroot
-
-④监听znode的值的变化，启动另一个客户端（注册一次watch只能监听一次）
-get -w /testroot
-set /testroot &quot;Hello,h02&quot;
-
-⑤监听znode子目录的变化(注册一次watch只能监听一次)
-ls -w /testroot
-create -s /testroot/test3
-
-⑥删除znode目录
-delete /testroot/test1
-ls /testroot
-
-⑦查看znode详细信息
-stat /
-stat /testroot
-
-⑧递归删除 znode 目录
-deleteall /testroot
-ls /
-quit
-
-（正常不执行）最后zhl-1、zhl-2、zhl-3一起操作：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-这时候zhl-1、zhl-2、zhl-3均备份
-zookeeper集群
-zookeeper集群和shell使用已完成，API编程未完成（要IDEA环境），下一步spark
-2.2.2 Zookeeper API 编程应用（待更新）
-(具体安装看视频)输入浏览器下载IntelliJ IDEA:
-https://www.jetbrains.com/
-
-网站打不开解决办法：
-https://blog.csdn.net/n2278556874/article/details/101477069
-破解Ultimate版：https://npegeek.com/
-Ultimate激活码（截至2021.2.18，过时了自己去上面网站找）
-E70JHCOV2H-eyJsaWNlbnNlSWQiOiJFNzBKSENPVjJIIiwibGljZW5zZWVOYW1lIjoi5bGx5Lic55CG5bel5aSn5a2mIiwiYXNzaWduZWVOYW1lIjoiIiwiYXNzaWduZWVFbWFpbCI6IiIsImxpY2Vuc2VSZXN0cmljdGlvbiI6IkZvciBlZHVjYXRpb25hbCB1c2Ugb25seSIsImNoZWNrQ29uY3VycmVudFVzZSI6ZmFsc2UsInByb2R1Y3RzIjpbeyJjb2RlIjoiSUkiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJBQyIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkRQTiIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IlBTIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiR08iLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJETSIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkNMIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUlMwIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUkMiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJSRCIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IlBDIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUk0iLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJXUyIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkRCIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiREMiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJSU1UiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifV0sImhhc2giOiIxNjc5MTgwMy8wIiwiZ3JhY2VQZXJpb2REYXlzIjo3LCJhdXRvUHJvbG9uZ2F0ZWQiOmZhbHNlLCJpc0F1dG9Qcm9sb25nYXRlZCI6ZmFsc2V9-qlgtO4xVGHX/r45fIKMaR6B9pWQtucrCYVsz0o00crcAiYN1k/kSMygggYl187B0u0jeXQCe4BmQIItKL79x6NwoPn43inreVhZ88f4+Cbl+V/KGeAYeybon+7YoTs8FY4+31ANW/LwBPxkPnlErxYdQ6oc/k6mnxIOm5Nf8WjKRfYYIl5Bhmdt1gHMGgFsocCcTLLiqDUGEcPj5tUIJXwwYaeKAR3YGXm/P73QpnYR/BcGaodBN3jprQRxsS5Ia5y06rrDAJcPSZuttAFpAit/4o/gq2XzhrjaBCtOMxNzk3XEAT82glTlWQOQx6KnRq6D7WUXzd81g44aP+Dca5Q==-MIIElTCCAn2gAwIBAgIBCTANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBMB4XDTE4MTEwMTEyMjk0NloXDTIwMTEwMjEyMjk0NlowaDELMAkGA1UEBhMCQ1oxDjAMBgNVBAgMBU51c2xlMQ8wDQYDVQQHDAZQcmFndWUxGTAXBgNVBAoMEEpldEJyYWlucyBzLnIuby4xHTAbBgNVBAMMFHByb2QzeS1mcm9tLTIwMTgxMTAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxcQkq+zdxlR2mmRYBPzGbUNdMN6OaXiXzxIWtMEkrJMO/5oUfQJbLLuMSMK0QHFmaI37WShyxZcfRCidwXjot4zmNBKnlyHodDij/78TmVqFl8nOeD5+07B8VEaIu7c3E1N+e1doC6wht4I4+IEmtsPAdoaj5WCQVQbrI8KeT8M9VcBIWX7fD0fhexfg3ZRt0xqwMcXGNp3DdJHiO0rCdU+Itv7EmtnSVq9jBG1usMSFvMowR25mju2JcPFp1+I4ZI+FqgR8gyG8oiNDyNEoAbsR3lOpI7grUYSvkB/xVy/VoklPCK2h0f0GJxFjnye8NT1PAywoyl7RmiAVRE/EKwIDAQABo4GZMIGWMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGEpG9oZGcfLMGNBkY7SgHiMGgTcMEgGA1UdIwRBMD+AFKOetkhnQhI2Qb1t4Lm0oFKLl/GzoRykGjAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBggkA0myxg7KDeeEwEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0PBAQDAgWgMA0GCSqGSIb3DQEBCwUAA4ICAQAF8uc+YJOHHwOFcPzmbjcxNDuGoOUIP+2h1R75Lecswb7ru2LWWSUMtXVKQzChLNPn/72W0k+oI056tgiwuG7M49LXp4zQVlQnFmWU1wwGvVhq5R63Rpjx1zjGUhcXgayu7+9zMUW596Lbomsg8qVve6euqsrFicYkIIuUu4zYPndJwfe0YkS5nY72SHnNdbPhEnN8wcB2Kz+OIG0lih3yz5EqFhld03bGp222ZQCIghCTVL6QBNadGsiN/lWLl4JdR3lJkZzlpFdiHijoVRdWeSWqM4y0t23c92HXKrgppoSV18XMxrWVdoSM3nuMHwxGhFyde05OdDtLpCv+jlWf5REAHHA201pAU6bJSZINyHDUTB+Beo28rRXSwSh3OUIvYwKNVeoBY+KwOJ7WnuTCUq1meE6GkKc4D/cXmgpOyW/1SmBz3XjVIi/zprZ0zf3qH5mkphtg6ksjKgKjmx1cXfZAAX6wcDBNaCL+Ortep1Dh8xDUbqbBVNBL4jbiL3i3xsfNiyJgaZ5sX7i8tmStEpLbPwvHcByuf59qJhV/bZOl8KqJBETCDJcY6O2aqhTUy+9x93ThKs1GKrRPePrWPluud7ttlgtRveit/pcBrnQcXOl1rHq7ByB8CFAxNotRUYL9IF5n3wJOgkPojMy6jetQA5Ogc8Sm7RG6vg1yow==
-
-
-
-
-3.    Spark
-注：无特殊说明只操作zhl-1，而zhl-2、zhl-3不操作。
-以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段
-zookeeper结束后zhl-1、zhl-2、zhl-3均备份
-3.1 Spark部署
-1. 从spark官网下载最新版本的安装包。http://spark.apache.org/
-cd
-wget http://mirror.bit.edu.cn/apache/spark/spark-3.0.0-preview2/spark-3.0.0-preview2-bin-hadoop3.2.tgz
-
-2. 解压安装spark，随后查看
-tar -zxvf spark-3.0.0-preview2-bin-hadoop3.2.tgz -C /usr/local/
-ls /usr/local/
-
-3.建立软链接
-zhl-1、zhl-2、zhl-3一起操作：
-ln -s /usr/local/spark-3.0.0-preview2-bin-hadoop3.2 spark
-ln -s /usr/local/apache-zookeeper-3.5.7-bin zookeeper
-ll
-相当于：ls /usr/local/spark-3.0.0-preview2-bin-hadoop3.2/conf/简化为ls spark/conf/
-想删除软链接的时候：rm -rf 目标链接
-上面zhl-2、zhl-3会爆红，属于正常现象（爆红就是不存在那个目录）
-后面步骤会通过scp同步到zhl-2、zhl-3上，爆红会消失
-
-4. ★修改配置文件spark-env.sh和slaves
-ls spark/conf/
-cp spark/conf/spark-env.sh.template spark/conf/spark-env.sh
-cp spark/conf/slaves.template spark/conf/slaves
-ls spark/conf/
-vim spark/conf/spark-env.sh
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-export SPARK_WORKER_CORES=1
-export SPARK_WORKER_INSTANCES=1 
-export SPARK_MASTER_HOST=zhl-1
-export SPARK_MASTER_PORT=7077
-vim spark/conf/slaves
-zhl-1
-zhl-2
-zhl-3
-vim spark/conf/slaves时把localhost删掉
-虚拟机内存默认2G+，若比较小（如1G），需要把conf/spark_env.sh 中把 SPARK 的 
-WORKER 的工作内存和 executor 内存降低成 900M 或者更低：
-（正常不运行）
-vim spark/conf/spark-env.sh
-export SPARK_EXECUTOR_MEMORY=512M 
-export SPARK_WORKER_MEMORY=512M 
-export SPARK_DRIVER_MEMORY=512M
-
-5. ★将软件包传输至其他节点上
-for i in &#123;2..3&#125;;do scp -r /usr/local/spark-3.0.0-preview2-bin-hadoop3.2 zhl-$i:/usr/local;done
-这里把/usr/local/spark-3.0.0-preview2-bin-hadoop3.2改成spark没用……
-
-zhl-2、zhl-3一起操作:
-ll
-可以发现爆红消失
-
-zhl-1、zhl-2、zhl-3一起操作:
-ls spark
-
-6.启动spark 集群(standalone 模式)
-下面又仅操作zhl-1：
-spark/sbin/start-all.sh
-查看
-zhl-1、zhl-2、zhl-3一起操作:
-jps
-
-★浏览器输入：
-http://192.168.1.11:8081/
-
-如果8081打不开，则输入
-（正常不运行）
-tail -n 100 spark/logs/spark-root-org.apache.spark.deploy.master.Master-1-zhl-1.out
-上面tail命令查看日志最后100行，可以看出端口尝试过程，可能是8080，或者8082等等
-
- 
-至此spark安装完成
-
-7. 启用 HA 功能（zookeeper必须已经配置完！否则无法进行）
-zhl-1、zhl-2、zhl-3一起操作:
-vim spark/conf/spark-env.sh
-将export SPARK_MASTER_HOST=zhl-1和export SPARK_MASTER_PORT=7077前面加#注释掉，后面加一行
-export SPARK_DAEMON_JAVA_OPTS=&quot;-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zhl-1:2181,zhl-2:2181,zhl-3:2181 -Dspark.deploy.zookeeper.dir=/spark&quot;
-即最终变成
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.242.b08-0.el7_7.x86_64
-export SPARK_WORKER_CORES=1
-export SPARK_WORKER_INSTANCES=1
-#export SPARK_MASTER_HOST=zhl-1
-#export SPARK_MASTER_PORT=7077
-export SPARK_DAEMON_JAVA_OPTS=&quot;-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zhl-1:2181,zhl-2:2181,zhl-3:2181 -Dspark.deploy.zookeeper.dir=/spark&quot;
-下面这两步别跳，spark关了重新启动一下，不然后面这里的
- 会只显示[zookeeper]
-spark/sbin/stop-all.sh
-spark/sbin/start-all.sh
-
-（jps三台均显示QuorumPeerMain则不用）zhl-1、zhl-2、zhl-3一起操作
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh start
-
-仅操作zhl-1：
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkCli.sh
-ls /
-ls /spark -s
-quit
-其中输入ls /后，必须要同时看到spark和zookeeper才能算成功
- 
-
-★仅操作zhl-2：
-spark/sbin/start-master.sh
-tail -n 100 spark/logs/spark-root-org.apache.spark.deploy.master.Master-1-zhl-2.out
- 
-通过日志找到了zhl-2使用了8082端口
-打开一个浏览器，输入：
-http://192.168.1.12:8082/
-
- 
-与zhl-1形成了鲜明对比，这里没有一个worker，这里折腾了这么久的意思就是就是要zhl-1是主机，zhl-2是备用主机，然后后面会测试让zhl-1宕机后恢复正常，然后看看zhl-2的反应，进而来检验spark的原理
-
-zhl-1、zhl-2、zhl-3一起操作:
-jps
-
-打开第二个浏览器输入：
-http://192.168.1.11:8081/
-
- 
-
-★测试zhl-1的master进程宕机（此时zhl-2是备用主机）
-jps
-kill -9 5424
- kill -9 进程号 要用jps具体查看具体修改
-
-不断刷新浏览器页面，此时zhl-1的页面已经无法打开，zhl-2的要多刷新几次（等一会儿）
- 
-也就是此时zhl-2（备用主机）完全继承了原先主机zhl-1的功能！所以正常的想法接下来恢复zhl-1（原主机），看看继承的功能会不会还回去
-
-然后重新启动zhl-1的master进程
-spark/sbin/start-master.sh
-    
-也就是说此时原先的备用主机（zhl-2 STANDBY）变成了实质上的主机，而原先的主机（zhl-1 ALIVE）变成了实质上的备用主机，继承的功能并不会随原主机的恢复而还回去！这就是spark集群的特点。
-
-8. ★运行例程蒙特卡洛计算圆周率
-spark/bin/spark-submit --master spark://zhl-1:7077,zhl-2:7077,zhl-3:7077 --class org.apache.spark.examples.SparkPi spark/examples/jars/spark-examples_2.12-3.0.0-preview2.jar 10000
-10000太大嫌慢了，改小点，运行起来快，但是Π小数点后的精度会下降
- 
-这是数值为10000时候的结果（其实spark运行起来明显发现比hadoop mapreduce快很多）
-这里有这样一组数据供参考：相同的运算次数的情况下，spark用时4.6s，而Hadoop MapReduce 用时35s
-有人对上面这段代码或许会问：master和worker有什么区别，运行例程必须要在master上吗？
-答：不是这样的。master只是管理作业的和产生运行调度表的，实际运行是在各个worker中excutor进程完成的，不用管哪个master是alive（实质上的主机）了,系统会自动找到alive的master并提交任务的。
-    更进一步来讲，上面7. 启用HA功能只是为了测试方便，所以只弄了两台zhl-1、zhl-2，本来这段代码中间应该是--master spark://zhl-1:7077,zhl-2:7077 但是真实情况是会连zhl-3也要写进去的（其中一台是alive，其他全是standby），所有都写的好处在于不去指定，让系统自己找，因为作为客户端大多数时候是没有权限去查看spark的状态的。给一个zk的服务器上下线的例子也是让大家看看zk如何为其他组件提供HA功能的简单原理。
-
-此时观察（即谁是现在实质上的主机master就观察谁，现在是zhl-2）：
-http://192.168.1.12:8082/
-
- 
-上图是正在运行例程中
- 
-上图是例程已经运行完毕
-
-★这里示范以下强行设定内存2G执行会怎么样（内存不够）
-spark/bin/spark-submit --master spark://zhl-1:7077,zhl-2:7077,zhl-3:7077 --class org.apache.spark.examples.SparkPi --executor-memory 2G spark/examples/jars/spark-examples_2.12-3.0.0-preview2.jar 1000
-WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
-没有足够的资源，所以报错
-
-到此为止，spark的部署和例程示范完美结束。
-（正常下不执行）如果关机则关机前记得：
-spark/sbin/stop-all.sh
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-上面黄色部分zhl-1、zhl-2、zhl-3一起操作
-3.2 Spark使用
-3.2.1 Spark shell
-1. Spark 本地运行模式(local)
-spark/bin/spark-shell
- 
-
-ctrl+z退出后仅操作zhl-1：
-jps
- 
-本机运行模式下，使用的是SparkSubmit进程来运行 Spark
-
-2. Spark 集群运行模式（standalone）
-spark/bin/spark-shell --master spark://zhl-1:7077,zhl-2:7077,zhl-3:7077
-跟本地区别就在于后面多加了--master spark：xxxxx 体现在：
-随便选一台比如仅运行zhl-2看看：
-jps
- 
-Standalone集群模式，使用的是CoarseGrainedExecutorBackend进程来运行Spark任务
-
-4.    提交 job
-在 后面输入：
-sc.textFile(&quot;file:///usr/local/spark-3.0.0-preview2-bin-hadoop3.2/README.md&quot;).flatMap(_.split(&quot; &quot;)).map((_,1)).reduceByKey(_+_).sortBy(_._2,false).collect
-如果发现警告WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
-就到浏览器 把多余占用的kill掉
- 
-最后成功运行
-
-然后读取分布式文件系统 HDFS 中的文件（hadoop必须也已经配置完成，否则无法进行）
-确保zhl-1、zhl-2、zhl-3已经处于开启状态（第一行若运行3台均操作，其余行若运行只操作zhl-2）：
-（一般来讲第三行hadoop还没开启，仅运行第三行，其余正常不运行）
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh start
-spark/sbin/start-all.sh
-/usr/local/hadoop-3.2.1/sbin/start-all.sh
-
-标黄仅操作zhl-2
-hdfs dfs -put /root/anaconda-ks.cfg /user/root/
-sc.textFile(&quot;hdfs://zhl-1:9000/user/root/anaconda-ks.cfg&quot;).flatMap(_.split(&quot; &quot;)).map((_,1)).reduceByKey(_+_).collect
-sc.textFile(&quot;hdfs://zhl-1:9000/user/root/anaconda-ks.cfg&quot;).flatMap(_.split(&quot; &quot;)).map((_,1)).reduceByKey(_+_).sortBy(_._2,false).collect
-hdfs dfs -put /root/anaconda-ks.cfg /user/root/将 /root/anaconda-ks.cfg复制到/user/root/路径下
-hdfs dfs -rm -r 路径 可以删除对应路径hdfs文件
-
- 
-如果报错：java.net.ConnectException: Call From zhl-1/192.168.1.11 to zhl-1:9000 failed on connection exception: java.net.ConnectException: Connection refused; For more details see:  http://wiki.apache.org/hadoop/ConnectionRefused
-那就是还没把hadoop开起
-
-最后关机前关闭（黄色zhl-1、zhl-2、zhl-3均运行）
-/usr/local/apache-zookeeper-3.5.7-bin/bin/zkServer.sh stop
-spark/sbin/stop-all.sh
-/usr/local/hadoop-3.2.1/sbin/stop-all.sh
-到此spark完美结束
-这时候zhl-1、zhl-2、zhl-3均备份
-spark集群
-spark集群和shell使用已完成，API编程未完成（要IDEA环境），下一步IDEA
-3.2.2 Spark API 编程应用（待更新）
-</code></pre>
-
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br><span class="line">731</span><br><span class="line">732</span><br><span class="line">733</span><br><span class="line">734</span><br><span class="line">735</span><br><span class="line">736</span><br><span class="line">737</span><br><span class="line">738</span><br><span class="line">739</span><br><span class="line">740</span><br><span class="line">741</span><br><span class="line">742</span><br><span class="line">743</span><br><span class="line">744</span><br><span class="line">745</span><br><span class="line">746</span><br><span class="line">747</span><br><span class="line">748</span><br><span class="line">749</span><br><span class="line">750</span><br><span class="line">751</span><br><span class="line">752</span><br><span class="line">753</span><br><span class="line">754</span><br><span class="line">755</span><br><span class="line">756</span><br><span class="line">757</span><br><span class="line">758</span><br><span class="line">759</span><br><span class="line">760</span><br><span class="line">761</span><br><span class="line">762</span><br><span class="line">763</span><br><span class="line">764</span><br><span class="line">765</span><br><span class="line">766</span><br><span class="line">767</span><br><span class="line">768</span><br><span class="line">769</span><br><span class="line">770</span><br><span class="line">771</span><br><span class="line">772</span><br><span class="line">773</span><br><span class="line">774</span><br><span class="line">775</span><br><span class="line">776</span><br><span class="line">777</span><br><span class="line">778</span><br><span class="line">779</span><br><span class="line">780</span><br><span class="line">781</span><br><span class="line">782</span><br><span class="line">783</span><br><span class="line">784</span><br><span class="line">785</span><br><span class="line">786</span><br><span class="line">787</span><br><span class="line">788</span><br><span class="line">789</span><br><span class="line">790</span><br><span class="line">791</span><br><span class="line">792</span><br><span class="line">793</span><br><span class="line">794</span><br><span class="line">795</span><br><span class="line">796</span><br><span class="line">797</span><br><span class="line">798</span><br><span class="line">799</span><br><span class="line">800</span><br><span class="line">801</span><br><span class="line">802</span><br><span class="line">803</span><br><span class="line">804</span><br><span class="line">805</span><br><span class="line">806</span><br><span class="line">807</span><br><span class="line">808</span><br><span class="line">809</span><br><span class="line">810</span><br><span class="line">811</span><br><span class="line">812</span><br><span class="line">813</span><br><span class="line">814</span><br><span class="line">815</span><br><span class="line">816</span><br><span class="line">817</span><br><span class="line">818</span><br><span class="line">819</span><br><span class="line">820</span><br><span class="line">821</span><br><span class="line">822</span><br><span class="line">823</span><br><span class="line">824</span><br><span class="line">825</span><br><span class="line">826</span><br><span class="line">827</span><br><span class="line">828</span><br><span class="line">829</span><br><span class="line">830</span><br><span class="line">831</span><br><span class="line">832</span><br><span class="line">833</span><br><span class="line">834</span><br><span class="line">835</span><br><span class="line">836</span><br><span class="line">837</span><br><span class="line">838</span><br><span class="line">839</span><br><span class="line">840</span><br><span class="line">841</span><br><span class="line">842</span><br><span class="line">843</span><br><span class="line">844</span><br><span class="line">845</span><br><span class="line">846</span><br><span class="line">847</span><br><span class="line">848</span><br><span class="line">849</span><br><span class="line">850</span><br><span class="line">851</span><br><span class="line">852</span><br><span class="line">853</span><br><span class="line">854</span><br><span class="line">855</span><br><span class="line">856</span><br><span class="line">857</span><br><span class="line">858</span><br><span class="line">859</span><br><span class="line">860</span><br><span class="line">861</span><br><span class="line">862</span><br><span class="line">863</span><br><span class="line">864</span><br><span class="line">865</span><br><span class="line">866</span><br><span class="line">867</span><br><span class="line">868</span><br><span class="line">869</span><br><span class="line">870</span><br><span class="line">871</span><br><span class="line">872</span><br><span class="line">873</span><br><span class="line">874</span><br><span class="line">875</span><br><span class="line">876</span><br><span class="line">877</span><br><span class="line">878</span><br><span class="line">879</span><br><span class="line">880</span><br><span class="line">881</span><br><span class="line">882</span><br><span class="line">883</span><br><span class="line">884</span><br><span class="line">885</span><br><span class="line">886</span><br><span class="line">887</span><br><span class="line">888</span><br><span class="line">889</span><br><span class="line">890</span><br><span class="line">891</span><br><span class="line">892</span><br><span class="line">893</span><br><span class="line">894</span><br><span class="line">895</span><br><span class="line">896</span><br><span class="line">897</span><br><span class="line">898</span><br><span class="line">899</span><br><span class="line">900</span><br><span class="line">901</span><br></pre></td><td class="code"><pre><span class="line">本文档推荐用word打开（wps也可以，就是各级目录不好展开合上），另外zookeeper和spark的IEDA部署和API编程后续也会尽快录制视频上传。</span><br><span class="line">					——compiled by：郑慧乐</span><br><span class="line"></span><br><span class="line">参考pdf：《大数据技术基础系统部署指南v3》（更详细，可对照结果截图，但有部分歧义）</span><br><span class="line"></span><br><span class="line">b站配套视频：</span><br><span class="line">①Virtualbox&amp;Centos7 hadoop-<span class="number">3.2</span><span class="number">.1</span>三台主机伪分布式、完全分布式配置安装教程：https://www.bilibili.com/video/BV1kE411c7KG/</span><br><span class="line">②Virtualbox&amp;Centos7  三台主机zookeeper集群和spark集群配置安装教程：</span><br><span class="line">https://www.bilibili.com/video/BV1k7411y7SD/</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>	Hadoop</span><br><span class="line">注：<span class="number">1.1</span>~<span class="number">1.3</span>无特殊说明三台服务器（zhl-<span class="number">1</span>~zhl-<span class="number">3</span>）在xshell6上一起操作运行；<span class="number">1.4</span>~<span class="number">1.5</span>无特殊说明xshell6先只在一台服务器（zhl-<span class="number">1</span>）上运行，后通过scp同步到其它服务器（zhl-<span class="number">2</span>、zhl-<span class="number">3</span>上）；以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段</span><br><span class="line"></span><br><span class="line"><span class="number">1.1</span>安装OpenJDK1<span class="number">.8</span></span><br><span class="line"><span class="number">1.</span>安装 jdk1<span class="number">.8</span></span><br><span class="line">yum install java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-devel -y</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> whereis 命令查找 java 安装的真实所在位置，设置jdk环境变量</span><br><span class="line">whereis java</span><br><span class="line">这里我的路径：</span><br><span class="line">/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line"><span class="number">3.</span>下载vim</span><br><span class="line">yum install vim -y</span><br><span class="line">vim可以完全替代vi，用于编辑vim直观好处是代码是彩色的，vi只是一片白色</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>★将步骤<span class="number">2</span>中找到具体路径添加到系统环境变量中</span><br><span class="line">vim /etc/profile</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre</span><br><span class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib/dt.jar:$&#123;JAVA_HOME&#125;/lib/tools.jar:$&#123;JRE_HOME&#125;/lib/rt.jar</span><br><span class="line">export HADOOP_HOME=/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line">export PATH=$&#123;PATH&#125;:$&#123;JAVA_HOME&#125;/<span class="built_in">bin</span>:$&#123;HADOOP_HOME&#125;/<span class="built_in">bin</span></span><br><span class="line">source /etc/profile</span><br><span class="line">第<span class="number">1</span>段代码vim进入文本进行编辑</span><br><span class="line">第<span class="number">2</span>段代码输入前按i，进入可编辑模式（下面会有INSERT显示）；代码输入完后按键盘左上角esc键，退出可编辑模式，然后输入:wq!保存强制退出，后面所有vim均是如此（如果只是输入:q，则会不保存退出）</span><br><span class="line">第<span class="number">3</span>段上面的source /etc/profile指令使得jdk环境生效</span><br><span class="line">后面黑色加深意思为三台都先加上，后面完全分布式hadoop会有用。</span><br><span class="line"><span class="number">5.</span>查看jdk环境是否添加成功</span><br><span class="line">java -version</span><br><span class="line"></span><br><span class="line"><span class="number">1.2</span>建立Hadoop用户</span><br><span class="line"><span class="number">1.</span> groupadd 命令建立新用户组</span><br><span class="line">groupadd hadoop </span><br><span class="line">groupadd hdfs </span><br><span class="line">groupadd hbase </span><br><span class="line">groupadd hive</span><br><span class="line">groupadd spark </span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 将组名（如hadoop）添加到用户组（如root）中</span><br><span class="line">usermod -a -G hadoop root</span><br><span class="line">usermod -a -G hdfs root</span><br><span class="line">usermod -a -G hbase root</span><br><span class="line">usermod -a -G hive root</span><br><span class="line">usermod -a -G spark root</span><br><span class="line">cat /etc/group</span><br><span class="line">其中cat /etc/group是查询是否添加成功（也可不执行）</span><br><span class="line"><span class="number">1.3</span>设置集群环境</span><br><span class="line"><span class="number">1.</span> ★将集群的各台主机添加到各台主机的 hosts 列表中</span><br><span class="line">vim /etc/hosts</span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span> zhl-<span class="number">1</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.12</span> zhl-<span class="number">2</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.13</span> zhl-<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>重启服务器，检查network服务是否生效</span><br><span class="line">reboot</span><br><span class="line">此时会发现xshell6断开连接（变红），等虚拟机重新加载显示出login登录界面，再在xshell6处重新连接即可（变绿）。</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> ★用ping检查各虚拟机是否互联</span><br><span class="line">ping zhl-<span class="number">1</span></span><br><span class="line">ping zhl-<span class="number">2</span></span><br><span class="line">ping zhl-<span class="number">3</span></span><br><span class="line">ping下发现正常就直接用ctrl+Z中止进程</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>关闭服务器防火墙</span><br><span class="line">systemctl status firewalld.service</span><br><span class="line">systemctl disable firewalld.service</span><br><span class="line">systemctl stop firewalld.service</span><br><span class="line">systemctl status firewalld.service</span><br><span class="line">第<span class="number">1</span>段代码块：查看当前系统中的防火墙服务的状态，查看是否关闭</span><br><span class="line">若systemctl status firewalld.service显示为inactive状态，后三段代码块可以忽略不执行</span><br><span class="line">第<span class="number">2</span>段代码块：取消开机启动防火墙，确保重启后防火墙为关闭状态</span><br><span class="line">第<span class="number">3</span>段代码块：关闭当前系统中的防火墙服务</span><br><span class="line">第<span class="number">4</span>段代码块：查看当前系统中的防火墙服务的状态，查看是否关闭</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> 设置 selinux 将 SELINUX 改为 disabled</span><br><span class="line">vim /etc/selinux/config</span><br><span class="line">SELINUX=enforcing改成SELINUX= disabled</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span> ★配置SSH无密钥登陆</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-<span class="built_in">id</span> zhl-<span class="number">1</span></span><br><span class="line">ssh-copy-<span class="built_in">id</span> zhl-<span class="number">2</span></span><br><span class="line">ssh-copy-<span class="built_in">id</span> zhl-<span class="number">3</span></span><br><span class="line">每执行完一次ssh-copy-<span class="built_in">id</span> zhl-<span class="number">1</span>，输入yes，接着再输入密码，然后再执行ssh-copy-<span class="built_in">id</span> zhl-<span class="number">2</span>，同理再执行ssh-copy-<span class="built_in">id</span> zhl-<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">7.</span> ★检查无密钥登录配置成功</span><br><span class="line">ssh zhl-<span class="number">1</span></span><br><span class="line">exit</span><br><span class="line">ssh zhl-<span class="number">2</span></span><br><span class="line">exit</span><br><span class="line">ssh zhl-<span class="number">3</span></span><br><span class="line">exit</span><br><span class="line"></span><br><span class="line"><span class="number">1.4</span>安装Hadoop</span><br><span class="line">从这里开始只操作zhl-<span class="number">1</span>一台,无特殊说明zhl-<span class="number">2</span>、zhl-<span class="number">3</span>暂不操作，等zhl-<span class="number">1</span>配置完后后期需要时候会通过scp同步到另外两台服务器上</span><br><span class="line"><span class="number">1.</span> 安装wget指令</span><br><span class="line">yum install wget -y</span><br><span class="line">wget 是一个从网络上自动下载文件的自由工具</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 下载 hadoop 软件包</span><br><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/stable/hadoop-<span class="number">3.2</span><span class="number">.1</span>.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 将 hadoop 安装包放入/usr/local 中并解压</span><br><span class="line">chown -R root /usr/local</span><br><span class="line">tar zxvf hadoop-<span class="number">3.2</span><span class="number">.1</span>.tar.gz -C /usr/local</span><br><span class="line">cd /usr/local</span><br><span class="line">ll</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>检查安装成功</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line"><span class="built_in">bin</span>/hadoop version</span><br><span class="line">这里直接cd或者cd ~可以返回到底，cd ..可以返回上一个文件目录，ls是仅列出当前目录下的所有文件名，ll则是详细列出，运行不了就cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>到这个目录下，就能运行了，后面很多都是要cd xxx(具体目录)下操作的</span><br><span class="line"><span class="number">1.5</span>运行hadoop</span><br><span class="line">无特殊说明只操作zhl-<span class="number">1</span>，而zhl-<span class="number">2</span>、zhl-<span class="number">3</span>暂不操作</span><br><span class="line">Hadoop安装分为<span class="number">3</span>种：</span><br><span class="line">①单机模式:单机模式: Hadoop默认模式为非分布式模式(本地模式) ，无需进行其他配置即可运行。非分布式即单Java进程，方便进行调试。</span><br><span class="line">②伪分布式模式: Hadoop可以在单节点上以伪分布式的方式运行，Hadoop 进程以分离的Java进程来运行，节点既作为NameNode也作为DataNode,同时，读取的是HDFS中的文件。</span><br><span class="line">③完全分布式模式:使用多个节点构成集群环境来运行Hadoop。</span><br><span class="line">实际使用的话是完全分布式，因此不是出于初学目的的话下面可以略过<span class="number">1.5</span><span class="number">.1</span>和<span class="number">1.5</span><span class="number">.2</span>有关本地模式和伪分布式的操作，省时间直接进行<span class="number">1.5</span><span class="number">.3</span>完全分布式最终完成hadoop的<span class="number">3</span>台集群工作任务</span><br><span class="line"><span class="number">1.5</span><span class="number">.1</span>	本地运行hadoop（单机模式） </span><br><span class="line"><span class="number">1.</span> 运行 hadoop 例子的 jar 包，查看有哪些例程。</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line"><span class="built_in">bin</span>/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-<span class="number">3.2</span><span class="number">.1</span>.jar</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 在本地模式下运行grep例程</span><br><span class="line">mkdir <span class="built_in">input</span></span><br><span class="line"><span class="built_in">bin</span>/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-<span class="number">3.2</span><span class="number">.1</span>.jar grep <span class="built_in">input</span> output <span class="string">&#x27;per[a-z.]+&#x27;</span></span><br><span class="line">上述mkdir <span class="built_in">input</span>的意为新建一个名叫<span class="built_in">input</span>的目录</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 查看输出 output 目录中的结果</span><br><span class="line">cd output</span><br><span class="line">ls</span><br><span class="line">cat part-r-<span class="number">00000</span></span><br><span class="line"></span><br><span class="line"><span class="number">1.5</span><span class="number">.2</span>	伪分布式hadoop </span><br><span class="line">进行伪分布式hadoop前在这里可以考虑给zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>系统三个都各自备份；</span><br><span class="line">操作完伪分布式后可以给zhl-<span class="number">1</span>再次备份然后zhl-<span class="number">1</span>回档到第一次备份（可以两次都不备份不回档直接做），zhl-<span class="number">2</span>、zhl-<span class="number">3</span>不用操作</span><br><span class="line">理由：后面的<span class="number">1.5</span><span class="number">.3</span>完全分布式hadoop修改的文件跟伪分布式有重叠，只是内容不一样，当然直接再改也行；另外养成系统备份的好习惯，出了问题好回档，不用全部重做一遍</span><br><span class="line"><span class="number">1.5</span><span class="number">.2</span><span class="number">.1</span>伪分布式运行HDFS</span><br><span class="line"><span class="number">1.</span> 配置core-site.xml</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/core-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;hdfs://localhost:<span class="number">9000</span>&lt;/value&gt; </span><br><span class="line">    &lt;final&gt;true&lt;/final&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">第二段代码块在&lt;configuration&gt;和&lt;/configuration&gt;之间添加！！（下面带&lt;<span class="built_in">property</span>&gt;和&lt;/<span class="built_in">property</span>&gt;的均如此）</span><br><span class="line">上面localhost就可以了，不用改成zhl-<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 配置hdfs-site.xml </span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/hdfs-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;dfs.replication&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;<span class="number">1</span>&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">输入了vim后如果跳出[O]pen Read-Only, (E)dit anyway, (R)ecover, (Q)uit, (A)bort的界面，按键盘E编辑就行了</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>初始化名称节点</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line"><span class="built_in">bin</span>/hdfs namenode -<span class="built_in">format</span></span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>★ 给当前用户配置为 root,随后开启hdfs服务守护进程</span><br><span class="line">export HDFS_NAMENODE_USER=root</span><br><span class="line">export HDFS_DATANODE_USER=root</span><br><span class="line">export HDFS_SECONDARYNAMENODE_USER=root</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/hadoop-env.sh</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line">sbin/start-dfs.sh</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> jps查看JVM 中的hadoop进程</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span> 伪分布式模式运行wordcount例程：先上传文本文件到 hdfs 上的相应的文件目录下</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -mkdir /user</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -mkdir /user/root</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -mkdir <span class="built_in">input</span></span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -put etc/hadoop/*.xml <span class="built_in">input</span></span><br><span class="line">下面一直ls的步骤可跳过</span><br><span class="line">ls</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -ls </span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -ls /user</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -ls /user/root</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -ls /user/root/<span class="built_in">input</span></span><br><span class="line"></span><br><span class="line"><span class="number">7.</span> 运行grep例程</span><br><span class="line"><span class="built_in">bin</span>/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-<span class="number">3.2</span><span class="number">.1</span>.jar grep <span class="built_in">input</span> output <span class="string">&#x27;dfs[a-z.]+&#x27;</span></span><br><span class="line">查找当前用户在 hdfs 文件系统中默认目录下的 <span class="built_in">input</span> 目录中的文本文件中包含有 dfs 的单词，并输出至默认目录/user/root下的 output 目录中</span><br><span class="line"></span><br><span class="line"><span class="number">8.</span>运行成功后查看 output 目录中的结果</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -ls /user/root/output</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -cat output/*</span><br><span class="line">下面也可以将结果传回到本地文件系统（可跳过）</span><br><span class="line"><span class="built_in">bin</span>/hdfs dfs -get output output</span><br><span class="line">ls</span><br><span class="line">ls output/*</span><br><span class="line">cat output/*</span><br><span class="line"></span><br><span class="line"><span class="number">9.</span>关闭伪分布式 HDFS</span><br><span class="line">sbin/stop-dfs.sh</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="number">1.5</span><span class="number">.2</span><span class="number">.2</span>伪分布式运行YARN</span><br><span class="line"><span class="number">1.</span> 配置mapred-site.xml</span><br><span class="line">vim etc/hadoop/mapred-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.application.classpath&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>配置yarn-site.xml</span><br><span class="line">vim etc/hadoop/yarn-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;yarn.nodemanager.env-whitelist&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>启动 YARN 服务守护进程</span><br><span class="line">export YARN_RESOURCEMANAGER_USER=root</span><br><span class="line">export YARN_NODEMANAGER_USER=root</span><br><span class="line">sbin/start-yarn.sh</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>关闭伪分布式YARN</span><br><span class="line">jps </span><br><span class="line">sbin/stop-yarn.sh</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="number">1.5</span><span class="number">.3</span>	完全分布式hadoop </span><br><span class="line">（做过<span class="number">1.5</span><span class="number">.2</span>伪分布式的无视这里）：如果跳过了<span class="number">1.52</span>伪分布式，则在这里系统备份zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>（养成系统备份的好习惯，出了问题好回档，不用全部重做一遍）</span><br><span class="line"></span><br><span class="line">下面依旧是只操作zhl-<span class="number">1</span>，无特殊提示zhl-<span class="number">2</span>、zhl-<span class="number">3</span>不操作</span><br><span class="line"></span><br><span class="line"><span class="number">1.</span>★ 配置hadoop-env.sh运行环境</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/hadoop-env.sh</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line">export HDFS_NAMENODE_USER=root</span><br><span class="line">export HDFS_DATANODE_USER=root</span><br><span class="line">export HDFS_SECONDARYNAMENODE_USER=root</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>★配置core-site.xml(下面&lt;value&gt;hdfs://zhl-<span class="number">1</span>:<span class="number">9000</span>&lt;/value&gt;改成自己的)</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/core-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!-- 必须设置：默认文件系统（存储层和运算层解耦 --&gt; </span><br><span class="line">    &lt;!-- 此处值为uri结构：使用内置的hdfs系统 端口号一般都是<span class="number">9000</span> --&gt;</span><br><span class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;hdfs://zhl-<span class="number">1</span>:<span class="number">9000</span>&lt;/value&gt; </span><br><span class="line">    &lt;final&gt;true&lt;/final&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;!-- 必须设置：hadoop在本地的工作目录，用于放hadoop进程的临时数据，可以自己指定 --&gt;</span><br><span class="line">    &lt;name&gt;hadoop.tmp.<span class="built_in">dir</span>&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/root/hadoop/tmp&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">&lt;<span class="built_in">property</span>&gt;和&lt;/<span class="built_in">property</span>&gt;均在&lt;configuration&gt;&lt;/configuration&gt;之间添加！！</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>★配置hdfs-site.xml（下面&lt;value&gt;zhl-<span class="number">1</span>:<span class="number">9870</span>&lt;/value&gt;改成自己的）</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/hdfs-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!-- hdfs保存namenode当前数据的路径，默认值需要配环境变量，建议使用自己创建的路径, 方便管理--&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.name.<span class="built_in">dir</span>&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/root/hadoop/dfs/name&lt;/value&gt; </span><br><span class="line">    &lt;final&gt;true&lt;/final&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;!-- hdfs保存datanode当前数据的路径，默认值需要配环境变量，建议使用自己创建的路径, 方便管理--&gt;</span><br><span class="line">    &lt;name&gt;dfs.datanode.data.<span class="built_in">dir</span>&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;/root/hadoop/dfs/data&lt;/value&gt;</span><br><span class="line">    &lt;final&gt;true&lt;/final&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;!-- hdfs存储数据的副本数量（避免一台宕机），可以不设置，默认值是<span class="number">3</span>--&gt; </span><br><span class="line">    &lt;name&gt;dfs.replication&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;<span class="number">3</span>&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">   &lt;!-- hdfs监听namenode的web的地址，默认就是<span class="number">9870</span>端口，如果不改端口也可以不设置--&gt; </span><br><span class="line">    &lt;name&gt;dfs.namenode.http-address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;zhl-<span class="number">1</span>:<span class="number">9870</span>&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!-- 配置为false后，可以允许不要检查权限就生成dfs上的文件，方便倒是方便了，但是你需要防止误删除 --&gt;</span><br><span class="line">    &lt;name&gt;dfs.permissions&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;true&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>★配置mapred-site.xml（修改<span class="number">2</span>处：&lt;value&gt;zhl-<span class="number">1</span>:<span class="number">10020</span>&lt;/value&gt;和&lt;value&gt;zhl-<span class="number">1</span>:<span class="number">19888</span>&lt;/value&gt;改成自己的）</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/mapred-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;!-- 必须设置，mapreduce程序使用的资源调度平台，默认值是local,若不改就只能单机运行，不会到集群上了 --&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;yarn&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">  &lt;!-- 这是<span class="number">3.2</span>以上版本需要增加配置的，不配置运行mapreduce任务可能会有问题，记得使用自己的路径 --&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.application.classpath&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt; </span><br><span class="line">    &lt;value&gt;zhl-<span class="number">1</span>:<span class="number">10020</span>&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt; </span><br><span class="line">    &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;zhl-<span class="number">1</span>:<span class="number">19888</span>&lt;/value&gt; </span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span>★配置yarn-site.xml（&lt;value&gt;zhl-<span class="number">1</span>&lt;/value&gt;改成自己的）</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/yarn-site.xml</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!-- 必须配置指定YARN的老大(ResourceManager)在哪一台主机 --&gt;</span><br><span class="line">    &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;zhl-<span class="number">1</span>&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!-- 必须配置提供mapreduce程序获取数据的方式默认为空 --&gt;</span><br><span class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;name&gt;yarn.nodemanager.env-whitelist&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line">  &lt;<span class="built_in">property</span>&gt;</span><br><span class="line">    &lt;!--忽略虚拟内存的检查，如果你是安装在虚拟机上，这个配置很有用，配上去之后后续操作不容易出问题。 --&gt;</span><br><span class="line">    &lt;name&gt;yarn.nodemanager.vmem-check-enabled&lt;/name&gt;</span><br><span class="line">    &lt;value&gt;false&lt;/value&gt;</span><br><span class="line">  &lt;/<span class="built_in">property</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span>★修改 workers,将localhost删除，zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>添加进去</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/workers</span><br><span class="line">zhl-<span class="number">1</span></span><br><span class="line">zhl-<span class="number">2</span></span><br><span class="line">zhl-<span class="number">3</span></span><br><span class="line">cat查看添加是否成功（可跳过）</span><br><span class="line">cat /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/etc/hadoop/workers</span><br><span class="line"></span><br><span class="line"><span class="number">7.</span> 配置 hadoop 中/sbin 中的各项文件</span><br><span class="line">①修改start-dfs.sh</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/start-dfs.sh</span><br><span class="line">HDFS_DATANODE_USER=root</span><br><span class="line">HDFS_DATANODE_SECURE_USER=hdfs</span><br><span class="line">HDFS_NAMENODE_USER=root</span><br><span class="line">HDFS_SECONDARYNAMENODE_USER=root</span><br><span class="line"></span><br><span class="line">②修改stop-dfs.sh</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/stop-dfs.sh</span><br><span class="line">HDFS_DATANODE_USER=root</span><br><span class="line">HDFS_DATANODE_SECURE_USER=hdfs</span><br><span class="line">HDFS_NAMENODE_USER=root</span><br><span class="line">HDFS_SECONDARYNAMENODE_USER=root</span><br><span class="line"></span><br><span class="line">③修改start-yarn.sh</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/start-yarn.sh</span><br><span class="line">YARN_RESOURCEMANAGER_USER=root</span><br><span class="line">HADOOP_SECURE_DN_USER=yarn</span><br><span class="line">YARN_NODEMANAGER_USER=root</span><br><span class="line"></span><br><span class="line">④修改stop-yarn.sh</span><br><span class="line">vim /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/stop-yarn.sh</span><br><span class="line">YARN_RESOURCEMANAGER_USER=root</span><br><span class="line">HADOOP_SECURE_DN_USER=yarn</span><br><span class="line">YARN_NODEMANAGER_USER=root</span><br><span class="line"></span><br><span class="line">⑤★scp复制 hadoop-<span class="number">3.2</span><span class="number">.1</span> 到zhl-<span class="number">2</span>、zhl-<span class="number">3</span>上（这里就解释了为什么一直以来只操作zhl-<span class="number">1</span>，而zhl-<span class="number">2</span>和zhl-<span class="number">3</span>不用操作，因为一台配置好了同步到其它台就ok了）</span><br><span class="line"><span class="keyword">for</span> A <span class="keyword">in</span> &#123;<span class="number">2.</span><span class="number">.3</span>&#125;; do scp -r /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span> zhl-$A:/usr/local;done</span><br><span class="line">注意上面代码<span class="number">2</span>、<span class="number">3</span>和zhl-，根据自己情况具体修改，因为现在只在操作zhl-<span class="number">1</span>，所以要scp复制同步到zhl-<span class="number">2</span>、zhl-<span class="number">3</span>上</span><br><span class="line"></span><br><span class="line"><span class="number">8.</span>启动集群</span><br><span class="line">①初始化集群的名称节点（<span class="built_in">format</span>只执行一次，别重复执行！）</span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/<span class="built_in">bin</span>/hdfs namenode -<span class="built_in">format</span></span><br><span class="line">（正常情况不执行）如果不小心多次<span class="built_in">format</span>出问题了，执行下面六步：</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line">sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line">rm -rf /root/hadoop/dfs/name</span><br><span class="line">rm -rf /root/hadoop/dfs/data</span><br><span class="line">rm -rf hadoop.tmp.<span class="built_in">dir</span></span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/<span class="built_in">bin</span>/hdfs namenode -<span class="built_in">format</span></span><br><span class="line">sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line"></span><br><span class="line">②启动 hadoop 集群</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line">sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line">如果warning说logs does <span class="keyword">not</span> exist.无视掉就好，logs日志可以没有的</span><br><span class="line">一旦使用了sbin/start-<span class="built_in">all</span>.sh后要切记：任何时候关闭虚拟机前先sbin/stop-<span class="built_in">all</span>.sh，否则下次可能报错，集群失败，又要重新格式化啥的很麻烦</span><br><span class="line"></span><br><span class="line"><span class="number">9.</span>检查集群情况</span><br><span class="line">①在zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>中同时输入</span><br><span class="line">jps</span><br><span class="line">查看每台服务器上JVM 中 hadoop 进程运行情况，了解hadoop各组件在服务器集群中的分布情况</span><br><span class="line">   </span><br><span class="line">②★在浏览器中输入</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">9870</span>/</span><br><span class="line"></span><br><span class="line">点击顶部“Datanodes”下翻找到：</span><br><span class="line"> </span><br><span class="line">监控datanode 的状态（出现了<span class="number">3</span>个绿√代表hadoop集群已经配置成功）</span><br><span class="line"></span><br><span class="line">③★在浏览器中输入</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">8088</span>/</span><br><span class="line"></span><br><span class="line">能看到集群管理页面</span><br><span class="line"> 配置是成功的</span><br><span class="line"></span><br><span class="line">④只操作zhl-<span class="number">1</span>，关闭 hadoop 集群（该步骤非常重要，start后关机前一定要先stop集群！！）</span><br><span class="line">cd /usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span></span><br><span class="line">sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line"></span><br><span class="line">这里就<span class="number">3</span>台hadoop完全式分布集群安装就已经成功了，下面的都是用这个集群去运行例程，可以跳过不做，这里总结下：上面在操作的时候，一直在zhl-<span class="number">1</span>上操作，最后scp同步到zhl-<span class="number">2</span>、zhl-<span class="number">3</span>时这么多的配置文件里的zhl-<span class="number">1</span>要改成zhl-<span class="number">2</span>或zhl-<span class="number">3</span>吗？答案是不用的，其他的里面都会是zhl-<span class="number">1</span>，这才是正常的。原先一直用<span class="number">3</span>台xshell6一起操作，导致后面一直被坑出问题，其实只用操作一台，注意避坑。</span><br><span class="line"></span><br><span class="line"><span class="number">10.</span>例程<span class="number">1</span>（省时间可不做跳过，建议做一下）：完全分布式运行wordcount</span><br><span class="line">①在此之前先调整时间，避免后面报错</span><br><span class="line">时间同步调整博客：https://blog.csdn.net/selectdb/article/details/<span class="number">81735104</span></span><br><span class="line">yum install ntp -y</span><br><span class="line">systemctl enable ntpd.service</span><br><span class="line">vim /etc/sysconfig/ntpd</span><br><span class="line">上面的vim添加-g -x参数</span><br><span class="line">systemctl restart ntpd.service</span><br><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">date</span><br><span class="line"></span><br><span class="line">②上传文本文件到 HDFS 中</span><br><span class="line">cd</span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/start-<span class="built_in">all</span>.sh </span><br><span class="line">hdfs dfs -mkdir /test</span><br><span class="line">hdfs dfs -put /etc/profile /test/<span class="built_in">input</span></span><br><span class="line">hdfs dfs -ls /test/<span class="built_in">input</span></span><br><span class="line">hdfs dfs -ls /test/<span class="built_in">input</span>用于查看(非必要步骤可跳)</span><br><span class="line">mkdir用于新建</span><br><span class="line">/etc/profile是随意选的一个文件</span><br><span class="line">/test和/test/<span class="built_in">input</span>是自己可以随意起的文件名</span><br><span class="line">注意上面第三步又开启了集群，后面不用时要关掉</span><br><span class="line">（正常情况下不用执行）如果前面有过多次<span class="built_in">format</span>的行为，第四步会报错，要先离开安全模式，再执行/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/<span class="built_in">bin</span>/hdfs dfs -put test1 /tmp</span><br><span class="line">hadoop dfsadmin -safemode leave</span><br><span class="line"></span><br><span class="line">★接下来再次进入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">9870</span>/</span><br><span class="line"></span><br><span class="line">然后点击右上角UtilitiesBrowse the file system</span><br><span class="line"> </span><br><span class="line">③运行 wordcount 例程</span><br><span class="line">hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-<span class="number">3.2</span><span class="number">.1</span>.jar wordcount /test/<span class="built_in">input</span> /test/output</span><br><span class="line"></span><br><span class="line">★接下来再次进入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">8088</span>/</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">看到多出了这个，wordcount例程到此完美结束</span><br><span class="line"></span><br><span class="line"><span class="number">10.</span>★例程<span class="number">2</span>（省时间可不做跳过，建议做一下）：完全分布式运行蒙特卡洛方法计算圆周率</span><br><span class="line">hadoop jar $HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-examples-<span class="number">3.2</span><span class="number">.1</span>.jar pi <span class="number">10</span> <span class="number">1000</span></span><br><span class="line"> </span><br><span class="line">最后Π结果得出<span class="number">3.1408</span>，想要更精确可以把数字调高，就是运行会变慢</span><br><span class="line">运行时会发现有 </span><br><span class="line">这里的<span class="built_in">map</span>和reduce有进度条原因是这样的：hadoop的分布式计算框架分为两个阶段，第一个是<span class="built_in">map</span>阶段，第二个是reduce阶段。<span class="built_in">map</span>阶段负责对输入文件进行切分处理，然后汇总再分组给reduce进行处理，以达到高效的分布式计算效率</span><br><span class="line"></span><br><span class="line">★同样进入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">8088</span>/</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">看到多出了这个，蒙特卡洛方法计算圆周率例程到此完美结束</span><br><span class="line">至此，hadoop全部配置、例程结束，别忘了输入:	:</span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>	Zookeeper </span><br><span class="line">注：无特殊说明只操作zhl-<span class="number">1</span>，而zhl-<span class="number">2</span>、zhl-<span class="number">3</span>不操作。</span><br><span class="line">以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段</span><br><span class="line"></span><br><span class="line"><span class="number">2.1</span> Zookeeper部署</span><br><span class="line"><span class="number">1.</span> 从 zookeeper 官网下载最新版本的安装包。http://zookeeper.apache.org/</span><br><span class="line">cd</span><br><span class="line">wget http://mirror.bit.edu.cn/apache/zookeeper/stable/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 解压安装 zookeeper，随后查看</span><br><span class="line">tar zxvf apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>.tar.gz -C /usr/local/</span><br><span class="line">ls /usr/local/</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 修改配置文件 zoo.cfg</span><br><span class="line">ls /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/</span><br><span class="line">cp /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/zoo_sample.cfg /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/zoo.cfg</span><br><span class="line">ls /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/</span><br><span class="line">vim /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/zoo.cfg</span><br><span class="line">dataDir=/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData</span><br><span class="line">第二段代码：cp zoo_sample.cfg zoo.cfg将zoo_sample.cfg复制到同目录下，并将名称改为zoo.cfg</span><br><span class="line">最后vim是将原有的dataDir替换掉</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>新建集群数据目录</span><br><span class="line">mkdir /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData</span><br><span class="line">ls /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span>启动Zookeeper服务进程</span><br><span class="line">ll /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span></span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh start</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span>查看Zookeeper服务状态</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line"></span><br><span class="line"><span class="number">7.</span>启动 Zookeeper 客户端连接服务</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkCli.sh</span><br><span class="line"></span><br><span class="line"><span class="number">8.</span>查看Zookeeper的目录</span><br><span class="line">ls /</span><br><span class="line"></span><br><span class="line"><span class="number">9.</span> 退出Zookeeper客户端</span><br><span class="line">quit</span><br><span class="line"></span><br><span class="line"><span class="number">10.</span>退出Zookeeper服务</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="number">11.</span> 修改集群配置文件</span><br><span class="line">在 zookeeper 的数据目录 zkData 中创建 myid 文件：</span><br><span class="line">touch /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData/myid</span><br><span class="line">touch 命令主要用于创建普通文件，如果文件存在，表示修改当前文件时间</span><br><span class="line"></span><br><span class="line">★然后修改 zoo.cfg 配置文件(第一行加入即可)：</span><br><span class="line">vim /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/conf/zoo.cfg</span><br><span class="line"><span class="comment">#cluster configuration</span></span><br><span class="line">server<span class="number">.1</span>=zhl-<span class="number">1</span>:<span class="number">2888</span>:<span class="number">3888</span></span><br><span class="line">server<span class="number">.2</span>=zhl-<span class="number">2</span>:<span class="number">2888</span>:<span class="number">3888</span></span><br><span class="line">server<span class="number">.3</span>=zhl-<span class="number">3</span>:<span class="number">2888</span>:<span class="number">3888</span></span><br><span class="line">这里有一个天坑！注意zhl-<span class="number">1</span>:<span class="number">2888</span>:<span class="number">3888</span>和zhl-<span class="number">2</span>:<span class="number">2888</span>:<span class="number">3888</span>和zhl-<span class="number">3</span>:<span class="number">2888</span>:<span class="number">3888</span>最后一个<span class="number">8</span>后面不要留空格，不要留空格，不要留空格，服务端口号后留了空格非常难检查出来，后面会直接导致zookeeper在解析端口号的时候出现异常，从而使：</span><br><span class="line">这里<span class="number">13.</span> 分别在各个服务器上启动 Zookeeper 服务 </span><br><span class="line">出现FAILED而不是STARTED  启动失败！</span><br><span class="line"></span><br><span class="line"><span class="number">12.</span> ★分布式部署 Zookeeper(<span class="number">3</span>台)</span><br><span class="line">将zhl-<span class="number">1</span>配置好的软件包复制到zhl-<span class="number">2</span>、zhl-<span class="number">3</span>上（只操作zhl-<span class="number">1</span>）</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;<span class="number">2.</span><span class="number">.3</span>&#125;;do scp -r /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span> zhl-$i:/usr/local;done</span><br><span class="line">可以在zhl-<span class="number">2</span>、zhl-<span class="number">3</span>中输入：</span><br><span class="line">ls /usr/local</span><br><span class="line">查看到：apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span> 则复制成功</span><br><span class="line"></span><br><span class="line">★在下一步开启zookeeper前请务必注意！</span><br><span class="line">仅操作zhl-<span class="number">1</span>：</span><br><span class="line">vim /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData/myid</span><br><span class="line"><span class="number">1</span></span><br><span class="line"></span><br><span class="line">仅操作zhl-<span class="number">2</span>：</span><br><span class="line">vim /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData/myid</span><br><span class="line"><span class="number">2</span></span><br><span class="line"></span><br><span class="line">仅操作zhl-<span class="number">3</span>：</span><br><span class="line">vim /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/zkData/myid</span><br><span class="line"><span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="number">13.</span>分别在各个服务器上启动 Zookeeper 服务（若启动失败回看<span class="number">11.</span> ★修改集群配置文件 后面警告）</span><br><span class="line">（jps如果显示有了QuorumPeerMain就不执行）zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh start</span><br><span class="line"></span><br><span class="line"><span class="number">14.</span>查看各个服务状态</span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line"></span><br><span class="line"><span class="number">15.</span> 测试故障重新选举 Leader</span><br><span class="line">在步骤<span class="number">14</span>中zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>谁显示leader先操作谁，其余两个原follower之后顺序随意</span><br><span class="line">这里是zhl-<span class="number">3</span>是leader，则仅操作zhl-<span class="number">3</span>：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh restart</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line"></span><br><span class="line">接下来仅操作zhl-<span class="number">1</span>：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line"></span><br><span class="line">仅操作zhl-<span class="number">2</span>：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line">这里显示zhl-<span class="number">2</span>变成了leader</span><br><span class="line">结论：原先的leader在restart即故障后，即使重新恢复正常，也不再是leader了，而是由剩下的正常的follower之一继承了leader之位（<span class="number">3</span>台情况下zhl-<span class="number">3</span>不是leader后zhl-<span class="number">2</span>会继承）</span><br><span class="line"></span><br><span class="line"><span class="number">16.</span> 测试HA(High Available缩写，指高可用性集群)</span><br><span class="line">关闭zhl-<span class="number">3</span>的Zookeeper 服务，Zookeeper 集群服务仍然可以工作（半数以上服务器有效）</span><br><span class="line">仅操作zhl-<span class="number">3</span>：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">接下来仅操作zhl-<span class="number">1</span>，查看zookeeper集群是否仍能工作</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line"></span><br><span class="line">再关闭zhl-<span class="number">2</span>的Zookeeper服务，整个Zookeeper集群服务失效（低于半数服务器失效）</span><br><span class="line">仅操作zhl-<span class="number">2</span>:</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">接下来仅操作zhl-<span class="number">1</span>，查看zookeeper集群是否仍能工作</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh status</span><br><span class="line">虽然集群失效了，但是仍然开启的服务器用jps能够观察的到</span><br><span class="line"></span><br><span class="line">（正常不执行）最后zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">zookeeper的集群部署和测试到此完美结束，下面是zookeeper的使用（建议做一下，节省时间可跳过，直接进行spark，不影响）</span><br><span class="line"></span><br><span class="line"><span class="number">2.2</span> Zookeeper使用（省时间可跳过直接spark，不影响）</span><br><span class="line"><span class="number">2.2</span><span class="number">.1</span> Zookeeper shell</span><br><span class="line"><span class="number">1.</span> </span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起打开集群，后面无特殊说明仅在zhl-<span class="number">1</span>上操作：</span><br><span class="line">（jps如果显示有了QuorumPeerMain就不执行start）</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh start</span><br><span class="line">启动客户端连接 Zookeeper 集群</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkCli.sh</span><br><span class="line">ls /</span><br><span class="line">其中ls查看当前 znode 中所包含的内容</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 测试shell命令：<span class="built_in">help</span>列出所有可用命令及用法。</span><br><span class="line"><span class="built_in">help</span></span><br><span class="line">ls -s /</span><br><span class="line"></span><br><span class="line">①创建普通节点（创建时要写入数据）</span><br><span class="line">create /testroot</span><br><span class="line">ls /</span><br><span class="line">ls -s /testroot</span><br><span class="line">create /testroot/test1</span><br><span class="line">ls /testroot</span><br><span class="line">create /testroot/test2</span><br><span class="line">ls /testroot</span><br><span class="line"></span><br><span class="line">②更新和读取节点目录中的数据</span><br><span class="line"><span class="built_in">set</span> /testroot/test1 <span class="string">&quot;Hello test1&quot;</span></span><br><span class="line"><span class="built_in">set</span> /testroot/test2 <span class="string">&quot;Hello test2&quot;</span></span><br><span class="line">get /testroot </span><br><span class="line">get /testroot/test1</span><br><span class="line">get /testroot/test2</span><br><span class="line">quit关闭客户端，/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkCli.sh + 回车 则是启动客户端</span><br><span class="line"></span><br><span class="line">③创建带有序号的znode目录</span><br><span class="line">create -s /testroot/test3</span><br><span class="line">ls /testroot</span><br><span class="line"></span><br><span class="line">④监听znode的值的变化，启动另一个客户端（注册一次watch只能监听一次）</span><br><span class="line">get -w /testroot</span><br><span class="line"><span class="built_in">set</span> /testroot <span class="string">&quot;Hello,h02&quot;</span></span><br><span class="line"></span><br><span class="line">⑤监听znode子目录的变化(注册一次watch只能监听一次)</span><br><span class="line">ls -w /testroot</span><br><span class="line">create -s /testroot/test3</span><br><span class="line"></span><br><span class="line">⑥删除znode目录</span><br><span class="line">delete /testroot/test1</span><br><span class="line">ls /testroot</span><br><span class="line"></span><br><span class="line">⑦查看znode详细信息</span><br><span class="line">stat /</span><br><span class="line">stat /testroot</span><br><span class="line"></span><br><span class="line">⑧递归删除 znode 目录</span><br><span class="line">deleteall /testroot</span><br><span class="line">ls /</span><br><span class="line">quit</span><br><span class="line"></span><br><span class="line">（正常不执行）最后zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">这时候zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>均备份</span><br><span class="line">zookeeper集群</span><br><span class="line">zookeeper集群和shell使用已完成，API编程未完成（要IDEA环境），下一步spark</span><br><span class="line"><span class="number">2.2</span><span class="number">.2</span> Zookeeper API 编程应用（待更新）</span><br><span class="line">(具体安装看视频)输入浏览器下载IntelliJ IDEA:</span><br><span class="line">https://www.jetbrains.com/</span><br><span class="line"></span><br><span class="line">网站打不开解决办法：</span><br><span class="line">https://blog.csdn.net/n2278556874/article/details/<span class="number">101477069</span></span><br><span class="line">破解Ultimate版：https://npegeek.com/</span><br><span class="line">Ultimate激活码（截至<span class="number">2021.2</span><span class="number">.18</span>，过时了自己去上面网站找）</span><br><span class="line">E70JHCOV2H-eyJsaWNlbnNlSWQiOiJFNzBKSENPVjJIIiwibGljZW5zZWVOYW1lIjoi5bGx5Lic55CG5bel5aSn5a2mIiwiYXNzaWduZWVOYW1lIjoiIiwiYXNzaWduZWVFbWFpbCI6IiIsImxpY2Vuc2VSZXN0cmljdGlvbiI6IkZvciBlZHVjYXRpb25hbCB1c2Ugb25seSIsImNoZWNrQ29uY3VycmVudFVzZSI6ZmFsc2UsInByb2R1Y3RzIjpbeyJjb2RlIjoiSUkiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJBQyIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkRQTiIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IlBTIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiR08iLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJETSIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkNMIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUlMwIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUkMiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJSRCIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IlBDIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiUk0iLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJXUyIsInBhaWRVcFRvIjoiMjAyMS0wMi0xOCJ9LHsiY29kZSI6IkRCIiwicGFpZFVwVG8iOiIyMDIxLTAyLTE4In0seyJjb2RlIjoiREMiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifSx7ImNvZGUiOiJSU1UiLCJwYWlkVXBUbyI6IjIwMjEtMDItMTgifV0sImhhc2giOiIxNjc5MTgwMy8wIiwiZ3JhY2VQZXJpb2REYXlzIjo3LCJhdXRvUHJvbG9uZ2F0ZWQiOmZhbHNlLCJpc0F1dG9Qcm9sb25nYXRlZCI6ZmFsc2V9-qlgtO4xVGHX/r45fIKMaR6B9pWQtucrCYVsz0o00crcAiYN1k/kSMygggYl187B0u0jeXQCe4BmQIItKL79x6NwoPn43inreVhZ88f4+Cbl+V/KGeAYeybon+7YoTs8FY4+31ANW/LwBPxkPnlErxYdQ6oc/k6mnxIOm5Nf8WjKRfYYIl5Bhmdt1gHMGgFsocCcTLLiqDUGEcPj5tUIJXwwYaeKAR3YGXm/P73QpnYR/BcGaodBN3jprQRxsS5Ia5y06rrDAJcPSZuttAFpAit/4o/gq2XzhrjaBCtOMxNzk3XEAT82glTlWQOQx6KnRq6D7WUXzd81g44aP+Dca5Q==-MIIElTCCAn2gAwIBAgIBCTANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBMB4XDTE4MTEwMTEyMjk0NloXDTIwMTEwMjEyMjk0NlowaDELMAkGA1UEBhMCQ1oxDjAMBgNVBAgMBU51c2xlMQ8wDQYDVQQHDAZQcmFndWUxGTAXBgNVBAoMEEpldEJyYWlucyBzLnIuby4xHTAbBgNVBAMMFHByb2QzeS1mcm9tLTIwMTgxMTAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxcQkq+zdxlR2mmRYBPzGbUNdMN6OaXiXzxIWtMEkrJMO/5oUfQJbLLuMSMK0QHFmaI37WShyxZcfRCidwXjot4zmNBKnlyHodDij/78TmVqFl8nOeD5+07B8VEaIu7c3E1N+e1doC6wht4I4+IEmtsPAdoaj5WCQVQbrI8KeT8M9VcBIWX7fD0fhexfg3ZRt0xqwMcXGNp3DdJHiO0rCdU+Itv7EmtnSVq9jBG1usMSFvMowR25mju2JcPFp1+I4ZI+FqgR8gyG8oiNDyNEoAbsR3lOpI7grUYSvkB/xVy/VoklPCK2h0f0GJxFjnye8NT1PAywoyl7RmiAVRE/EKwIDAQABo4GZMIGWMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGEpG9oZGcfLMGNBkY7SgHiMGgTcMEgGA1UdIwRBMD+AFKOetkhnQhI2Qb1t4Lm0oFKLl/GzoRykGjAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBggkA0myxg7KDeeEwEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0PBAQDAgWgMA0GCSqGSIb3DQEBCwUAA4ICAQAF8uc+YJOHHwOFcPzmbjcxNDuGoOUIP+2h1R75Lecswb7ru2LWWSUMtXVKQzChLNPn/72W0k+oI056tgiwuG7M49LXp4zQVlQnFmWU1wwGvVhq5R63Rpjx1zjGUhcXgayu7+9zMUW596Lbomsg8qVve6euqsrFicYkIIuUu4zYPndJwfe0YkS5nY72SHnNdbPhEnN8wcB2Kz+OIG0lih3yz5EqFhld03bGp222ZQCIghCTVL6QBNadGsiN/lWLl4JdR3lJkZzlpFdiHijoVRdWeSWqM4y0t23c92HXKrgppoSV18XMxrWVdoSM3nuMHwxGhFyde05OdDtLpCv+jlWf5REAHHA201pAU6bJSZINyHDUTB+Beo28rRXSwSh3OUIvYwKNVeoBY+KwOJ7WnuTCUq1meE6GkKc4D/cXmgpOyW/1SmBz3XjVIi/zprZ0zf3qH5mkphtg6ksjKgKjmx1cXfZAAX6wcDBNaCL+Ortep1Dh8xDUbqbBVNBL4jbiL3i3xsfNiyJgaZ5sX7i8tmStEpLbPwvHcByuf59qJhV/bZOl8KqJBETCDJcY6O2aqhTUy+9x93ThKs1GKrRPePrWPluud7ttlgtRveit/pcBrnQcXOl1rHq7ByB8CFAxNotRUYL9IF5n3wJOgkPojMy6jetQA5Ogc8Sm7RG6vg1yow==</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>	Spark</span><br><span class="line">注：无特殊说明只操作zhl-<span class="number">1</span>，而zhl-<span class="number">2</span>、zhl-<span class="number">3</span>不操作。</span><br><span class="line">以下所有步骤后加★意为下面代码可能需要具体修改（加红部分），没检查确认前不要看都不看直接完全copy代码段</span><br><span class="line">zookeeper结束后zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>均备份</span><br><span class="line"><span class="number">3.1</span> Spark部署</span><br><span class="line"><span class="number">1.</span> 从spark官网下载最新版本的安装包。http://spark.apache.org/</span><br><span class="line">cd</span><br><span class="line">wget http://mirror.bit.edu.cn/apache/spark/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span>.tgz</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> 解压安装spark，随后查看</span><br><span class="line">tar -zxvf spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span>.tgz -C /usr/local/</span><br><span class="line">ls /usr/local/</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span>建立软链接</span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作：</span><br><span class="line">ln -s /usr/local/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span> spark</span><br><span class="line">ln -s /usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span> zookeeper</span><br><span class="line">ll</span><br><span class="line">相当于：ls /usr/local/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span>/conf/简化为ls spark/conf/</span><br><span class="line">想删除软链接的时候：rm -rf 目标链接</span><br><span class="line">上面zhl-<span class="number">2</span>、zhl-<span class="number">3</span>会爆红，属于正常现象（爆红就是不存在那个目录）</span><br><span class="line">后面步骤会通过scp同步到zhl-<span class="number">2</span>、zhl-<span class="number">3</span>上，爆红会消失</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> ★修改配置文件spark-env.sh和slaves</span><br><span class="line">ls spark/conf/</span><br><span class="line">cp spark/conf/spark-env.sh.template spark/conf/spark-env.sh</span><br><span class="line">cp spark/conf/slaves.template spark/conf/slaves</span><br><span class="line">ls spark/conf/</span><br><span class="line">vim spark/conf/spark-env.sh</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line">export SPARK_WORKER_CORES=<span class="number">1</span></span><br><span class="line">export SPARK_WORKER_INSTANCES=<span class="number">1</span> </span><br><span class="line">export SPARK_MASTER_HOST=zhl-<span class="number">1</span></span><br><span class="line">export SPARK_MASTER_PORT=<span class="number">7077</span></span><br><span class="line">vim spark/conf/slaves</span><br><span class="line">zhl-<span class="number">1</span></span><br><span class="line">zhl-<span class="number">2</span></span><br><span class="line">zhl-<span class="number">3</span></span><br><span class="line">vim spark/conf/slaves时把localhost删掉</span><br><span class="line">虚拟机内存默认2G+，若比较小（如1G），需要把conf/spark_env.sh 中把 SPARK 的 </span><br><span class="line">WORKER 的工作内存和 executor 内存降低成 900M 或者更低：</span><br><span class="line">（正常不运行）</span><br><span class="line">vim spark/conf/spark-env.sh</span><br><span class="line">export SPARK_EXECUTOR_MEMORY=512M </span><br><span class="line">export SPARK_WORKER_MEMORY=512M </span><br><span class="line">export SPARK_DRIVER_MEMORY=512M</span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> ★将软件包传输至其他节点上</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;<span class="number">2.</span><span class="number">.3</span>&#125;;do scp -r /usr/local/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span> zhl-$i:/usr/local;done</span><br><span class="line">这里把/usr/local/spark-<span class="number">3.0</span><span class="number">.0</span>-preview2-<span class="built_in">bin</span>-hadoop3<span class="number">.2</span>改成spark没用……</span><br><span class="line"></span><br><span class="line">zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作:</span><br><span class="line">ll</span><br><span class="line">可以发现爆红消失</span><br><span class="line"></span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作:</span><br><span class="line">ls spark</span><br><span class="line"></span><br><span class="line"><span class="number">6.</span>启动spark 集群(standalone 模式)</span><br><span class="line">下面又仅操作zhl-<span class="number">1</span>：</span><br><span class="line">spark/sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line">查看</span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作:</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line">★浏览器输入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">8081</span>/</span><br><span class="line"></span><br><span class="line">如果<span class="number">8081</span>打不开，则输入</span><br><span class="line">（正常不运行）</span><br><span class="line">tail -n <span class="number">100</span> spark/logs/spark-root-org.apache.spark.deploy.master.Master-<span class="number">1</span>-zhl-<span class="number">1.</span>out</span><br><span class="line">上面tail命令查看日志最后<span class="number">100</span>行，可以看出端口尝试过程，可能是<span class="number">8080</span>，或者<span class="number">8082</span>等等</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">至此spark安装完成</span><br><span class="line"></span><br><span class="line"><span class="number">7.</span> 启用 HA 功能（zookeeper必须已经配置完！否则无法进行）</span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作:</span><br><span class="line">vim spark/conf/spark-env.sh</span><br><span class="line">将export SPARK_MASTER_HOST=zhl-<span class="number">1</span>和export SPARK_MASTER_PORT=<span class="number">7077</span>前面加<span class="comment">#注释掉，后面加一行</span></span><br><span class="line">export SPARK_DAEMON_JAVA_OPTS=<span class="string">&quot;-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zhl-1:2181,zhl-2:2181,zhl-3:2181 -Dspark.deploy.zookeeper.dir=/spark&quot;</span></span><br><span class="line">即最终变成</span><br><span class="line">export JAVA_HOME=/usr/lib/jvm/java-<span class="number">1.8</span><span class="number">.0</span>-openjdk-<span class="number">1.8</span><span class="number">.0</span><span class="number">.242</span>.b08-<span class="number">0.</span>el7_7.x86_64</span><br><span class="line">export SPARK_WORKER_CORES=<span class="number">1</span></span><br><span class="line">export SPARK_WORKER_INSTANCES=<span class="number">1</span></span><br><span class="line"><span class="comment">#export SPARK_MASTER_HOST=zhl-1</span></span><br><span class="line"><span class="comment">#export SPARK_MASTER_PORT=7077</span></span><br><span class="line">export SPARK_DAEMON_JAVA_OPTS=<span class="string">&quot;-Dspark.deploy.recoveryMode=ZOOKEEPER -Dspark.deploy.zookeeper.url=zhl-1:2181,zhl-2:2181,zhl-3:2181 -Dspark.deploy.zookeeper.dir=/spark&quot;</span></span><br><span class="line">下面这两步别跳，spark关了重新启动一下，不然后面这里的</span><br><span class="line"> 会只显示[zookeeper]</span><br><span class="line">spark/sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line">spark/sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line"></span><br><span class="line">（jps三台均显示QuorumPeerMain则不用）zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh start</span><br><span class="line"></span><br><span class="line">仅操作zhl-<span class="number">1</span>：</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkCli.sh</span><br><span class="line">ls /</span><br><span class="line">ls /spark -s</span><br><span class="line">quit</span><br><span class="line">其中输入ls /后，必须要同时看到spark和zookeeper才能算成功</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">★仅操作zhl-<span class="number">2</span>：</span><br><span class="line">spark/sbin/start-master.sh</span><br><span class="line">tail -n <span class="number">100</span> spark/logs/spark-root-org.apache.spark.deploy.master.Master-<span class="number">1</span>-zhl-<span class="number">2.</span>out</span><br><span class="line"> </span><br><span class="line">通过日志找到了zhl-<span class="number">2</span>使用了<span class="number">8082</span>端口</span><br><span class="line">打开一个浏览器，输入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.12</span>:<span class="number">8082</span>/</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">与zhl-<span class="number">1</span>形成了鲜明对比，这里没有一个worker，这里折腾了这么久的意思就是就是要zhl-<span class="number">1</span>是主机，zhl-<span class="number">2</span>是备用主机，然后后面会测试让zhl-<span class="number">1</span>宕机后恢复正常，然后看看zhl-<span class="number">2</span>的反应，进而来检验spark的原理</span><br><span class="line"></span><br><span class="line">zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作:</span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line">打开第二个浏览器输入：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span>:<span class="number">8081</span>/</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">★测试zhl-<span class="number">1</span>的master进程宕机（此时zhl-<span class="number">2</span>是备用主机）</span><br><span class="line">jps</span><br><span class="line">kill -<span class="number">9</span> <span class="number">5424</span></span><br><span class="line"> kill -<span class="number">9</span> 进程号 要用jps具体查看具体修改</span><br><span class="line"></span><br><span class="line">不断刷新浏览器页面，此时zhl-<span class="number">1</span>的页面已经无法打开，zhl-<span class="number">2</span>的要多刷新几次（等一会儿）</span><br><span class="line"> </span><br><span class="line">也就是此时zhl-<span class="number">2</span>（备用主机）完全继承了原先主机zhl-<span class="number">1</span>的功能！所以正常的想法接下来恢复zhl-<span class="number">1</span>（原主机），看看继承的功能会不会还回去</span><br><span class="line"></span><br><span class="line">然后重新启动zhl-<span class="number">1</span>的master进程</span><br><span class="line">spark/sbin/start-master.sh</span><br><span class="line">    </span><br><span class="line">也就是说此时原先的备用主机（zhl-<span class="number">2</span> STANDBY）变成了实质上的主机，而原先的主机（zhl-<span class="number">1</span> ALIVE）变成了实质上的备用主机，继承的功能并不会随原主机的恢复而还回去！这就是spark集群的特点。</span><br><span class="line"></span><br><span class="line"><span class="number">8.</span> ★运行例程蒙特卡洛计算圆周率</span><br><span class="line">spark/<span class="built_in">bin</span>/spark-submit --master spark://zhl-<span class="number">1</span>:<span class="number">7077</span>,zhl-<span class="number">2</span>:<span class="number">7077</span>,zhl-<span class="number">3</span>:<span class="number">7077</span> --<span class="class"><span class="keyword">class</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">spark</span>.<span class="title">examples</span>.<span class="title">SparkPi</span> <span class="title">spark</span>/<span class="title">examples</span>/<span class="title">jars</span>/<span class="title">spark</span>-<span class="title">examples_2</span>.12-3.0.0-<span class="title">preview2</span>.<span class="title">jar</span> 10000</span></span><br><span class="line"><span class="class">10000太大嫌慢了，改小点，运行起来快，但是Π小数点后的精度会下降</span></span><br><span class="line"><span class="class"> </span></span><br><span class="line"><span class="class">这是数值为10000时候的结果（其实<span class="title">spark</span>运行起来明显发现比<span class="title">hadoop</span> <span class="title">mapreduce</span>快很多）</span></span><br><span class="line"><span class="class">这里有这样一组数据供参考：相同的运算次数的情况下，<span class="title">spark</span>用时4.6<span class="title">s</span>，而<span class="title">Hadoop</span> <span class="title">MapReduce</span> 用时35<span class="title">s</span></span></span><br><span class="line"><span class="class">有人对上面这段代码或许会问：<span class="title">master</span>和<span class="title">worker</span>有什么区别，运行例程必须要在<span class="title">master</span>上吗？</span></span><br><span class="line"><span class="class">答：不是这样的。<span class="title">master</span>只是管理作业的和产生运行调度表的，实际运行是在各个<span class="title">worker</span>中<span class="title">excutor</span>进程完成的，不用管哪个<span class="title">master</span>是<span class="title">alive</span>（实质上的主机）了,系统会自动找到<span class="title">alive</span>的<span class="title">master</span>并提交任务的。</span></span><br><span class="line"><span class="class">	更进一步来讲，上面7. 启用<span class="title">HA</span>功能只是为了测试方便，所以只弄了两台<span class="title">zhl</span>-1、<span class="title">zhl</span>-2，本来这段代码中间应该是--<span class="title">master</span> <span class="title">spark</span>:</span>//zhl-<span class="number">1</span>:<span class="number">7077</span>,zhl-<span class="number">2</span>:<span class="number">7077</span> 但是真实情况是会连zhl-<span class="number">3</span>也要写进去的（其中一台是alive，其他全是standby），所有都写的好处在于不去指定，让系统自己找，因为作为客户端大多数时候是没有权限去查看spark的状态的。给一个zk的服务器上下线的例子也是让大家看看zk如何为其他组件提供HA功能的简单原理。</span><br><span class="line"></span><br><span class="line">此时观察（即谁是现在实质上的主机master就观察谁，现在是zhl-<span class="number">2</span>）：</span><br><span class="line">http://<span class="number">192.168</span><span class="number">.1</span><span class="number">.12</span>:<span class="number">8082</span>/</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">上图是正在运行例程中</span><br><span class="line"> </span><br><span class="line">上图是例程已经运行完毕</span><br><span class="line"></span><br><span class="line">★这里示范以下强行设定内存2G执行会怎么样（内存不够）</span><br><span class="line">spark/<span class="built_in">bin</span>/spark-submit --master spark://zhl-<span class="number">1</span>:<span class="number">7077</span>,zhl-<span class="number">2</span>:<span class="number">7077</span>,zhl-<span class="number">3</span>:<span class="number">7077</span> --<span class="class"><span class="keyword">class</span> <span class="title">org</span>.<span class="title">apache</span>.<span class="title">spark</span>.<span class="title">examples</span>.<span class="title">SparkPi</span> --<span class="title">executor</span>-<span class="title">memory</span> 2<span class="title">G</span> <span class="title">spark</span>/<span class="title">examples</span>/<span class="title">jars</span>/<span class="title">spark</span>-<span class="title">examples_2</span>.12-3.0.0-<span class="title">preview2</span>.<span class="title">jar</span> 1000</span></span><br><span class="line"><span class="class"><span class="title">WARN</span> <span class="title">TaskSchedulerImpl</span>:</span> Initial job has <span class="keyword">not</span> accepted <span class="built_in">any</span> resources; check your cluster UI to ensure that workers are registered <span class="keyword">and</span> have sufficient resources</span><br><span class="line">没有足够的资源，所以报错</span><br><span class="line"></span><br><span class="line">到此为止，spark的部署和例程示范完美结束。</span><br><span class="line">（正常下不执行）如果关机则关机前记得：</span><br><span class="line">spark/sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">上面黄色部分zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>一起操作</span><br><span class="line"><span class="number">3.2</span> Spark使用</span><br><span class="line"><span class="number">3.2</span><span class="number">.1</span> Spark shell</span><br><span class="line"><span class="number">1.</span> Spark 本地运行模式(local)</span><br><span class="line">spark/<span class="built_in">bin</span>/spark-shell</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">ctrl+z退出后仅操作zhl-<span class="number">1</span>：</span><br><span class="line">jps</span><br><span class="line"> </span><br><span class="line">本机运行模式下，使用的是SparkSubmit进程来运行 Spark</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> Spark 集群运行模式（standalone）</span><br><span class="line">spark/<span class="built_in">bin</span>/spark-shell --master spark://zhl-<span class="number">1</span>:<span class="number">7077</span>,zhl-<span class="number">2</span>:<span class="number">7077</span>,zhl-<span class="number">3</span>:<span class="number">7077</span></span><br><span class="line">跟本地区别就在于后面多加了--master spark：xxxxx 体现在：</span><br><span class="line">随便选一台比如仅运行zhl-<span class="number">2</span>看看：</span><br><span class="line">jps</span><br><span class="line"> </span><br><span class="line">Standalone集群模式，使用的是CoarseGrainedExecutorBackend进程来运行Spark任务</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span>	提交 job</span><br><span class="line">在 后面输入：</span><br><span class="line">sc.textFile(<span class="string">&quot;file:///usr/local/spark-3.0.0-preview2-bin-hadoop3.2/README.md&quot;</span>).flatMap(_.split(<span class="string">&quot; &quot;</span>)).<span class="built_in">map</span>((_,<span class="number">1</span>)).reduceByKey(_+_).sortBy(_._2,false).collect</span><br><span class="line">如果发现警告WARN TaskSchedulerImpl: Initial job has <span class="keyword">not</span> accepted <span class="built_in">any</span> resources; check your cluster UI to ensure that workers are registered <span class="keyword">and</span> have sufficient resources</span><br><span class="line">就到浏览器 把多余占用的kill掉</span><br><span class="line"> </span><br><span class="line">最后成功运行</span><br><span class="line"></span><br><span class="line">然后读取分布式文件系统 HDFS 中的文件（hadoop必须也已经配置完成，否则无法进行）</span><br><span class="line">确保zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>已经处于开启状态（第一行若运行<span class="number">3</span>台均操作，其余行若运行只操作zhl-<span class="number">2</span>）：</span><br><span class="line">（一般来讲第三行hadoop还没开启，仅运行第三行，其余正常不运行）</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh start</span><br><span class="line">spark/sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/start-<span class="built_in">all</span>.sh</span><br><span class="line"></span><br><span class="line">标黄仅操作zhl-<span class="number">2</span></span><br><span class="line">hdfs dfs -put /root/anaconda-ks.cfg /user/root/</span><br><span class="line">sc.textFile(<span class="string">&quot;hdfs://zhl-1:9000/user/root/anaconda-ks.cfg&quot;</span>).flatMap(_.split(<span class="string">&quot; &quot;</span>)).<span class="built_in">map</span>((_,<span class="number">1</span>)).reduceByKey(_+_).collect</span><br><span class="line">sc.textFile(<span class="string">&quot;hdfs://zhl-1:9000/user/root/anaconda-ks.cfg&quot;</span>).flatMap(_.split(<span class="string">&quot; &quot;</span>)).<span class="built_in">map</span>((_,<span class="number">1</span>)).reduceByKey(_+_).sortBy(_._2,false).collect</span><br><span class="line">hdfs dfs -put /root/anaconda-ks.cfg /user/root/将 /root/anaconda-ks.cfg复制到/user/root/路径下</span><br><span class="line">hdfs dfs -rm -r 路径 可以删除对应路径hdfs文件</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">如果报错：java.net.ConnectException: Call From zhl-<span class="number">1</span>/<span class="number">192.168</span><span class="number">.1</span><span class="number">.11</span> to zhl-<span class="number">1</span>:<span class="number">9000</span> failed on connection exception: java.net.ConnectException: Connection refused; For more details see:  http://wiki.apache.org/hadoop/ConnectionRefused</span><br><span class="line">那就是还没把hadoop开起</span><br><span class="line"></span><br><span class="line">最后关机前关闭（黄色zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>均运行）</span><br><span class="line">/usr/local/apache-zookeeper-<span class="number">3.5</span><span class="number">.7</span>-<span class="built_in">bin</span>/<span class="built_in">bin</span>/zkServer.sh stop</span><br><span class="line">spark/sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line">/usr/local/hadoop-<span class="number">3.2</span><span class="number">.1</span>/sbin/stop-<span class="built_in">all</span>.sh</span><br><span class="line">到此spark完美结束</span><br><span class="line">这时候zhl-<span class="number">1</span>、zhl-<span class="number">2</span>、zhl-<span class="number">3</span>均备份</span><br><span class="line">spark集群</span><br><span class="line">spark集群和shell使用已完成，API编程未完成（要IDEA环境），下一步IDEA</span><br><span class="line"><span class="number">3.2</span><span class="number">.2</span> Spark API 编程应用（待更新）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -1297,7 +396,7 @@ spark集群和shell使用已完成，API编程未完成（要IDEA环境），下
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -1334,12 +433,8 @@ spark集群和shell使用已完成，API编程未完成（要IDEA环境），下
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Java 类加载机制Java 虚拟机的启动是通过引导类加载器 ( Bootstrap Class Loader ) 创建一个初始类  (Initial Class ) 来完成，">
@@ -85,7 +85,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,59 +235,9 @@
 <p>虚拟机把描述类的数据从class文件加载到内存，并对数据进行校验，转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是虚拟机的类加载机制。</p>
 <p>什么是类的加载</p>
 <p>类的加载指的是将类的.class文件中的二进制数据读入到内存中，将其放在运行时数据区的方法区内，然后在堆区创建一个java.lang.Class对象，用来封装类在方法区内的数据结构。类的加载的最终产品是位于堆区中的Class对象，Class对象封装了类在方法区内的数据结构，并且向Java程序员提供了访问方法区内的数据结构的接口。<br>类加载器并不需要等到某个类被“首次主动使用”时再加载它，JVM规范允许类加载器在预料某个类将要被使用时就预先加载它，如果在预先加载的过程中遇到了.class文件缺失或存在错误，类加载器必须在程序首次主动使用该类时才报告错误（LinkageError错误）如果这个类一直没有被程序主动使用，那么类加载器就不会报告错误。</p>
-<pre><code class="java">public class ClassLoaderTest &#123;
-    public static void main(String[] args) &#123;
-        System.out.println(&quot;爸爸的岁数:&quot; + Son.factor);  //入口1
-        // new Son();  //入口 2
-    &#125;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爸爸的岁数:&quot;</span> + Son.factor);  <span class="comment">//入口1</span></span><br><span class="line">        <span class="comment">// new Son();  //入口 2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grandpa</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爷爷在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Grandpa</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爷爷~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;    </span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Father</span> <span class="keyword">extends</span> <span class="title">Grandpa</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;爸爸在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> factor = <span class="number">25</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Father</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爸爸~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;儿子在静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Son</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是儿子~&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-class Grandpa &#123;
-    static &#123;
-        System.out.println(&quot;爷爷在静态代码块&quot;);
-    &#125;
-    public Grandpa() &#123;
-        System.out.println(&quot;我是爷爷~&quot;);
-    &#125;
-&#125;    
-
-class Father extends Grandpa &#123;
-    static &#123;
-        System.out.println(&quot;爸爸在静态代码块&quot;);
-    &#125;
-    public static int factor = 25;
-
-    public Father() &#123;
-        System.out.println(&quot;我是爸爸~&quot;);
-    &#125;
-&#125;
-
-class Son extends Father &#123;
-    static &#123;
-        System.out.println(&quot;儿子在静态代码块&quot;);
-    &#125;
-
-    public Son() &#123;
-        System.out.println(&quot;我是儿子~&quot;);
-    &#125;
-&#125;
-</code></pre>
-<pre><code class="java">入口1 的结果：
-
-爷爷在静态代码块
-爸爸在静态代码块
-爸爸的岁数:25
-入口2 的结果
-
-复制代码
-爷爷在静态代码块
-爸爸在静态代码块
-儿子在静态代码块
-我是爷爷~
-我是爸爸~
-我是儿子~
-复制代码
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">入口<span class="number">1</span> 的结果：</span><br><span class="line"></span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">爸爸的岁数:<span class="number">25</span></span><br><span class="line">入口<span class="number">2</span> 的结果</span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">爷爷在静态代码块</span><br><span class="line">爸爸在静态代码块</span><br><span class="line">儿子在静态代码块</span><br><span class="line">我是爷爷~</span><br><span class="line">我是爸爸~</span><br><span class="line">我是儿子~</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
 <p>如果以前没有遇到这种问题，现在要你解答肯定是很难的。该题考察的就是你对 Java 类加载机制的理解。如果你对 Java 加载机制不理解，那么你是无法解答这道题目的。</p>
 <p>对比上面两个结果，可以发现，入口1 都是静态代码的初始化，入口2 既涉及到静态代码的初始化，也涉及到类的初始化。到此大家肯定就知道对于静态代码和非静态代码的初始化逻辑是有区别的。</p>
 <p>这篇文章，将对 Java 类加载机制的进行讲解，让你以后遇到类似问题不在犯难。</p>
@@ -313,37 +263,22 @@ class Son extends Father &#123;
 <p>对整个类加载机制而言，验证阶段是一个很重要但是非必需的阶段，如果我们的代码能够确保没有问题，那么我们就没有必要去验证，毕竟验证需要花费一定的的时间。当然我们可以使用 -Xverfity:none 来关闭大部分的验证。 </p>
 <h3 id="准备（重点）"><a href="#准备（重点）" class="headerlink" title="准备（重点）"></a>准备（重点）</h3><p>当完成字节码文件的校验之后，JVM 便会开始为类变量分配内存并初始化。这里需要注意两个关键点，即内存分配的对象以及初始化的类型。</p>
 <p>内存分配的对象。Java 中的变量有<strong>「类变量」和「类成员变量」</strong>两种类型，「类变量」指的是被 static 修饰的变量，而其他所有类型的变量都属于「类成员变量」。在准备阶段，JVM 只会为「类变量」分配内存，而不会为「类成员变量」分配内存。「类成员变量」的内存分配需要等到初始化阶段才开始。<br>例如下面的代码在准备阶段，只会为 factor 属性分配内存，而不会为 website 属性分配内存。</p>
-<pre><code class="java">public static int factor = 3;
-public String website = &quot;www.cnblogs.com/chanshuyi&quot;;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> factor = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">public</span> String website = <span class="string">&quot;www.cnblogs.com/chanshuyi&quot;</span>;</span><br></pre></td></tr></table></figure>
+
 <p>初始化的类型。在准备阶段，JVM 会为类变量分配内存，并为其初始化。但是这里的初始化指的是为变量赋予 Java 语言中该数据类型的零值，而不是用户代码里初始化的值。<br>例如下面的代码在准备阶段之后，sector 的值将是 0，而不是 3。</p>
-<pre><code class="java">public static int sector = 3;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> sector = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
 <p>但如果一个变量是常量（被 static final 修饰）的话，那么在准备阶段，属性便会被赋予用户希望的值。例如下面的代码在准备阶段之后，number 的值将是 3，而不是 0。</p>
-<pre><code class="java">public static final int number = 3;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> number = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
 <p>之所以 static final 会直接被复制，而 static 变量会被赋予零值。其实我们稍微思考一下就能想明白了。</p>
 <p>两个语句的区别是一个有 final 关键字修饰，另外一个没有。而 final 关键字在 Java 中代表不可改变的意思，意思就是说 number 的值一旦赋值就不会在改变了。既然一旦赋值就不会再改变，那么就必须一开始就给其赋予用户想要的值，因此被 final 修饰的类变量在准备阶段就会被赋予想要的值。而没有被 final 修饰的类变量，其可能在初始化阶段或者运行阶段发生变化，所以就没有必要在准备阶段对它赋予用户想要的值。 </p>
 <h3 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h3><p>解析阶段是虚拟机常量池内的符号引用替换为直接引用的过程。</p>
 <p><strong>符号引用：</strong>符号引用是一组符号来描述所引用的目标对象，符号可以是任何形式的字面量，只要使用时能无歧义地定位到目标即可。符号引用与虚拟机实现的内存布局无关，引用的目标对象并不一定已经加载到内存中。Java 虚拟机明确在 Class 文件格式中定义的符号引用的字面量形式。</p>
 <p><strong>直接引用</strong>：直接引用可以是直接指向目标对象的指针、相对偏移量或是一个能间接定位到目标的句柄。直接引用是与虚拟机内存布局实现相关的，同一个符号引用在不同虚拟机实例上翻译出来的直接引用一般不会相同，如果有了直接引用，那引用的目标必定已经在内存中存在。</p>
 <p>在解析的阶段，解析动作主要针对7类符号引用进行，它们的名称以及对于常量池中的常量类型和解析报错信息如下：</p>
-<pre><code class="java">| 解析动作 | 符号引用 | 解析可能的报错 | | ---------- | ------------------------------- | -----------------------------------------------------------
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">| 解析动作 | 符号引用 | 解析可能的报错 | | ---------- | ------------------------------- | -----------------------------------------------------------</span><br><span class="line"></span><br><span class="line">| | 类或接口 | CONSTANTClassInfo | java.land.IllegalAccessError</span><br><span class="line"></span><br><span class="line">| | 字段 | CONSTANTFieldrefInfo | java.land.IllegalAccessError 或 java.land.NoSuchFieldError</span><br><span class="line"></span><br><span class="line">| | 类方法 | CONSTANTMethodefInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError</span><br><span class="line"></span><br><span class="line">| | 接口方法 | CONSTANTInterfaceMethoderInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError</span><br><span class="line"></span><br><span class="line">| | 方法类型 | CONSTANTMethodTypeInfo |</span><br><span class="line"></span><br><span class="line">| | 方法句柄 | CONSTANTMethodhandlerInfo |</span><br><span class="line"></span><br><span class="line">| | 调用限定符 | CONSTANTInvokeDynamicInfo | </span><br></pre></td></tr></table></figure>
 
-| | 类或接口 | CONSTANTClassInfo | java.land.IllegalAccessError
-
-| | 字段 | CONSTANTFieldrefInfo | java.land.IllegalAccessError 或 java.land.NoSuchFieldError
-
-| | 类方法 | CONSTANTMethodefInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError
-
-| | 接口方法 | CONSTANTInterfaceMethoderInfo | java.land.IllegalAccessError 或 java.land.NoSuchMethodError
-
-| | 方法类型 | CONSTANTMethodTypeInfo |
-
-| | 方法句柄 | CONSTANTMethodhandlerInfo |
-
-| | 调用限定符 | CONSTANTInvokeDynamicInfo | 
-</code></pre>
 <p>解析的整个阶段在虚拟机中还是比较复杂的，远比上面介绍的复杂的多，但是很多特别细节的东西我们可以暂时先忽略，先有个大概的认识和了解之后有时间在慢慢深入了。</p>
 <h3 id="初始化（重点）"><a href="#初始化（重点）" class="headerlink" title="初始化（重点）"></a>初始化（重点）</h3><p>类什么时候才被初始化：</p>
 <ul>
@@ -395,22 +330,11 @@ public String website = &quot;www.cnblogs.com/chanshuyi&quot;;
 <p>双亲委派模型的优点：<strong>java类随着它的加载器一起具备了一种带有优先级的层次关系.</strong></p>
 <p>例如类 <strong>java.lang.Object 它存放在 rt.jart</strong> 之中，无论哪一个类加载器都要加载这个类.最终都是双亲委派模型最顶端的 Bootstrap 类加载器去加载.因此Object类在程序的各种类加载器环境中都是同一个类.相反.如果没有使用双亲委派模型.由各个类加载器自行去加载的话.如果用户编写了一个称为 “java.lang.Object” 的类，并存放在程序的 ClassPath 中。那系统中将会出现多个不同的Object类，java类型体系中最基础的行为也就无法保证，应用程序也将会一片混乱。</p>
 <p>这里也可以用代码验证下：</p>
-<pre><code class="java">public class ClassLoaderTest &#123;
-    public static void main(String[] args) &#123;
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        System.out.println(loader);  
-        System.out.println(loader.getParent());  
-        System.out.println(loader.getParent().getParent());  
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ClassLoader loader = Thread.currentThread().getContextClassLoader();</span><br><span class="line">        System.out.println(loader);  </span><br><span class="line">        System.out.println(loader.getParent());  </span><br><span class="line">        System.out.println(loader.getParent().getParent());  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>输出结果为：</p>
-<pre><code class="java">sun.misc.Launcher$AppClassLoader@2a139a55
-sun.misc.Launcher$ExtClassLoader@7852e922
-null
-跟前面的描述是一致的。启动类加载器是由 C++ 实现的，没有对应的
- Java 对象，因此在 Java 中只能用 null 代替。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sun.misc.Launcher$AppClassLoader@2a139a55</span><br><span class="line">sun.misc.Launcher$ExtClassLoader@<span class="number">7852e922</span></span><br><span class="line"><span class="keyword">null</span></span><br><span class="line">跟前面的描述是一致的。启动类加载器是由 C++ 实现的，没有对应的</span><br><span class="line"> Java 对象，因此在 Java 中只能用 <span class="keyword">null</span> 代替。</span><br></pre></td></tr></table></figure>
 <p><strong>结束生命周期</strong><br>在如下几种情况下，Java虚拟机将结束生命周期</p>
 <ul>
 <li>1、执行了System.exit()方法</li>
@@ -424,171 +348,28 @@ null
 <p><strong>如何自定义ClassLoader</strong></p>
 <p>新建一个类继承自 java.lang.ClassLoader 重写它的 findClass 方法。将 class 字节码数组转换为 Class 类的实例。调用 loadClass 方法加载即可</p>
 <p>代码实战：<br>先是定义一个自定义类加载器</p>
-<pre><code class="java">package com.hello.test;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.File;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoader</span> <span class="keyword">extends</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 指定路径</span></span><br><span class="line">    <span class="keyword">private</span> String path ;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoader</span><span class="params">(String classPath)</span></span>&#123;</span><br><span class="line">        path=classPath;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 重写findClass方法</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name 是我们这个类的全路径</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> ClassNotFoundException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">        Class log = <span class="keyword">null</span>;</span><br><span class="line">        <span class="comment">// 获取该class文件字节码数组</span></span><br><span class="line">        <span class="keyword">byte</span>[] classData = getData();</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (classData != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 将class的字节码数组转换成Class类的实例</span></span><br><span class="line">            log = defineClass(name, classData, <span class="number">0</span>, classData.length);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> log;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将class文件转化为字节码数组</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] getData() &#123;</span><br><span class="line"> </span><br><span class="line">        File file = <span class="keyword">new</span> File(path);</span><br><span class="line">        <span class="keyword">if</span> (file.exists())&#123;</span><br><span class="line">            FileInputStream in = <span class="keyword">null</span>;</span><br><span class="line">            ByteArrayOutputStream out = <span class="keyword">null</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                in = <span class="keyword">new</span> FileInputStream(file);</span><br><span class="line">                out = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"> </span><br><span class="line">                <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">                <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> ((size = in.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                    out.write(buffer, <span class="number">0</span>, size);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    in.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line"> </span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> out.toByteArray();</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-public class MyClassLoader extends ClassLoader &#123;
-    // 指定路径
-    private String path ;
-    
-    public MyClassLoader(String classPath)&#123;
-        path=classPath;
-    &#125;
- 
-    /**
-     * 重写findClass方法
-     * @param name 是我们这个类的全路径
-     * @return
-     * @throws ClassNotFoundException
-     */
-    @Override
-    protected Class&lt;?&gt; findClass(String name) throws ClassNotFoundException &#123;
-        Class log = null;
-        // 获取该class文件字节码数组
-        byte[] classData = getData();
- 
-        if (classData != null) &#123;
-            // 将class的字节码数组转换成Class类的实例
-            log = defineClass(name, classData, 0, classData.length);
-        &#125;
-        return log;
-    &#125;
- 
-    /**
-     * 将class文件转化为字节码数组
-     * @return
-     */
-    private byte[] getData() &#123;
- 
-        File file = new File(path);
-        if (file.exists())&#123;
-            FileInputStream in = null;
-            ByteArrayOutputStream out = null;
-            try &#123;
-                in = new FileInputStream(file);
-                out = new ByteArrayOutputStream();
- 
-                byte[] buffer = new byte[1024];
-                int size = 0;
-                while ((size = in.read(buffer)) != -1) &#123;
-                    out.write(buffer, 0, size);
-                &#125;
-            &#125; catch (IOException e) &#123;
-                e.printStackTrace();
-            &#125; finally &#123;
-                try &#123;
-                    in.close();
-                &#125; catch (IOException e) &#123;
- 
-                    e.printStackTrace();
-                &#125;
-            &#125;
-            return out.toByteArray();
-        &#125;else&#123;
-            return null;
-        &#125;
-    &#125;
-&#125;
-</code></pre>
 <p>可以再 getData 里面做很多事情 ，比如加密解密之类的 都是可以的。</p>
 <p>接着创建一个试验 class :</p>
-<pre><code class="java">package com.hello.test;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;load Log class successfully from log &quot;</span> );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-public class Log &#123;
-    public static void main(String[] args) &#123;
-        System.out.println(&quot;load Log class successfully from log &quot; );
-    &#125;
-&#125;
-</code></pre>
 <p>执行命令行 javac Log.java 生成我们的 Log.class 文件:</p>
 <p>最后就是进行加载：</p>
-<pre><code class="java">package com.hello.test;
-
-import java.lang.reflect.Method;
-
-public class ClassLoaderTest &#123;
-    public static void main(String[] args) &#123;
-         // 这个类class的路径,自己复制自己电脑的路径
-        String classPath = &quot;/Users/yourname/Documents/workspace-sts-3.9.6.RELEASE/HelloWorld/src/Log.class&quot;;
- 
-        MyClassLoader myClassLoader = new MyClassLoader(classPath);
-        // 类的全称，对应包名
-        String packageNamePath = &quot;com.hello.test.Log&quot;;
-        try &#123;
-        // 加载Log这个class文件
-            Class&lt;?&gt; Log = myClassLoader.loadClass(packageNamePath);
-            System.out.println(&quot;类加载器是:&quot; + Log.getClassLoader());
-            // 利用反射获取main方法
-            Method method = Log.getDeclaredMethod(&quot;main&quot;, String[].class);
-            Object object = Log.newInstance();
-            String[] arg = &#123;&quot;ad&quot;&#125;;
-            method.invoke(object, (Object) arg);
-
-        &#125; catch (Exception e) &#123;
-            e.printStackTrace();
-        &#125;
-    &#125;
-
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.hello.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoaderTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">         <span class="comment">// 这个类class的路径,自己复制自己电脑的路径</span></span><br><span class="line">        String classPath = <span class="string">&quot;/Users/yourname/Documents/workspace-sts-3.9.6.RELEASE/HelloWorld/src/Log.class&quot;</span>;</span><br><span class="line"> </span><br><span class="line">        MyClassLoader myClassLoader = <span class="keyword">new</span> MyClassLoader(classPath);</span><br><span class="line">        <span class="comment">// 类的全称，对应包名</span></span><br><span class="line">        String packageNamePath = <span class="string">&quot;com.hello.test.Log&quot;</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 加载Log这个class文件</span></span><br><span class="line">            Class&lt;?&gt; Log = myClassLoader.loadClass(packageNamePath);</span><br><span class="line">            System.out.println(<span class="string">&quot;类加载器是:&quot;</span> + Log.getClassLoader());</span><br><span class="line">            <span class="comment">// 利用反射获取main方法</span></span><br><span class="line">            Method method = Log.getDeclaredMethod(<span class="string">&quot;main&quot;</span>, String[].class);</span><br><span class="line">            Object object = Log.newInstance();</span><br><span class="line">            String[] arg = &#123;<span class="string">&quot;ad&quot;</span>&#125;;</span><br><span class="line">            method.invoke(object, (Object) arg);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>输出结果如下：<br><img src="https://img-blog.csdnimg.cn/20200609130004796.png" alt="在这里插入图片描述"></p>
 <p>可以看到是委托父类进行加载的。 到此，关于类加载器的内容就说完了。</p>
 <p>最后我们再来看一道升级过后的题目：</p>
-<pre><code class="java">public class Book &#123;
- 
-    static int amount1 = 112;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> amount1 = <span class="number">112</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> Book book = <span class="keyword">new</span> Book();  <span class="comment">// 入口1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        staticFunction();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的普通代码块&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Book() &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的构造方法&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;price=&quot;</span> + price +<span class="string">&quot;, amount=&quot;</span> + amount + <span class="string">&quot;, amount1=&quot;</span> + amount1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">staticFunction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;书的静态方法&quot;</span>);</span><br><span class="line">　　　　 System.out.println(<span class="string">&quot;amount=&quot;</span> + amount + <span class="string">&quot;,amount1=&quot;</span> + amount1);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> price = <span class="number">110</span>;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> amount = <span class="number">112</span>;</span><br><span class="line">    <span class="comment">// static Book book = new Book(); // 入口2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    static Book book = new Book();  // 入口1
-
-
-    public static void main(String[] args) &#123;
-        staticFunction();
-    &#125;
-
-
-    static &#123;
-        System.out.println(&quot;书的静态代码块&quot;);
-    &#125;
-
-    &#123;
-        System.out.println(&quot;书的普通代码块&quot;);
-    &#125;
-
-    Book() &#123;
-        System.out.println(&quot;书的构造方法&quot;);
-        System.out.println(&quot;price=&quot; + price +&quot;, amount=&quot; + amount + &quot;, amount1=&quot; + amount1);
-    &#125;
-
-    public static void staticFunction() &#123;
-        System.out.println(&quot;书的静态方法&quot;);
-　　　　 System.out.println(&quot;amount=&quot; + amount + &quot;,amount1=&quot; + amount1);
-    &#125;
-    
-    int price = 110;
-    static int amount = 112;
-    // static Book book = new Book(); // 入口2
-&#125;
-</code></pre>
 <p> 入口1 的结果</p>
-<pre><code class="java">书的普通代码块
-书的构造方法
-price=110, amount=0, amount1=112
-书的静态代码块
-书的静态方法
-amount=112, amount1=112
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">书的普通代码块</span><br><span class="line">书的构造方法</span><br><span class="line">price=<span class="number">110</span>, amount=<span class="number">0</span>, amount1=<span class="number">112</span></span><br><span class="line">书的静态代码块</span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
+
 <p>入口2 的结果</p>
-<pre><code class="java">书的静态代码块
-书的普通代码块
-书的构造方法
-price=110, amount=112, amount1=112
-书的静态方法
-amount=112, amount1=112
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">书的静态代码块</span><br><span class="line">书的普通代码块</span><br><span class="line">书的构造方法</span><br><span class="line">price=<span class="number">110</span>, amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
+
 <p> 入口1 分析</p>
 <p>在上面两个例子中，因为 main 方法所在类并没有多余的代码，我们都直接忽略了 main 方法所在类的初始化。</p>
 <p>但在这个例子中，main 方法所在类有许多代码，我们就并不能直接忽略了。</p>
@@ -601,10 +382,8 @@ amount=112, amount1=112
 <p>对于入口1，执行类构造器发现 book 实例是静态变量，于是就会执行普通代码块，再去执行 book 的构造函数。执行完后，重新回到执行类构造器的路上，对剩下的静态变量进行初始化。</p>
 <p> 入口2 分析<br>入口2 的变化就是将静态实例初始化移到了最后。从而保证优先执行类构造器，再去进行对象初始化过程。</p>
 <p>变例<br>假如把入口1，2 都注释掉，这回结果会怎么样：</p>
-<pre><code class="java">书的静态代码块
-书的静态方法
-amount=112, amount1=112
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">书的静态代码块</span><br><span class="line">书的静态方法</span><br><span class="line">amount=<span class="number">112</span>, amount1=<span class="number">112</span></span><br></pre></td></tr></table></figure>
+
 <p>可以发现，最终只有类构造器得到了执行。</p>
 <p>方法论<br>从上面几个例子可以看出，分析一个类的执行顺序大概可以按照如下步骤：</p>
 <ol>
@@ -783,7 +562,7 @@ amount=112, amount1=112
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -820,12 +599,8 @@ amount=112, amount1=112
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定仅有小写字母组成的字符串数组 A，返回列表中的每个字符串中都显示的全部字符（包括重复字符）组成的列表。例如，如果一个字符在每个字符串中出现 3 次，但不是 4 次，则需要在最终答案中包含该字符 3 次。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -225,47 +225,13 @@
 <span id="more"></span>
 <p>你可以按任意顺序返回答案。</p>
 <p>示例 1：</p>
-<pre><code class="java">输入：[&quot;bella&quot;,&quot;label&quot;,&quot;roller&quot;]
-输出：[&quot;e&quot;,&quot;l&quot;,&quot;l&quot;]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[<span class="string">&quot;bella&quot;</span>,<span class="string">&quot;label&quot;</span>,<span class="string">&quot;roller&quot;</span>]</span><br><span class="line">输出：[<span class="string">&quot;e&quot;</span>,<span class="string">&quot;l&quot;</span>,<span class="string">&quot;l&quot;</span>]</span><br></pre></td></tr></table></figure>
+
 <p>示例 2：</p>
-<pre><code class="java">输入：[&quot;cool&quot;,&quot;lock&quot;,&quot;cook&quot;]
-输出：[&quot;c&quot;,&quot;o&quot;]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入：[<span class="string">&quot;cool&quot;</span>,<span class="string">&quot;lock&quot;</span>,<span class="string">&quot;cook&quot;</span>]</span><br><span class="line">输出：[<span class="string">&quot;c&quot;</span>,<span class="string">&quot;o&quot;</span>]</span><br></pre></td></tr></table></figure>
+
 <p>室友提供思路 我写的臭代码。。<br>采用的计数方法，从第一个String开始计数，如果包含字符多少次就对应数组为几，遍历第二个 同样的数组，然后比较两个数组，相同位置数组取出现次数少的，最后回收数组结果</p>
-<pre><code class="java">class Solution &#123;
-    public List&lt;String&gt; commonChars(String[] A) &#123;
-        int[] res = new int[26];
-        for (int i = 0; i &lt; A[0].length(); i++) &#123;
-            int m = A[0].charAt(i) - &#39;a&#39;;
-            res[m] += 1;
-        &#125;
-        for (String s : A) &#123;
-            int[] temp = new int[26];
-            for (int i = 0; i &lt; s.length(); i++) &#123;
-
-                int m = s.charAt(i) - &#39;a&#39;;
-                temp[m] += 1;
-            &#125;
-            for (int i = 0; i &lt; 26; i++) &#123;
-                if(res[i] &gt; temp[i]) res[i] = temp[i];
-            &#125;
-        &#125;
-        List&lt;String&gt; result = new ArrayList&lt;&gt;();
-        for (int i = 0; i &lt; res.length; i++) &#123;
-
-            if(res[i] != 0) &#123;
-                for (int j = 0; j &lt; res[i]; j++) &#123;
-                    String c = String.valueOf((char)(i + &#39;a&#39;));
-                    result.add(c);
-                &#125;
-            &#125;
-        &#125;
-        return result;
-    &#125;
-        
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">commonChars</span><span class="params">(String[] A)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A[<span class="number">0</span>].length(); i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> m = A[<span class="number">0</span>].charAt(i) - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">            res[m] += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (String s : A) &#123;</span><br><span class="line">            <span class="keyword">int</span>[] temp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">int</span> m = s.charAt(i) - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">                temp[m] += <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(res[i] &gt; temp[i]) res[i] = temp[i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;String&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; res.length; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span>(res[i] != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; res[i]; j++) &#123;</span><br><span class="line">                    String c = String.valueOf((<span class="keyword">char</span>)(i + <span class="string">&#x27;a&#x27;</span>));</span><br><span class="line">                    result.add(c);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20201014204659656.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>一次过 ，错误的是别人写的</p>
 
     </div>
@@ -434,7 +400,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -471,12 +437,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

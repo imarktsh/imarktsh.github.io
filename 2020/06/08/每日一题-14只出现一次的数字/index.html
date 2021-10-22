@@ -17,15 +17,15 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="只出现一次的数字给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。   说明： 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？ 示例 1: 输入: [2,2,1] 输出: 1  示例 2: 输入: [4,1,2,1,2] 输出: 4  一个我不知道的知识点 异或操作^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为1">
+  <meta name="description" content="只出现一次的数字给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。   说明： 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？ 示例 1: 12输入: [2,2,1]输出: 1  示例 2: 12输入: [4,1,2,1,2]输出: 4 一个我不知道的知识点 异或操作^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一题@14只出现一次的数字">
 <meta property="og:url" content="http://onlyear.com/2020/06/08/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-14%E5%8F%AA%E5%87%BA%E7%8E%B0%E4%B8%80%E6%AC%A1%E7%9A%84%E6%95%B0%E5%AD%97/index.html">
 <meta property="og:site_name" content="imarktsh的博客">
-<meta property="og:description" content="只出现一次的数字给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。   说明： 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？ 示例 1: 输入: [2,2,1] 输出: 1  示例 2: 输入: [4,1,2,1,2] 输出: 4  一个我不知道的知识点 异或操作^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为1">
+<meta property="og:description" content="只出现一次的数字给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。   说明： 你的算法应该具有线性时间复杂度。 你可以不使用额外空间来实现吗？ 示例 1: 12输入: [2,2,1]输出: 1  示例 2: 12输入: [4,1,2,1,2]输出: 4 一个我不知道的知识点 异或操作^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20200608095906398.png">
 <meta property="article:published_time" content="2020-06-08T02:01:00.000Z">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,28 +227,14 @@
 <p>说明：</p>
 <p>你的算法应该具有<strong>线性时间</strong>复杂度。 你可以<strong>不使用额外空间</strong>来实现吗？</p>
 <p>示例 1:</p>
-<pre><code class="java">输入: [2,2,1]
-输出: 1
-</code></pre>
-<p>示例 2:</p>
-<pre><code class="java">输入: [4,1,2,1,2]
-输出: 4
-</code></pre>
-<p>一个我不知道的知识点 异或操作<br>^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为1.<br>一个数a与另一个数b异或的结果等于a^b，用结果（ a^b)异或a，就会得到b；</p>
-<pre><code class="java">int c=a^b ; ------------ 01=10^11 得到结果C（ a^b)
-b=c^b; ------------ 10=01^11 用结果（ a^b)异或a，就会得到b；
-a=c^a; -------------11=01^10 用结果（ a^b)异或b，就会得到a；
-</code></pre>
-<p><strong>异或实现</strong></p>
-<pre><code class="java">public int singleNumber(int[] nums) &#123;
-        int res = 0;
-        for(int c: nums)&#123;
-            res ^= c;
-        &#125;
-        return res;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>]</span><br><span class="line">输出: <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-    &#125;
-</code></pre>
+<p>示例 2:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">输出: <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>一个我不知道的知识点 异或操作<br>^是异或运算符，异或的规则是转换成二进制比较，相同为0，不同为1.<br>一个数a与另一个数b异或的结果等于a^b，用结果（ a^b)异或a，就会得到b；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> c=a^b ; ------------ <span class="number">01</span>=<span class="number">10</span>^<span class="number">11</span> 得到结果C（ a^b)</span><br><span class="line">b=c^b; ------------ <span class="number">10</span>=<span class="number">01</span>^<span class="number">11</span> 用结果（ a^b)异或a，就会得到b；</span><br><span class="line">a=c^a; -------------<span class="number">11</span>=<span class="number">01</span>^<span class="number">10</span> 用结果（ a^b)异或b，就会得到a；</span><br></pre></td></tr></table></figure>
+<p><strong>异或实现</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">singleNumber</span><span class="params">(<span class="keyword">int</span>[] nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> c: nums)&#123;</span><br><span class="line">            res ^= c;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p><strong>时间复杂度 O(N)</strong><br><img src="https://img-blog.csdnimg.cn/20200608095906398.png" alt="在这里插入图片描述"><br><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/single-number/submissions/">leetcode</a></p>
 
     </div>
@@ -418,7 +404,7 @@ a=c^a; -------------11=01^10 用结果（ a^b)异或b，就会得到a；
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -455,12 +441,8 @@ a=c^a; -------------11=01^10 用结果（ a^b)异或b，就会得到a；
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

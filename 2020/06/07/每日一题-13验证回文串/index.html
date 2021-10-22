@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="验证回文串给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -231,25 +231,13 @@
 <span id="more"></span>
 <p>说明：本题中，我们将空字符串定义为有效的回文串。</p>
 <p>示例 1:</p>
-<pre><code class="java">输入: &quot;A man, a plan, a canal: Panama&quot;
-输出: true
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;A man, a plan, a canal: Panama&quot;</span></span><br><span class="line">输出: <span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
 <p>示例 2:</p>
-<pre><code class="java">输入: &quot;race a car&quot;
-输出: false
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="string">&quot;race a car&quot;</span></span><br><span class="line">输出: <span class="keyword">false</span></span><br></pre></td></tr></table></figure>
 <p>先把字符串只保留0-9 a-z A-Z的字符 然后利用双指针一次判断前后对应位是否相等</p>
 <p>代码</p>
-<pre><code class="java"> public boolean isPalindrome(String s) &#123;
-        if(s == null) return true;
-        s = s.replaceAll(&quot;[^a-zA-Z0-9]&quot;,&quot;&quot;).toLowerCase();
-        for(int i = 0;i &lt; s.length() / 2; i ++)&#123;
-            if(s.charAt(i)!=s.charAt(s.length()-1-i)) return false;
-        &#125;
-        return true;
-
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(s == <span class="keyword">null</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">       s = s.replaceAll(<span class="string">&quot;[^a-zA-Z0-9]&quot;</span>,<span class="string">&quot;&quot;</span>).toLowerCase();</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; s.length() / <span class="number">2</span>; i ++)&#123;</span><br><span class="line">           <span class="keyword">if</span>(s.charAt(i)!=s.charAt(s.length()-<span class="number">1</span>-i)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p><strong>时间复杂度O(N)<br>空间复杂度O(N)</strong><br><img src="https://img-blog.csdnimg.cn/20200607093210188.png" alt="在这里插入图片描述"></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-palindrome">力扣（LeetCode）</a></p>
 
@@ -420,7 +408,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -457,12 +445,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

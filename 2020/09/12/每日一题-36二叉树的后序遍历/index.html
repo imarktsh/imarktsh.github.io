@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定一个二叉树，返回它的 后序 遍历。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -224,61 +224,13 @@
         <p>给定一个二叉树，返回它的 <strong>后序</strong> 遍历。</p>
 <span id="more"></span>
 
-<pre><code class="java">示例:
-
-输入: [1,null,2,3]  
-   1
-    \
-     2
-    /
-   3 
-
-输出: [3,2,1]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">示例:</span><br><span class="line"></span><br><span class="line">输入: [<span class="number">1</span>,<span class="keyword">null</span>,<span class="number">2</span>,<span class="number">3</span>]  </span><br><span class="line">   <span class="number">1</span></span><br><span class="line">    \</span><br><span class="line">     <span class="number">2</span></span><br><span class="line">    /</span><br><span class="line">   <span class="number">3</span> </span><br><span class="line"></span><br><span class="line">输出: [<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
 <p>递归 只需要改一下读取节点的顺序就可</p>
-<pre><code class="java">    private void postorder(TreeNode root, List&lt;Integer&gt; res)&#123;
-        if(root != null)&#123;
-            postorder(root.left,res);
-            postorder(root.right,res); 
-             res.add(root.val);
-        &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postorder</span><span class="params">(TreeNode root, List&lt;Integer&gt; res)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(root != <span class="keyword">null</span>)&#123;</span><br><span class="line">        postorder(root.left,res);</span><br><span class="line">        postorder(root.right,res); </span><br><span class="line">         res.add(root.val);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>改前序遍历的方法 先读根节点 然后 右节点 在左节点变成 根-右-左 </p>
 <p>后续遍历的顺序为 左右根，采用头插法 就可以输出正确答案</p>
-<pre><code class="java">class Solution &#123;
-    public List&lt;Integer&gt; postorderTraversal(TreeNode root) &#123;
-        LinkedList&lt;Integer&gt; res = new LinkedList&lt;&gt;();
-        postorder(root,res);
-        return res;
-    &#125;
-
-    private void postorder(TreeNode root,  LinkedList&lt;Integer&gt; res)&#123;
-        //使用栈
-        Stack&lt;TreeNode&gt; stack = new Stack&lt;&gt;();
-        //root不为null或者栈不为空 循环
-        while(root != null || !stack.isEmpty())&#123;
-            //节点有子节点 把根加入栈 用头插法先读取根节点val，然后进入right 
-            if(root != null)&#123;
-                stack.push(root);
-                res.addFirst(root.val);
-                root = root.right;
-            &#125;
-            else&#123;
-                root = stack.pop();
-                root = root.left;
-            &#125;
-        &#125;
-    &#125;
-
-    // private void postorder(TreeNode root, List&lt;Integer&gt; res)&#123;
-    //     if(root != null)&#123;
-    //         postorder(root.left,res);
-    //         postorder(root.right,res); 
-    //          res.add(root.val);
-    //     &#125;
-
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Integer&gt; <span class="title">postorderTraversal</span><span class="params">(TreeNode root)</span> </span>&#123;</span><br><span class="line">        LinkedList&lt;Integer&gt; res = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        postorder(root,res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">postorder</span><span class="params">(TreeNode root,  LinkedList&lt;Integer&gt; res)</span></span>&#123;</span><br><span class="line">        <span class="comment">//使用栈</span></span><br><span class="line">        Stack&lt;TreeNode&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="comment">//root不为null或者栈不为空 循环</span></span><br><span class="line">        <span class="keyword">while</span>(root != <span class="keyword">null</span> || !stack.isEmpty())&#123;</span><br><span class="line">            <span class="comment">//节点有子节点 把根加入栈 用头插法先读取根节点val，然后进入right </span></span><br><span class="line">            <span class="keyword">if</span>(root != <span class="keyword">null</span>)&#123;</span><br><span class="line">                stack.push(root);</span><br><span class="line">                res.addFirst(root.val);</span><br><span class="line">                root = root.right;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                root = stack.pop();</span><br><span class="line">                root = root.left;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// private void postorder(TreeNode root, List&lt;Integer&gt; res)&#123;</span></span><br><span class="line">    <span class="comment">//     if(root != null)&#123;</span></span><br><span class="line">    <span class="comment">//         postorder(root.left,res);</span></span><br><span class="line">    <span class="comment">//         postorder(root.right,res); </span></span><br><span class="line">    <span class="comment">//          res.add(root.val);</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/2020091211471415.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -447,7 +399,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -484,12 +436,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

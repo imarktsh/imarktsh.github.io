@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="为什么分布式一定要有Redis？">
@@ -85,7 +85,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -297,23 +297,11 @@
 <p>采用定期删除+惰性删除就没其他问题了么?</p>
 <p>不是的，如果定期删除没删除 Key。然后你也没即时去请求 Key，也就是说惰性删除也没生效。这样，<strong>Redis的内存会越来越高。那么就应该采用内存淘汰机制。</strong></p>
 <p>在 redis.conf 中有一行配置：</p>
-<pre><code class="java"># maxmemory-policy volatile-lru
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># maxmemory-policy <span class="keyword">volatile</span>-lru</span><br></pre></td></tr></table></figure>
+
 <p>该配置就是配内存淘汰策略的(什么，你没配过？好好反省一下自己)：</p>
-<pre><code class="java">noeviction：当内存不足以容纳新写入数据时，新写入操作会报错。应该没人用吧。
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">noeviction：当内存不足以容纳新写入数据时，新写入操作会报错。应该没人用吧。</span><br><span class="line"></span><br><span class="line">allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的 Key。推荐使用，目前项目在用这种。</span><br><span class="line"></span><br><span class="line">allkeys-random：当内存不足以容纳新写入数据时，在键空间中，随机移除某个 Key。应该也没人用吧，你不删最少使用 Key，去随机删。</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span>-lru：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，移除最近最少使用的 Key。这种情况一般是把 Redis 既当缓存，又做持久化存储的时候才用。不推荐。</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span>-random：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，随机移除某个 Key。依然不推荐。</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span>-ttl：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，有更早过期时间的 Key 优先移除。不推荐。</span><br><span class="line"></span><br><span class="line">PS：如果没有设置 expire 的 Key，不满足先决条件(prerequisites)；那么 <span class="keyword">volatile</span>-lru，<span class="keyword">volatile</span>-random 和 <span class="keyword">volatile</span>-ttl 策略的行为，和 noeviction(不删除) 基本上一致。</span><br></pre></td></tr></table></figure>
 
-allkeys-lru：当内存不足以容纳新写入数据时，在键空间中，移除最近最少使用的 Key。推荐使用，目前项目在用这种。
-
-allkeys-random：当内存不足以容纳新写入数据时，在键空间中，随机移除某个 Key。应该也没人用吧，你不删最少使用 Key，去随机删。
-
-volatile-lru：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，移除最近最少使用的 Key。这种情况一般是把 Redis 既当缓存，又做持久化存储的时候才用。不推荐。
-
-volatile-random：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，随机移除某个 Key。依然不推荐。
-
-volatile-ttl：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，有更早过期时间的 Key 优先移除。不推荐。
-
-PS：如果没有设置 expire 的 Key，不满足先决条件(prerequisites)；那么 volatile-lru，volatile-random 和 volatile-ttl 策略的行为，和 noeviction(不删除) 基本上一致。
-</code></pre>
 <h2 id="Redis-和数据库双写一致性问题"><a href="#Redis-和数据库双写一致性问题" class="headerlink" title="Redis 和数据库双写一致性问题"></a>Redis 和数据库双写一致性问题</h2><p>一致性问题是分布式常见问题，还可以再分为最终一致性和强一致性。数据库和缓存双写，就必然会存在不一致的问题。</p>
 <p>答这个问题，先明白一个前提。就是如果对数据有强一致性要求，不能放缓存。<strong>我们所做的一切，只能保证最终一致性。</strong></p>
 <p>另外，我们所做的方案从根本上来说，只能说降低不一致发生的概率，无法完全避免。因此，<strong>有强一致性要求的数据，不能放缓存。</strong></p>
@@ -334,10 +322,8 @@ PS：如果没有设置 expire 的 Key，不满足先决条件(prerequisites)；
 <p>假设有一个 key1，系统 A 需要将 key1 设置为 valueA，系统 B 需要将 key1 设置为 valueB，系统 C 需要将 key1 设置为 valueC。</p>
 <p>期望按照 key1 的 value 值按照 valueA &gt; valueB &gt; valueC 的顺序变化。这种时候我们在数据写入数据库的时候，需要保存一个时间戳。</p>
 <p>假设时间戳如下：</p>
-<pre><code class="java">系统A key 1 &#123;valueA  3:00&#125;
-系统B key 1 &#123;valueB  3:05&#125;
-系统C key 1 &#123;valueC  3:10&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">系统A key <span class="number">1</span> &#123;valueA  <span class="number">3</span>:<span class="number">00</span>&#125;</span><br><span class="line">系统B key <span class="number">1</span> &#123;valueB  <span class="number">3</span>:<span class="number">05</span>&#125;</span><br><span class="line">系统C key <span class="number">1</span> &#123;valueC  <span class="number">3</span>:<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure>
+
 <p>那么，假设这会系统 B 先抢到锁，将 key1 设置为{valueB 3:05}。接下来系统 A 抢到锁，发现自己的 valueA 的时间戳早于缓存中的时间戳，那就不做 set 操作了，以此类推。</p>
 <p>其他方法，比如利用队列，将 set 方法变成串行访问也可以。总之，灵活变通。</p>
 <p>出处：<a target="_blank" rel="noopener" href="http://rjzheng.cnblogs.com/">http://rjzheng.cnblogs.com/</a></p>
@@ -510,7 +496,7 @@ PS：如果没有设置 expire 的 Key，不满足先决条件(prerequisites)；
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -547,12 +533,8 @@ PS：如果没有设置 expire 的 Key，不满足先决条件(prerequisites)；
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

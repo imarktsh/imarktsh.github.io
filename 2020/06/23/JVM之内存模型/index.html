@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="JVM内存模型Java程序内存的分配是在JVM虚拟机内存分配机制下完成。">
@@ -89,7 +89,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,10 +242,8 @@
 <h3 id="Java栈（虚拟机栈）"><a href="#Java栈（虚拟机栈）" class="headerlink" title="Java栈（虚拟机栈）"></a>Java栈（虚拟机栈）</h3><p>同计数器也为线程私有，生命周期与相同，就是我们平时说的栈，栈描述的是Java方法执行的内存模型。</p>
 <p>每个方法被执行的时候都会创建一个栈帧用于存储局部变量表，操作栈，动态链接，方法出口等信息。每一个方法被调用的过程就对应一个栈帧在虚拟机栈中从入栈到出栈的过程。【栈先进后出，下图栈1先进最后出来】</p>
 <p>对于栈帧的解释参考 Java虚拟机运行时栈帧结构</p>
-<pre><code class="java">栈帧: 是用来存储数据和部分过程结果的数据结构。
-栈帧的位置:  内存 -&gt; 运行时数据区 -&gt; 某个线程对应的虚拟机栈 -&gt; here[在这里]
-栈帧大小确定时间: 编译期确定，不受运行期数据影响。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">栈帧: 是用来存储数据和部分过程结果的数据结构。</span><br><span class="line">栈帧的位置:  内存 -&gt; 运行时数据区 -&gt; 某个线程对应的虚拟机栈 -&gt; here[在这里]</span><br><span class="line">栈帧大小确定时间: 编译期确定，不受运行期数据影响。</span><br></pre></td></tr></table></figure>
+
 <p>通常有人将java内存区分为栈和堆，实际上java内存比这复杂，这么区分可能是因为我们最关注，与对象内存分配关系最密切的是这两个。</p>
 <p>平时说的栈一般指局部变量表部分。</p>
 <ul>
@@ -293,36 +291,13 @@
 <h3 id="直接指针"><a href="#直接指针" class="headerlink" title="直接指针"></a>直接指针</h3><p>与句柄访问不同的是，ref中直接存储的就是对象的实例数据,但是类型数据跟句柄访问方式一样。</p>
 <p>优点:优势很明显，就是速度快，相比于句柄访问少了一次指针定位的开销时间。【可能是出于Java中对象的访问时十分频繁的,平时我们常用的JVM HotSpot采用此种方式】<img src="https://img-blog.csdnimg.cn/20200623151809614.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="内存溢出"><a href="#内存溢出" class="headerlink" title="内存溢出"></a>内存溢出</h2><p>两种内存溢出异常[注意内存溢出是error级别的]</p>
-<pre><code class="java">1.StackOverFlowError:当请求的栈深度大于虚拟机所允许的最大深度
-2.OutOfMemoryError:虚拟机在扩展栈时无法申请到足够的内存空间
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>StackOverFlowError:当请求的栈深度大于虚拟机所允许的最大深度</span><br><span class="line"><span class="number">2.</span>OutOfMemoryError:虚拟机在扩展栈时无法申请到足够的内存空间</span><br></pre></td></tr></table></figure>
+
 <p>[一般都能设置扩大]<br>java -verbose:class -version 可以查看刚开始加载的类，可以发现这两个类并不是异常出现的时候才去加载，而是jvm启动的时候就已经加载。这么做的原因是在vm启动过程中我们把类加载起来，并创建几个没有堆栈的对象缓存起来，只需要设置下不同的提示信息即可，当需要抛出特定类型的OutOfMemoryError异常的时候，就直接拿出缓存里的这几个对象就可以了。</p>
 <p>比如说OutOfMemoryError对象，jvm预留出4个对象【固定常量】，这就为什么最多出现4次有堆栈的OutOfMemoryError异常及大部分情况下都将看到没有堆栈的OutOfMemoryError对象的原因。</p>
 <p>两个基本的例子</p>
-<pre><code class="java">public class MemErrorTest &#123;
-    public static void main(String[] args) &#123;
-        try &#123;
-            List&lt;Object&gt; list = new ArrayList&lt;Object&gt;();
-            for(;;) &#123;
-                list.add(new Object()); //创建对象速度可能高于jvm回收速度
-            &#125;
-        &#125; catch (OutOfMemoryError e) &#123;
-            e.printStackTrace();
-        &#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MemErrorTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            List&lt;Object&gt; list = <span class="keyword">new</span> ArrayList&lt;Object&gt;();</span><br><span class="line">            <span class="keyword">for</span>(;;) &#123;</span><br><span class="line">                list.add(<span class="keyword">new</span> Object()); <span class="comment">//创建对象速度可能高于jvm回收速度</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (OutOfMemoryError e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            hi();<span class="comment">//递归造成StackOverflowError 这边因为每运行一个方法将创建一个栈帧，栈帧创建太多无法继续申请到内存扩展</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (StackOverflowError e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hi</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        hi();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-        try &#123;
-            hi();//递归造成StackOverflowError 这边因为每运行一个方法将创建一个栈帧，栈帧创建太多无法继续申请到内存扩展
-        &#125; catch (StackOverflowError e) &#123;
-            e.printStackTrace();
-        &#125;
-
-    &#125;
-
-    public static void hi() &#123;
-        hi();
-    &#125;
-&#125;
-</code></pre>
 <h2 id="GC简介"><a href="#GC简介" class="headerlink" title="GC简介"></a>GC简介</h2><p>GC(Garbage Collection)：即垃圾回收器，诞生于1960年MIT的Lisp语言，主要是用来回收，释放垃圾占用的空间。</p>
 <p><strong>java GC泛指java的垃圾回收机制，该机制是java与C/C++的主要区别之一，我们在日常写java代码的时候，一般都不需要编写内存回收或者垃圾清理的代码，也不需要像C/C++那样做类似delete/free的操作。</strong></p>
 <h3 id="为什么需要学习GC"><a href="#为什么需要学习GC" class="headerlink" title="为什么需要学习GC"></a>为什么需要学习GC</h3><p>对象的内存分配在java虚拟机的自动内存分配机制下，一般不容易出现内存泄漏问题。但是写代码难免会遇到一些特殊情况，比如OOM神马的。。尽管虚拟机内存的动态分配与内存回收技术很成熟，可万一出现了这样那样的内存溢出问题，那么将难以定位错误的原因所在。</p>
@@ -337,28 +312,14 @@
 <h3 id="堆的回收区域"><a href="#堆的回收区域" class="headerlink" title="堆的回收区域"></a>堆的回收区域</h3><p>为了高效的回收，jvm将堆分为三个区域<br>1.新生代（Young Generation）NewSize和MaxNewSize分别可以控制年轻代的初始大小和最大的大小<br>2.老年代（Old Generation）<br>3.永久代（Permanent Generation）【1.8以后采用元空间，就不在堆中了】<br>Tracing GC的根本思路就是：给定一个集合的引用作为根出发，通过引用关系遍历对象图，能被遍历到的（可到达的）对象就被判定为存活，其余对象（也就是没有被遍历到的）就自然被判定为死亡。注意再注意：tracing GC的本质是通过找出所有活对象来把其余空间认定为“无用”，而不是找出所有死掉的对象并回收它们占用的空间。GC roots这组引用是tracing GC的起点。要实现语义正确的tracing GC，就必须要能完整枚举出所有的GC roots，否则就可能会漏扫描应该存活的对象，导致GC错误回收了这些被漏扫的活对象。</p>
 <p>关于元空间</p>
 <p>5 判断对象是否存活算法</p>
-<pre><code class="java">1.引用计数算法
-早期判断对象是否存活大多都是以这种算法，这种算法判断很简单，简单来说就是给对象添加一个引用计数器，每当对象被引用一次就加1，引用失效时就减1。当为0的时候就判断对象不会再被引用。
-优点:实现简单效率高，被广泛使用与如python何游戏脚本语言上。
-缺点:难以解决循环引用的问题，就是假如两个对象互相引用已经不会再被其它其它引用，导致一直不会为0就无法进行回收。
-
-2.可达性分析算法
-目前主流的商用语言[如java、c#]采用的是可达性分析算法判断对象是否存活。这个算法有效解决了循环利用的弊端。
-它的基本思路是通过一个称为“GC Roots”的对象为起始点，搜索所经过的路径称为引用链，当一个对象到GC Roots没有任何引用跟它连接则证明对象是不可用的。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>引用计数算法</span><br><span class="line">早期判断对象是否存活大多都是以这种算法，这种算法判断很简单，简单来说就是给对象添加一个引用计数器，每当对象被引用一次就加<span class="number">1</span>，引用失效时就减<span class="number">1</span>。当为<span class="number">0</span>的时候就判断对象不会再被引用。</span><br><span class="line">优点:实现简单效率高，被广泛使用与如python何游戏脚本语言上。</span><br><span class="line">缺点:难以解决循环引用的问题，就是假如两个对象互相引用已经不会再被其它其它引用，导致一直不会为<span class="number">0</span>就无法进行回收。</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span>可达性分析算法</span><br><span class="line">目前主流的商用语言[如java、c#]采用的是可达性分析算法判断对象是否存活。这个算法有效解决了循环利用的弊端。</span><br><span class="line">它的基本思路是通过一个称为“GC Roots”的对象为起始点，搜索所经过的路径称为引用链，当一个对象到GC Roots没有任何引用跟它连接则证明对象是不可用的。</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/2020062315281678.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">可作为GC Roots的对象有四种</p>
-<pre><code class="java">①虚拟机栈(栈桢中的本地变量表)中的引用的对象，就是平时所指的java对象，存放在堆中。
-②方法区中的类静态属性引用的对象，一般指被static修饰引用的对象，加载类的时候就加载到内存中。
-③方法区中的常量引用的对象,
-④本地方法栈中JNI（native方法)引用的对象
-即使可达性算法中不可达的对象，也不是一定要马上被回收，还有可能被抢救一下。网上例子很多，基本上和深入理解JVM一书讲的一样对象的生存还是死亡
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">①虚拟机栈(栈桢中的本地变量表)中的引用的对象，就是平时所指的java对象，存放在堆中。</span><br><span class="line">②方法区中的类静态属性引用的对象，一般指被<span class="keyword">static</span>修饰引用的对象，加载类的时候就加载到内存中。</span><br><span class="line">③方法区中的常量引用的对象,</span><br><span class="line">④本地方法栈中JNI（<span class="keyword">native</span>方法)引用的对象</span><br><span class="line">即使可达性算法中不可达的对象，也不是一定要马上被回收，还有可能被抢救一下。网上例子很多，基本上和深入理解JVM一书讲的一样对象的生存还是死亡</span><br></pre></td></tr></table></figure>
+
 <p>要真正宣告对象死亡需经过两个过程。<br>1.可达性分析后没有发现引用链<br>2.查看对象是否有finalize方法，如果有重写且在方法内完成自救[比如再建立引用]，还是可以抢救一下，注意这边一个类的finalize只执行一次，这就会出现一样的代码第一次自救成功第二次失败的情况。[如果类重写finalize且还没调用过，会将这个对象放到一个叫做F-Queue的序列里，这边finalize不承诺一定会执行，这么做是因为如果里面死循环的话可能会时F-Queue队列处于等待，严重会导致内存崩溃，这是我们不希望看到的。]<br>HotSpot虚拟机如何实现可达性算法</p>
 <h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><p>jvm中，可达性分析算法帮我们解决了哪些对象可以回收的问题，垃圾收集算法则关心怎么回收。</p>
-<h3 id="三大垃圾收集算法"><a href="#三大垃圾收集算法" class="headerlink" title="三大垃圾收集算法"></a>三大垃圾收集算法</h3><pre><code class="java">1.标记/清除算法【最基础】
-2.复制算法
-3.标记/整理算法
-</code></pre>
+<h3 id="三大垃圾收集算法"><a href="#三大垃圾收集算法" class="headerlink" title="三大垃圾收集算法"></a>三大垃圾收集算法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>标记/清除算法【最基础】</span><br><span class="line"><span class="number">2.</span>复制算法</span><br><span class="line"><span class="number">3.</span>标记/整理算法</span><br></pre></td></tr></table></figure>
+
 <p>jvm采用<code>分代收集算法</code>对不同区域采用不同的回收算法。</p>
 <p><strong>新生代采用复制算法</strong></p>
 <p>新生代中因为对象都是”朝生夕死的”，【深入理解JVM虚拟机上说98%的对象,不知道是不是这么多，总之就是存活率很低】，适用于复制算法【复制算法比较适合用于存活率低的内存区域】。<strong>它优化了标记/清除算法的效率和内存碎片问题</strong>，且JVM不以5:5分配内存【由于存活率低，不需要复制保留那么大的区域造成空间上的浪费，因此不需要按1:1【原有区域:保留空间】划分内存区域，而是将内存分为一块Eden空间和From Survivor、To Survivor【保留空间】，三者默认比例为8:1:1，优先使用Eden区，若Eden区满，则将对象复制到第二块内存区上。但是不能保证每次回收都只有不多于10%的对象存货，所以Survivor区不够的话，则会依赖老年代年存进行分配】。</p>
@@ -629,7 +590,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -666,12 +627,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

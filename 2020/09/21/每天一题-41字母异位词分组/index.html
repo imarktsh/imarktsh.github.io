@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -230,41 +230,15 @@
         <p>给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。</p>
 <span id="more"></span>
 <p>示例:</p>
-<pre><code class="java">输入: [&quot;eat&quot;, &quot;tea&quot;, &quot;tan&quot;, &quot;ate&quot;, &quot;nat&quot;, &quot;bat&quot;]
-输出:
-[
-  [&quot;ate&quot;,&quot;eat&quot;,&quot;tea&quot;],
-  [&quot;nat&quot;,&quot;tan&quot;],
-  [&quot;bat&quot;]
-]
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="string">&quot;eat&quot;</span>, <span class="string">&quot;tea&quot;</span>, <span class="string">&quot;tan&quot;</span>, <span class="string">&quot;ate&quot;</span>, <span class="string">&quot;nat&quot;</span>, <span class="string">&quot;bat&quot;</span>]</span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line">  [<span class="string">&quot;ate&quot;</span>,<span class="string">&quot;eat&quot;</span>,<span class="string">&quot;tea&quot;</span>],</span><br><span class="line">  [<span class="string">&quot;nat&quot;</span>,<span class="string">&quot;tan&quot;</span>],</span><br><span class="line">  [<span class="string">&quot;bat&quot;</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <p>说明：</p>
 <blockquote>
 <p>所有输入均为小写字母。<br>不考虑答案输出的顺序。</p>
 </blockquote>
 <p>来源：力扣（LeetCode）<br>链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/group-anagrams">https://leetcode-cn.com/problems/group-anagrams</a><br>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
 <p>遍历这个字符串数组的时候，吧每一个字符串 取出每个字母 然后排序 然后合并为字符串 ，新建一个map，如果字符串在map里面的话 就加入value，如果不在 就设为key，然后再加入value<br>最后 new ArrayList&lt;&gt;()输出<br><strong>return new ArrayList(map.values());</strong></p>
-<pre><code class="java">class Solution &#123;
-    public List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) &#123;
-        //就是字母相同，位置不同的单词放在一个list里面 然后输出这些list
-        if(strs.length == 0) return new ArrayList&lt;&gt;();
-        Map&lt;String, List&gt; map = new HashMap&lt;String, List&gt;();
-        for(String s : strs)&#123;
-            char[] ca = s.toCharArray();
-        //将这几个字符排序 可以确定唯一性
-            Arrays.sort(ca);
-            //排序之后转化为字符串
-            String key = String.valueOf(ca);
-            //不包含当前这些字符串 就新建一个list存储
-            if(!map.containsKey(key)) map.put(key, new ArrayList());
-            map.get(key).add(s);
-
-        &#125;
-        return new ArrayList(map.values());
-
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;String&gt;&gt; groupAnagrams(String[] strs) &#123;</span><br><span class="line">        <span class="comment">//就是字母相同，位置不同的单词放在一个list里面 然后输出这些list</span></span><br><span class="line">        <span class="keyword">if</span>(strs.length == <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Map&lt;String, List&gt; map = <span class="keyword">new</span> HashMap&lt;String, List&gt;();</span><br><span class="line">        <span class="keyword">for</span>(String s : strs)&#123;</span><br><span class="line">            <span class="keyword">char</span>[] ca = s.toCharArray();</span><br><span class="line">        <span class="comment">//将这几个字符排序 可以确定唯一性</span></span><br><span class="line">            Arrays.sort(ca);</span><br><span class="line">            <span class="comment">//排序之后转化为字符串</span></span><br><span class="line">            String key = String.valueOf(ca);</span><br><span class="line">            <span class="comment">//不包含当前这些字符串 就新建一个list存储</span></span><br><span class="line">            <span class="keyword">if</span>(!map.containsKey(key)) map.put(key, <span class="keyword">new</span> ArrayList());</span><br><span class="line">            map.get(key).add(s);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList(map.values());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20200921155644845.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -433,7 +407,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -470,12 +444,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

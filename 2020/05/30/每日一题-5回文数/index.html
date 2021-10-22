@@ -17,15 +17,15 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="回文数判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。 示例 1: 输入: 121 输出: true  示例 2: 输入: -121 输出: false">
+  <meta name="description" content="回文数判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。 示例 1: 12输入: 121输出: true  示例 2: 12输入: -121输出: false">
 <meta property="og:type" content="article">
 <meta property="og:title" content="每日一题@5回文数">
 <meta property="og:url" content="http://onlyear.com/2020/05/30/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-5%E5%9B%9E%E6%96%87%E6%95%B0/index.html">
 <meta property="og:site_name" content="imarktsh的博客">
-<meta property="og:description" content="回文数判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。 示例 1: 输入: 121 输出: true  示例 2: 输入: -121 输出: false">
+<meta property="og:description" content="回文数判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。 示例 1: 12输入: 121输出: true  示例 2: 12输入: -121输出: false">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/2020053010212480.png">
 <meta property="article:published_time" content="2020-05-30T02:23:00.000Z">
@@ -82,7 +82,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -223,38 +223,22 @@
       
         <h2 id="回文数"><a href="#回文数" class="headerlink" title="回文数"></a>回文数</h2><p><strong>判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数</strong>。</p>
 <p><strong>示例 1:</strong></p>
-<pre><code class="java">输入: 121
-输出: true
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">121</span></span><br><span class="line">输出: <span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>示例 2:</strong></p>
-<pre><code class="java">输入: -121
-输出: false
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: -<span class="number">121</span></span><br><span class="line">输出: <span class="keyword">false</span></span><br></pre></td></tr></table></figure>
 <span id="more"></span>
 
 <p>解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。<br><strong>示例 3:</strong></p>
-<pre><code class="java">输入: 10
-输出: false
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: <span class="number">10</span></span><br><span class="line">输出: <span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
 <p>解释: 从右向左读, 为 01 。因此它不是一个回文数。</p>
 <p>先写简单题吧，看别的搞我的怀疑人生</p>
 <p><strong>用取余运算获取整数的最后一位，依次×10加最后一位得到反转后的int，可能会溢出，但是直接返回false，因为溢出的数不是回文数影响不大。</strong></p>
 <p><strong>代码：</strong></p>
-<pre><code class="java"> public boolean isPalindrome(int x) &#123;
-      if(x &lt; 0) return false;
-      int cur = 0;
-      int num = x;
-      while(num != 0)&#123;
-          cur = cur * 10 + num % 10;
-          num /= 10;
-      &#125;
-      return cur == x;
-    &#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isPalindrome</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">     <span class="keyword">if</span>(x &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">     <span class="keyword">int</span> cur = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">int</span> num = x;</span><br><span class="line">     <span class="keyword">while</span>(num != <span class="number">0</span>)&#123;</span><br><span class="line">         cur = cur * <span class="number">10</span> + num % <span class="number">10</span>;</span><br><span class="line">         num /= <span class="number">10</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     <span class="keyword">return</span> cur == x;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p>其实溢出了但是java通过了。 因为回文数必定相等必定不会溢出，所以溢出的情况（不等）就自然归到false里了。</p>
-<pre><code class="java">//判断溢出
-if (cur &gt; Integer.MAX_VALUE / 10|| (cur == Integer.MAX_VALUE / 10 &amp;&amp; num &gt; Integer.MAX_VALUE % 10)) return false;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断溢出</span></span><br><span class="line"><span class="keyword">if</span> (cur &gt; Integer.MAX_VALUE / <span class="number">10</span>|| (cur == Integer.MAX_VALUE / <span class="number">10</span> &amp;&amp; num &gt; Integer.MAX_VALUE % <span class="number">10</span>)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/2020053010212480.png"></p>
 <p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/palindrome-number">力扣（LeetCode）</a></p>
 
@@ -425,7 +409,7 @@ if (cur &gt; Integer.MAX_VALUE / 10|| (cur == Integer.MAX_VALUE / 10 &amp;&amp; 
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -462,12 +446,8 @@ if (cur &gt; Integer.MAX_VALUE / 10|| (cur == Integer.MAX_VALUE / 10 &amp;&amp; 
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

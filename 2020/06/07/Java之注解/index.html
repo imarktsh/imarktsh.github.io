@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Java 注解实际上Java注解与普通修饰符(public、static、void等)的使用方式并没有多大区别">
@@ -86,7 +86,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -235,905 +235,103 @@
 <span id="more"></span>
 
 <h2 id="注解的定义"><a href="#注解的定义" class="headerlink" title="注解的定义"></a>注解的定义</h2><p>日常开发中新建Java类，我们使用class、interface比较多，而注解和它们一样，也是一种类的类型，他是用的修饰符为 <code>@interface</code><br>注解类的写法</p>
-<pre><code class="java">我们新建一个注解MyTestAnnotation
-public @interface MyTestAnnotation &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">我们新建一个注解MyTestAnnotation</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyTestAnnotation &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AnnotationDemo</span> </span>&#123;</span><br><span class="line">    <span class="comment">//@Test注解修饰方法A</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Test.....&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//一个方法上可以拥有多个不同的注解</span></span><br><span class="line">    <span class="meta">@Deprecated</span></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;uncheck&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-&#125;
-public class AnnotationDemo &#123;
-    //@Test注解修饰方法A
-    @Test
-    public static void A()&#123;
-        System.out.println(&quot;Test.....&quot;);
-    &#125;
-
-    //一个方法上可以拥有多个不同的注解
-    @Deprecated
-    @SuppressWarnings(&quot;uncheck&quot;)
-    public static void B()&#123;
-
-    &#125;
-&#125;
-</code></pre>
 <p>接着我们就可以在类或者方法上作用我们刚刚新建的注解</p>
-<pre><code class="java">@MyTestAnnotation
-public class test &#123;
-   @MyTestAnnotation
-   public static void main(String[] args)&#123;
-   &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MyTestAnnotation</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">   <span class="meta">@MyTestAnnotation</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>通过在方法上使用@Test注解后，在运行该方法时，测试框架会自动识别该方法并单独调用，@Test实际上是一种标记注解，起标记作用，运行时告诉测试框架该方法为测试方法。而对于@Deprecated和@SuppressWarnings(“uncheck”)，则是Java本身内置的注解，在代码中，可以经常看见它们，但这并不是一件好事，毕竟当方法或是类上面有@Deprecated注解时，说明该方法或是类都已经过期不建议再用，@SuppressWarnings 则表示忽略指定警告，比如@SuppressWarnings(“uncheck”)，这就是注解的最简单的使用方式，那么下面我们就来看看注解定义的基本语法</p>
 <p>以上我们只是了解了注解的写法，但是我们定义的注解中还没写任何代码，现在这个注解毫无意义，要如何使注解工作呢？接下来我们接着了解元注解。</p>
 <h2 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h2><p>元注解顾名思义我们可以理解为<strong>注解的注解</strong>，它是作用在注解中，方便我们使用注解实现想要的功能。元注解分别有<code>@Retention、 @Target、 @Document、 @Inherited和@Repeatable（JDK1.8加入）</code>五种</p>
 <h3 id="Retention"><a href="#Retention" class="headerlink" title="@Retention"></a>@Retention</h3><p>Retention英文意思有保留、保持的意思，它表示注解存在阶段是保留在源码（编译期），字节码（类加载）或者运行期（JVM中运行）。在@Retention注解中使用枚举RetentionPolicy来表示注解保留时期</p>
-<pre><code class="java">@Retention(RetentionPolicy.SOURCE)，注解仅存在于源码中，在class字节码文件中不包含
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span>，注解仅存在于源码中，在<span class="class"><span class="keyword">class</span>字节码文件中不包含</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">@<span class="title">Retention</span>(<span class="title">RetentionPolicy</span>.<span class="title">CLASS</span>)， 默认的保留策略，注解会在<span class="title">class</span>字节码文件中存在，但运行时无法获得</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">@<span class="title">Retention</span>(<span class="title">RetentionPolicy</span>.<span class="title">RUNTIME</span>)， 注解会在<span class="title">class</span>字节码文件中存在，在运行时可以通过反射获取到</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">如果我们是自定义注解，则通过前面分析，我们自定义注解如果只存着源码中或者字节码文件中就无法发挥作用，而在运行期间能获取到注解才能实现我们目的，所以自定义注解中肯定是使用 </span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">@<span class="title">Retention</span>(<span class="title">RetentionPolicy</span>.<span class="title">RUNTIME</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Retention</span>(<span class="title">RetentionPolicy</span>.<span class="title">RUNTIME</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">MyTestAnnotation</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@Retention(RetentionPolicy.CLASS)， 默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得
-
-@Retention(RetentionPolicy.RUNTIME)， 注解会在class字节码文件中存在，在运行时可以通过反射获取到
-
-如果我们是自定义注解，则通过前面分析，我们自定义注解如果只存着源码中或者字节码文件中就无法发挥作用，而在运行期间能获取到注解才能实现我们目的，所以自定义注解中肯定是使用 
-
-@Retention(RetentionPolicy.RUNTIME)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface MyTestAnnotation &#123;
-
-&#125;
-</code></pre>
 <h3 id="Target"><a href="#Target" class="headerlink" title="@Target"></a>@Target</h3><p>Target的英文意思是目标，这也很容易理解，使用@Target元注解表示我们的注解作用的范围就比较具体了，可以是类，方法，方法参数变量等，同样也是通过枚举类ElementType表达作用类型</p>
-<pre><code class="java">@Target(ElementType.TYPE) 作用接口、类、枚举、注解
-@Target(ElementType.FIELD) 作用属性字段、枚举的常量
-@Target(ElementType.METHOD) 作用方法
-@Target(ElementType.PARAMETER) 作用方法参数
-@Target(ElementType.CONSTRUCTOR) 作用构造函数
-@Target(ElementType.LOCAL_VARIABLE)作用局部变量
-@Target(ElementType.ANNOTATION_TYPE)作用于注解（@Retention注解中就使用该属性）
-@Target(ElementType.PACKAGE) 作用于包
-@Target(ElementType.TYPE_PARAMETER) 作用于类型泛型，即泛型方法、泛型类、泛型接口 （jdk1.8加入）
-@Target(ElementType.TYPE_USE) 类型使用.可以用于标注任意类型除了 class （jdk1.8加入）
-一般比较常用的是ElementType.TYPE类型
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface MyTestAnnotation &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.TYPE)</span> 作用接口、类、枚举、注解</span><br><span class="line"><span class="meta">@Target(ElementType.FIELD)</span> 作用属性字段、枚举的常量</span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span> 作用方法</span><br><span class="line"><span class="meta">@Target(ElementType.PARAMETER)</span> 作用方法参数</span><br><span class="line"><span class="meta">@Target(ElementType.CONSTRUCTOR)</span> 作用构造函数</span><br><span class="line"><span class="meta">@Target(ElementType.LOCAL_VARIABLE)</span>作用局部变量</span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span>作用于注解（<span class="meta">@Retention</span>注解中就使用该属性）</span><br><span class="line"><span class="meta">@Target(ElementType.PACKAGE)</span> 作用于包</span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_PARAMETER)</span> 作用于类型泛型，即泛型方法、泛型类、泛型接口 （jdk1<span class="number">.8</span>加入）</span><br><span class="line"><span class="meta">@Target(ElementType.TYPE_USE)</span> 类型使用.可以用于标注任意类型除了 <span class="class"><span class="keyword">class</span> （<span class="title">jdk1</span>.8加入）</span></span><br><span class="line"><span class="class">一般比较常用的是<span class="title">ElementType</span>.<span class="title">TYPE</span>类型</span></span><br><span class="line"><span class="class">@<span class="title">Retention</span>(<span class="title">RetentionPolicy</span>.<span class="title">RUNTIME</span>)</span></span><br><span class="line"><span class="class">@<span class="title">Target</span>(<span class="title">ElementType</span>.<span class="title">TYPE</span>)</span></span><br><span class="line"><span class="class"><span class="title">public</span> @<span class="title">interface</span> <span class="title">MyTestAnnotation</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-&#125;
-</code></pre>
 <h3 id="Documented"><a href="#Documented" class="headerlink" title="@Documented"></a>@Documented</h3><p>Document的英文意思是文档。它的作用是能够将注解中的元素包含到 Javadoc 中去。</p>
 <h3 id="Inherited"><a href="#Inherited" class="headerlink" title="@Inherited"></a>@Inherited</h3><p>Inherited的英文意思是继承，但是这个继承和我们平时理解的继承大同小异，一个被@Inherited注解了的注解修饰了一个父类，如果他的子类没有被其他注解修饰，则它的子类也继承了父类的注解。<br>下面我们来看个@Inherited注解例子</p>
-<pre><code class="java">/**自定义注解*/
-@Documented
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface MyTestAnnotation &#123;
-&#125;
-/**父类标注自定义注解*/
-@MyTestAnnotation
-public class Father &#123;
-&#125;
-/**子类*/
-public class Son extends Father &#123;
-&#125;
-/**测试子类获取父类自定义注解*/
-public class test &#123;
-   public static void main(String[] args)&#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**自定义注解*/</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyTestAnnotation &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**父类标注自定义注解*/</span></span><br><span class="line"><span class="meta">@MyTestAnnotation</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**子类*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**测试子类获取父类自定义注解*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//获取Son的class对象</span></span><br><span class="line">       Class&lt;Son&gt; sonClass = Son.class;</span><br><span class="line">      <span class="comment">// 获取Son类上的注解MyTestAnnotation可以执行成功</span></span><br><span class="line">      MyTestAnnotation annotation = sonClass.getAnnotation(MyTestAnnotation.class);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-      //获取Son的class对象
-       Class&lt;Son&gt; sonClass = Son.class;
-      // 获取Son类上的注解MyTestAnnotation可以执行成功
-      MyTestAnnotation annotation = sonClass.getAnnotation(MyTestAnnotation.class);
-   &#125;
-&#125;
-</code></pre>
 <h3 id="Repeatable"><a href="#Repeatable" class="headerlink" title="@Repeatable"></a>@Repeatable</h3><p>元注解@Repeatable是JDK1.8新加入的，它表示在同一个位置重复相同的注解。在没有该注解前，一般是无法在同一个类型上使用相同的注解的</p>
-<pre><code class="java">//Java8前无法这样使用
-@FilterPath(&quot;/web/update&quot;)
-@FilterPath(&quot;/web/add&quot;)
-public class A &#123;&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Java8前无法这样使用</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/update&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/add&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
 <p>但在Java8新增了@Repeatable注解后就可以采用如下的方式定义并使用了</p>
-<pre><code class="java">package com.zejian.annotationdemo;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zejian.annotationdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.*;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/20.</span></span><br><span class="line"><span class="comment"> * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//使用Java8新增@Repeatable原注解</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Repeatable(FilterPaths.class)</span><span class="comment">//参数指明接收的注解class</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FilterPath &#123;</span><br><span class="line">    <span class="function">String  <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@interface</span> FilterPaths &#123;</span><br><span class="line">    FilterPath[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用案例</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/update&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/add&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/delete&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AA</span></span>&#123; &#125;</span><br></pre></td></tr></table></figure>
 
-import java.lang.annotation.*;
 
-/**
- * Created by zejian on 2017/5/20.
- * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
- */
-//使用Java8新增@Repeatable原注解
-@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)
-@Retention(RetentionPolicy.RUNTIME)
-@Repeatable(FilterPaths.class)//参数指明接收的注解class
-public @interface FilterPath &#123;
-    String  value();
-&#125;
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@interface FilterPaths &#123;
-    FilterPath[] value();
-&#125;
-
-//使用案例
-@FilterPath(&quot;/web/update&quot;)
-@FilterPath(&quot;/web/add&quot;)
-@FilterPath(&quot;/web/delete&quot;)
-class AA&#123; &#125;
-</code></pre>
 <p>我们可以简单理解为通过使用@Repeatable后，将使用@FilterPaths注解作为接收同一个类型上重复注解的容器，而每个@FilterPath则负责保存指定的路径串。为了处理上述的新增注解，Java8还在<code>AnnotatedElement</code>接口新增了<code>getDeclaredAnnotationsByType()</code> 和 <code>getAnnotationsByType()</code>两个方法并在接口给出了默认实现，在指定@Repeatable的注解时，可以通过这两个方法获取到注解相关信息。但请注意，旧版API中的getDeclaredAnnotation()和 getAnnotation()是不对@Repeatable注解的处理的(除非该注解没有在同一个声明上重复出现)。注意getDeclaredAnnotationsByType方法获取到的注解不包括父类，其实当 getAnnotationsByType()方法调用时，其内部先执行了getDeclaredAnnotationsByType方法，只有当前类不存在指定注解时，getAnnotationsByType()才会继续从其父类寻找，但请注意如果@FilterPath和@FilterPaths没有使用了@Inherited的话，仍然无法获取。下面通过代码来演示：</p>
-<pre><code class="java">/**
- * Created by zejian on 2017/5/20.
- */
-//使用Java8新增@Repeatable原注解
-@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)
-@Retention(RetentionPolicy.RUNTIME)
-@Repeatable(FilterPaths.class)
-public @interface FilterPath &#123;
-    String  value();
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/20.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//使用Java8新增@Repeatable原注解</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Repeatable(FilterPaths.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FilterPath &#123;</span><br><span class="line">    <span class="function">String  <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@interface</span> FilterPaths &#123;</span><br><span class="line">    FilterPath[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/list&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CC</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用案例</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/update&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/add&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/delete&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AA</span> <span class="keyword">extends</span> <span class="title">CC</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; clazz = AA.class;</span><br><span class="line">        <span class="comment">//通过getAnnotationsByType方法获取所有重复注解</span></span><br><span class="line">        FilterPath[] annotationsByType = clazz.getAnnotationsByType(FilterPath.class);</span><br><span class="line">        FilterPath[] annotationsByType2 = clazz.getDeclaredAnnotationsByType(FilterPath.class);</span><br><span class="line">        <span class="keyword">if</span> (annotationsByType != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (FilterPath filter : annotationsByType) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;1:&quot;</span>+filter.value());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (annotationsByType2 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (FilterPath filter : annotationsByType2) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;2:&quot;</span>+filter.value());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;使用getAnnotation的结果:&quot;</span>+clazz.getAnnotation(FilterPath.class));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 执行结果(当前类拥有该注解FilterPath,则不会从CC父类寻找)</span></span><br><span class="line"><span class="comment">         1:/web/update</span></span><br><span class="line"><span class="comment">         1:/web/add</span></span><br><span class="line"><span class="comment">         1:/web/delete</span></span><br><span class="line"><span class="comment">         -----------------</span></span><br><span class="line"><span class="comment">         2:/web/update</span></span><br><span class="line"><span class="comment">         2:/web/add</span></span><br><span class="line"><span class="comment">         2:/web/delete</span></span><br><span class="line"><span class="comment">         使用getAnnotation的结果:null</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@interface FilterPaths &#123;
-    FilterPath[] value();
-&#125;
-
-@FilterPath(&quot;/web/list&quot;)
-class CC &#123; &#125;
-
-//使用案例
-@FilterPath(&quot;/web/update&quot;)
-@FilterPath(&quot;/web/add&quot;)
-@FilterPath(&quot;/web/delete&quot;)
-class AA extends CC&#123;
-    public static void main(String[] args) &#123;
-
-        Class&lt;?&gt; clazz = AA.class;
-        //通过getAnnotationsByType方法获取所有重复注解
-        FilterPath[] annotationsByType = clazz.getAnnotationsByType(FilterPath.class);
-        FilterPath[] annotationsByType2 = clazz.getDeclaredAnnotationsByType(FilterPath.class);
-        if (annotationsByType != null) &#123;
-            for (FilterPath filter : annotationsByType) &#123;
-                System.out.println(&quot;1:&quot;+filter.value());
-            &#125;
-        &#125;
-
-        System.out.println(&quot;-----------------&quot;);
-
-        if (annotationsByType2 != null) &#123;
-            for (FilterPath filter : annotationsByType2) &#123;
-                System.out.println(&quot;2:&quot;+filter.value());
-            &#125;
-        &#125;
-
-
-        System.out.println(&quot;使用getAnnotation的结果:&quot;+clazz.getAnnotation(FilterPath.class));
-
-
-        /**
-         * 执行结果(当前类拥有该注解FilterPath,则不会从CC父类寻找)
-         1:/web/update
-         1:/web/add
-         1:/web/delete
-         -----------------
-         2:/web/update
-         2:/web/add
-         2:/web/delete
-         使用getAnnotation的结果:null
-         */
-    &#125;
-&#125;
-</code></pre>
 <p>从执行结果来看如果当前类拥有该注解@FilterPath,则getAnnotationsByType方法不会从CC父类寻找，下面看看另外一种情况，即AA类上没有@FilterPath注解</p>
-<pre><code class="java">/**
- * Created by zejian on 2017/5/20.
- */
-//使用Java8新增@Repeatable原注解
-@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited //添加可继承元注解
-@Repeatable(FilterPaths.class)
-public @interface FilterPath &#123;
-    String  value();
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/20.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">//使用Java8新增@Repeatable原注解</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.TYPE,ElementType.FIELD,ElementType.METHOD&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Inherited</span> <span class="comment">//添加可继承元注解</span></span><br><span class="line"><span class="meta">@Repeatable(FilterPaths.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FilterPath &#123;</span><br><span class="line">    <span class="function">String  <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Inherited</span> <span class="comment">//添加可继承元注解</span></span><br><span class="line"><span class="meta">@interface</span> FilterPaths &#123;</span><br><span class="line">    FilterPath[] value();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/list&quot;)</span></span><br><span class="line"><span class="meta">@FilterPath(&quot;/web/getList&quot;)</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CC</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//AA上不使用@FilterPath注解,getAnnotationsByType将会从父类查询</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AA</span> <span class="keyword">extends</span> <span class="title">CC</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; clazz = AA.class;</span><br><span class="line">        <span class="comment">//通过getAnnotationsByType方法获取所有重复注解</span></span><br><span class="line">        FilterPath[] annotationsByType = clazz.getAnnotationsByType(FilterPath.class);</span><br><span class="line">        FilterPath[] annotationsByType2 = clazz.getDeclaredAnnotationsByType(FilterPath.class);</span><br><span class="line">        <span class="keyword">if</span> (annotationsByType != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (FilterPath filter : annotationsByType) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;1:&quot;</span>+filter.value());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;-----------------&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (annotationsByType2 != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (FilterPath filter : annotationsByType2) &#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;2:&quot;</span>+filter.value());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;使用getAnnotation的结果:&quot;</span>+clazz.getAnnotation(FilterPath.class));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 执行结果(当前类没有<span class="doctag">@FilterPath</span>,getAnnotationsByType方法从CC父类寻找)</span></span><br><span class="line"><span class="comment">         1:/web/list</span></span><br><span class="line"><span class="comment">         1:/web/getList</span></span><br><span class="line"><span class="comment">         -----------------</span></span><br><span class="line"><span class="comment">         使用getAnnotation的结果:null</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited //添加可继承元注解
-@interface FilterPaths &#123;
-    FilterPath[] value();
-&#125;
-
-@FilterPath(&quot;/web/list&quot;)
-@FilterPath(&quot;/web/getList&quot;)
-class CC &#123; &#125;
-
-//AA上不使用@FilterPath注解,getAnnotationsByType将会从父类查询
-class AA extends CC&#123;
-    public static void main(String[] args) &#123;
-
-        Class&lt;?&gt; clazz = AA.class;
-        //通过getAnnotationsByType方法获取所有重复注解
-        FilterPath[] annotationsByType = clazz.getAnnotationsByType(FilterPath.class);
-        FilterPath[] annotationsByType2 = clazz.getDeclaredAnnotationsByType(FilterPath.class);
-        if (annotationsByType != null) &#123;
-            for (FilterPath filter : annotationsByType) &#123;
-                System.out.println(&quot;1:&quot;+filter.value());
-            &#125;
-        &#125;
-
-        System.out.println(&quot;-----------------&quot;);
-
-        if (annotationsByType2 != null) &#123;
-            for (FilterPath filter : annotationsByType2) &#123;
-                System.out.println(&quot;2:&quot;+filter.value());
-            &#125;
-        &#125;
-
-
-        System.out.println(&quot;使用getAnnotation的结果:&quot;+clazz.getAnnotation(FilterPath.class));
-
-
-        /**
-         * 执行结果(当前类没有@FilterPath,getAnnotationsByType方法从CC父类寻找)
-         1:/web/list
-         1:/web/getList
-         -----------------
-         使用getAnnotation的结果:null
-         */
-    &#125;
-&#125;
-</code></pre>
 <p>注意定义@FilterPath和@FilterPath时必须指明@Inherited，getAnnotationsByType方法否则依旧无法从父类获取@FilterPath注解，这是为什么呢，不妨看看getAnnotationsByType方法的实现源码：</p>
-<pre><code class="java">//接口默认实现方法
-default &lt;T extends Annotation&gt; T[] getAnnotationsByType(Class&lt;T&gt; annotationClass) &#123;
-//先调用getDeclaredAnnotationsByType方法
-T[] result = getDeclaredAnnotationsByType(annotationClass);
-
-//判断当前类获取到的注解数组是否为0
-if (result.length == 0 &amp;&amp; this instanceof Class &amp;&amp; 
-//判断定义注解上是否使用了@Inherited元注解 
- AnnotationType.getInstance(annotationClass).isInherited()) &#123; // Inheritable
-        //从父类获取
-       Class&lt;?&gt; superClass = ((Class&lt;?&gt;) this).getSuperclass();
-   if (superClass != null) &#123;
-      result = superClass.getAnnotationsByType(annotationClass);
-       &#125;
-   &#125;
-
-   return result;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//接口默认实现方法</span></span><br><span class="line"><span class="keyword">default</span> &lt;T extends Annotation&gt; T[] getAnnotationsByType(Class&lt;T&gt; annotationClass) &#123;</span><br><span class="line"><span class="comment">//先调用getDeclaredAnnotationsByType方法</span></span><br><span class="line">T[] result = getDeclaredAnnotationsByType(annotationClass);</span><br><span class="line"></span><br><span class="line"><span class="comment">//判断当前类获取到的注解数组是否为0</span></span><br><span class="line"><span class="keyword">if</span> (result.length == <span class="number">0</span> &amp;&amp; <span class="keyword">this</span> <span class="keyword">instanceof</span> Class &amp;&amp; </span><br><span class="line"><span class="comment">//判断定义注解上是否使用了@Inherited元注解 </span></span><br><span class="line"> AnnotationType.getInstance(annotationClass).isInherited()) &#123; <span class="comment">// Inheritable</span></span><br><span class="line">        <span class="comment">//从父类获取</span></span><br><span class="line">       Class&lt;?&gt; superClass = ((Class&lt;?&gt;) <span class="keyword">this</span>).getSuperclass();</span><br><span class="line">   <span class="keyword">if</span> (superClass != <span class="keyword">null</span>) &#123;</span><br><span class="line">      result = superClass.getAnnotationsByType(annotationClass);</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Repeatable的英文意思是可重复的。顾名思义说明被这个元注解修饰的注解可以同时作用一个对象多次，但是每次作用注解又可以代表不同的含义。<br>下面我们看一个人玩游戏的例子</p>
-<pre><code class="java">/**一个人喜欢玩游戏，他喜欢玩英雄联盟，绝地求生，极品飞车，尘埃4等，则我们需要定义一个人的注解，他属性代表喜欢玩游戏集合，一个游戏注解，游戏属性代表游戏名称*/
-/**玩家注解*/
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface People &#123;
-    Game[] value() ;
-&#125;
-/**游戏注解*/
-@Repeatable(People.class)
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Game &#123;
-    String value() default &quot;&quot;;
-&#125;
-/**玩游戏类*/
-@Game(value = &quot;LOL&quot;)
-@Game(value = &quot;PUBG&quot;)
-@Game(value = &quot;NFS&quot;)
-@Game(value = &quot;Dirt4&quot;)
-public class PlayGame &#123;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**一个人喜欢玩游戏，他喜欢玩英雄联盟，绝地求生，极品飞车，尘埃4等，则我们需要定义一个人的注解，他属性代表喜欢玩游戏集合，一个游戏注解，游戏属性代表游戏名称*/</span></span><br><span class="line"><span class="comment">/**玩家注解*/</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> People &#123;</span><br><span class="line">    Game[] value() ;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**游戏注解*/</span></span><br><span class="line"><span class="meta">@Repeatable(People.class)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Game &#123;</span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**玩游戏类*/</span></span><br><span class="line"><span class="meta">@Game(value = &quot;LOL&quot;)</span></span><br><span class="line"><span class="meta">@Game(value = &quot;PUBG&quot;)</span></span><br><span class="line"><span class="meta">@Game(value = &quot;NFS&quot;)</span></span><br><span class="line"><span class="meta">@Game(value = &quot;Dirt4&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PlayGame</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>通过上面的例子，你可能会有一个疑问，游戏注解中括号的变量是啥，其实这和游戏注解中定义的属性对应。接下来我们继续学习注解的属性。</p>
 <h2 id="注解的属性"><a href="#注解的属性" class="headerlink" title="注解的属性"></a>注解的属性</h2><p>通过上一小节@Repeatable注解的例子，我们说到注解的属性。注解的属性其实和类中定义的变量有异曲同工之处，只是注解中的变量都是成员变量（属性），并且注解中是没有方法的，只有成员变量，变量名就是使用注解括号中对应的参数名，变量返回值注解括号中对应参数类型。相信这会你应该会对上面的例子有一个更深的认识。而@Repeatable注解中的变量则类型则是对应Annotation（接口）的泛型Class。</p>
-<pre><code class="java">/**注解Repeatable源码*/
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface Repeatable &#123;
-    /**
-     * Indicates the &lt;em&gt;containing annotation type&lt;/em&gt; for the
-     * repeatable annotation type.
-     * @return the containing annotation type
-     */
-    Class&lt;? extends Annotation&gt; value();
-&#125;
-注解的本质
-注解的本质就是一个Annotation接口
-/**Annotation接口源码*/
-public interface Annotation &#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**注解Repeatable源码*/</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.ANNOTATION_TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Repeatable &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Indicates the &lt;em&gt;containing annotation type&lt;/em&gt; for the</span></span><br><span class="line"><span class="comment">     * repeatable annotation type.</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> the containing annotation type</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Class&lt;? extends Annotation&gt; value();</span><br><span class="line">&#125;</span><br><span class="line">注解的本质</span><br><span class="line">注解的本质就是一个Annotation接口</span><br><span class="line"><span class="comment">/**Annotation接口源码*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Annotation</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    Class&lt;? extends Annotation&gt; annotationType();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    boolean equals(Object obj);
-
-    int hashCode();
-
-    Class&lt;? extends Annotation&gt; annotationType();
-&#125;
-</code></pre>
 <p>通过以上源码，我们知道注解本身就是<strong>Annotation接口的子接口</strong>，也就是说<strong>注解中其实是可以有属性和方法，但是接口中的属性都是static final的，对于注解来说没什么意义，而我们定义接口的方法就相当于注解的属性</strong>，也就对应了前面说的为什么注解只有属性成员变量，其实他就是接口的方法，这就是为什么成员变量会有括号，不同于接口我们可以在注解的括号中给成员变量赋值。<br>注解属性类型<br>注解属性类型可以有以下列出的类型</p>
-<pre><code class="java">1.基本数据类型
-2.String
-3.枚举类型
-4.注解类型
-5.Class类型
-6.以上类型的一维数组类型
-</code></pre>
-<pre><code class="java">package com.zejian.annotationdemo;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>基本数据类型</span><br><span class="line"><span class="number">2.</span>String</span><br><span class="line"><span class="number">3.</span>枚举类型</span><br><span class="line"><span class="number">4.</span>注解类型</span><br><span class="line"><span class="number">5.</span>Class类型</span><br><span class="line"><span class="number">6.</span>以上类型的一维数组类型</span><br></pre></td></tr></table></figure>
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * Created by wuzejian on 2017/5/19.
- * 数据类型使用Demo
- */
-
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@interface Reference&#123;
-    boolean next() default false;
-&#125;
-
-public @interface AnnotationElementDemo &#123;
-    //枚举类型
-    enum Status &#123;FIXED,NORMAL&#125;;
-
-    //声明枚举
-    Status status() default Status.FIXED;
-
-    //布尔类型
-    boolean showSupport() default false;
-
-    //String类型
-    String name()default &quot;&quot;;
-
-    //class类型
-    Class&lt;?&gt; testCase() default Void.class;
-
-    //注解嵌套
-    Reference reference() default @Reference(next=true);
-
-    //数组类型
-    long[] value();
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zejian.annotationdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/19.</span></span><br><span class="line"><span class="comment"> * 数据类型使用Demo</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@interface</span> Reference&#123;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">next</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> AnnotationElementDemo &#123;</span><br><span class="line">    <span class="comment">//枚举类型</span></span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Status</span> </span>&#123;FIXED,NORMAL&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//声明枚举</span></span><br><span class="line">    <span class="function">Status <span class="title">status</span><span class="params">()</span> <span class="keyword">default</span> Status.FIXED</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//布尔类型</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">showSupport</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//String类型</span></span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span><span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//class类型</span></span><br><span class="line">    Class&lt;?&gt; testCase() <span class="keyword">default</span> Void.class;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注解嵌套</span></span><br><span class="line">    <span class="function">Reference <span class="title">reference</span><span class="params">()</span> <span class="keyword">default</span> @<span class="title">Reference</span><span class="params">(next=<span class="keyword">true</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//数组类型</span></span><br><span class="line">    <span class="keyword">long</span>[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>编译器对默认值的限制</strong><br>编译器对元素的默认值有些过分挑剔。首先，元素不能有不确定的值。也就是说，元素必须要么具有默认值，要么在使用注解时提供元素的值。其次，对于非基本类型的元素，无论是在源代码中声明，还是在注解接口中定义默认值，都不能以null作为值，这就是限制，没有什么利用可言，但造成一个元素的存在或缺失状态，因为每个注解的声明中，所有的元素都存在，并且都具有相应的值，为了绕开这个限制，只能定义一些特殊的值，例如空字符串或负数，表示某个元素不存在。</p>
 <p><strong>注解不支持继承</strong><br>注解是不支持继承的，因此不能使用关键字extends来继承某个@interface，但注解在编译后，编译器会自动继承java.lang.annotation.Annotation接口，这里我们反编译前面定义的DBTable注解</p>
-<pre><code class="java">package com.zejian.annotationdemo;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zejian.annotationdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="comment">//反编译后的代码</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">DBTable</span> <span class="keyword">extends</span> <span class="title">Annotation</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">name</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-import java.lang.annotation.Annotation;
-//反编译后的代码
-public interface DBTable extends Annotation
-&#123;
-    public abstract String name();
-&#125;
-</code></pre>
 <p>虽然反编译后发现DBTable注解继承了Annotation接口，请记住，即使Java的接口可以实现多继承，但定义注解时依然无法使用extends关键字继承@interface。</p>
 <h2 id="注解成员变量赋值"><a href="#注解成员变量赋值" class="headerlink" title="注解成员变量赋值"></a>注解成员变量赋值</h2><p>如果注解又多个属性，则可以在注解括号中用“，”号隔开分别给对应的属性赋值，如下例子，注解在父类中赋值属性</p>
-<pre><code class="java">@Documented
-@Inherited
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface MyTestAnnotation &#123;
-    String name() default &quot;mao&quot;;
-    int age() default 18;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> MyTestAnnotation &#123;</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> &quot;mao&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">age</span><span class="params">()</span> <span class="keyword">default</span> 18</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@MyTestAnnotation(name = &quot;father&quot;,age = 50)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@MyTestAnnotation(name = &quot;father&quot;,age = 50)
-public class Father &#123;
-&#125;
-</code></pre>
 <h2 id="获取注解属性"><a href="#获取注解属性" class="headerlink" title="获取注解属性"></a>获取注解属性</h2><h3 id="新增的两种ElementType"><a href="#新增的两种ElementType" class="headerlink" title="新增的两种ElementType"></a>新增的两种ElementType</h3><p>在Java8中 ElementType 新增两个枚举成员，<code>TYPE_PARAMETER</code> 和 <code>TYPE_USE</code> ，在Java8前注解只能标注在一个声明(如字段、类、方法)上，Java8后，新增的TYPE_PARAMETER可以用于标注类型参数，而TYPE_USE则可以用于标注任意类型(不包括class)。如下所示</p>
-<pre><code class="java">//TYPE_PARAMETER 标注在类型参数上
-class D&lt;@Parameter T&gt; &#123; &#125;
-
-//TYPE_USE则可以用于标注任意类型(不包括class)
-//用于父类或者接口
-class Image implements @Rectangular Shape &#123; &#125;
-
-//用于构造函数
-new @Path String(&quot;/usr/bin&quot;)
-
-//用于强制转换和instanceof检查,注意这些注解中用于外部工具，它们不会对类型转换或者instanceof的检查行为带来任何影响。
-String path=(@Path String)input;
-if(input instanceof @Path String)
-
-//用于指定异常
-public Person read() throws @Localized IOException.
-
-//用于通配符绑定
-List&lt;@ReadOnly ? extends Person&gt;
-List&lt;? extends @ReadOnly Person&gt;
-
-@NotNull String.class //非法，不能标注class
-import java.lang.@NotNull String //非法，不能标注import
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//TYPE_PARAMETER 标注在类型参数上</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span>&lt;@<span class="title">Parameter</span> <span class="title">T</span>&gt; </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//TYPE_USE则可以用于标注任意类型(不包括class)</span></span><br><span class="line"><span class="comment">//用于父类或者接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Image</span> <span class="keyword">implements</span> @<span class="title">Rectangular</span> <span class="title">Shape</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用于构造函数</span></span><br><span class="line"><span class="keyword">new</span> <span class="meta">@Path</span> String(<span class="string">&quot;/usr/bin&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">//用于强制转换和instanceof检查,注意这些注解中用于外部工具，它们不会对类型转换或者instanceof的检查行为带来任何影响。</span></span><br><span class="line">String path=(<span class="meta">@Path</span> String)input;</span><br><span class="line"><span class="keyword">if</span>(input <span class="keyword">instanceof</span> <span class="meta">@Path</span> String)</span><br><span class="line"></span><br><span class="line"><span class="comment">//用于指定异常</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Person <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> @Localized IOException.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//用于通配符绑定</span></span></span><br><span class="line"><span class="function">List&lt;@ReadOnly ? extends Person&gt;</span></span><br><span class="line"><span class="function">List&lt;? extends @ReadOnly Person&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">@NotNull String.class <span class="comment">//非法，不能标注class</span></span></span><br><span class="line"><span class="function"><span class="keyword">import</span> java.lang.@NotNull String <span class="comment">//非法，不能标注import</span></span></span><br></pre></td></tr></table></figure>
 <p>这里主要说明一下TYPE_USE，类型注解用来支持在Java的程序中做强类型检查，配合第三方插件工具（如Checker Framework），可以在编译期检测出runtime error（如<code>UnsupportedOperationException、NullPointerException异常</code>），<strong>避免异常延续到运行期才发现，从而提高代码质量，这就是类型注解的主要作用</strong>。总之Java 8 新增加了两个注解的元素类型ElementType.TYPE_USE 和ElementType.TYPE_PARAMETER ，通过它们，我们可以把注解应用到各种新场合中。</p>
 <p>前面我们说了很多注解如何定义，放在哪，现在我们可以开始学习注解属性的提取了，这才是使用注解的关键，获取属性的值才是使用注解的目的。<br>如果获取注解属性，当然是反射啦，主要有三个基本的方法</p>
-<pre><code class="java"> /**是否存在对应 Annotation 对象*/
-  public boolean isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationClass) &#123;
-        return GenericDeclaration.super.isAnnotationPresent(annotationClass);
-    &#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**是否存在对应 Annotation 对象*/</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isAnnotationPresent</span><span class="params">(Class&lt;? extends Annotation&gt; annotationClass)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> GenericDeclaration.<span class="keyword">super</span>.isAnnotationPresent(annotationClass);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**获取 Annotation 对象*/</span></span><br><span class="line">    <span class="keyword">public</span> &lt;A extends Annotation&gt; <span class="function">A <span class="title">getAnnotation</span><span class="params">(Class&lt;A&gt; annotationClass)</span> </span>&#123;</span><br><span class="line">        Objects.requireNonNull(annotationClass);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> (A) annotationData().annotations.get(annotationClass);</span><br><span class="line">    &#125;</span><br><span class="line"> <span class="comment">/**获取所有 Annotation 对象数组*/</span>   </span><br><span class="line"> <span class="keyword">public</span> Annotation[] getAnnotations() &#123;</span><br><span class="line">        <span class="keyword">return</span> AnnotationParser.toArray(annotationData().annotations);</span><br><span class="line">    &#125;    </span><br><span class="line">下面结合前面的例子，我们来获取一下注解属性，在获取之前我们自定义的注解必须使用元注解<span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> NoSuchMethodException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 获取类注解属性</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        Class&lt;Father&gt; fatherClass = Father.class;</span><br><span class="line">        <span class="keyword">boolean</span> annotationPresent = fatherClass.isAnnotationPresent(MyTestAnnotation.class);</span><br><span class="line">        <span class="keyword">if</span>(annotationPresent)&#123;</span><br><span class="line">            MyTestAnnotation annotation = fatherClass.getAnnotation(MyTestAnnotation.class);</span><br><span class="line">            System.out.println(annotation.name());</span><br><span class="line">            System.out.println(annotation.age());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 获取方法注解属性</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Field age = fatherClass.getDeclaredField(<span class="string">&quot;age&quot;</span>);</span><br><span class="line">            <span class="keyword">boolean</span> annotationPresent1 = age.isAnnotationPresent(Age.class);</span><br><span class="line">            <span class="keyword">if</span>(annotationPresent1)&#123;</span><br><span class="line">                Age annotation = age.getAnnotation(Age.class);</span><br><span class="line">                System.out.println(annotation.value());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            Method play = PlayGame.class.getDeclaredMethod(<span class="string">&quot;play&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (play!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                People annotation2 = play.getAnnotation(People.class);</span><br><span class="line">                Game[] value = annotation2.value();</span><br><span class="line">                <span class="keyword">for</span> (Game game : value) &#123;</span><br><span class="line">                    System.out.println(game.value());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchFieldException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
- /**获取 Annotation 对象*/
-    public &lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationClass) &#123;
-        Objects.requireNonNull(annotationClass);
-
-        return (A) annotationData().annotations.get(annotationClass);
-    &#125;
- /**获取所有 Annotation 对象数组*/   
- public Annotation[] getAnnotations() &#123;
-        return AnnotationParser.toArray(annotationData().annotations);
-    &#125;    
-下面结合前面的例子，我们来获取一下注解属性，在获取之前我们自定义的注解必须使用元注解@Retention(RetentionPolicy.RUNTIME)
-
-public class test &#123;
-   public static void main(String[] args) throws NoSuchMethodException &#123;
-
-        /**
-         * 获取类注解属性
-         */
-        Class&lt;Father&gt; fatherClass = Father.class;
-        boolean annotationPresent = fatherClass.isAnnotationPresent(MyTestAnnotation.class);
-        if(annotationPresent)&#123;
-            MyTestAnnotation annotation = fatherClass.getAnnotation(MyTestAnnotation.class);
-            System.out.println(annotation.name());
-            System.out.println(annotation.age());
-        &#125;
-
-        /**
-         * 获取方法注解属性
-         */
-        try &#123;
-            Field age = fatherClass.getDeclaredField(&quot;age&quot;);
-            boolean annotationPresent1 = age.isAnnotationPresent(Age.class);
-            if(annotationPresent1)&#123;
-                Age annotation = age.getAnnotation(Age.class);
-                System.out.println(annotation.value());
-            &#125;
-
-            Method play = PlayGame.class.getDeclaredMethod(&quot;play&quot;);
-            if (play!=null)&#123;
-                People annotation2 = play.getAnnotation(People.class);
-                Game[] value = annotation2.value();
-                for (Game game : value) &#123;
-                    System.out.println(game.value());
-                &#125;
-            &#125;
-        &#125; catch (NoSuchFieldException e) &#123;
-            e.printStackTrace();
-        &#125;
-    &#125;
-&#125;
-</code></pre>
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/20200607094501988.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="Java内置注解与其它元注解"><a href="#Java内置注解与其它元注解" class="headerlink" title="Java内置注解与其它元注解"></a>Java内置注解与其它元注解</h2><p><img src="https://img-blog.csdnimg.cn/20200607094527410.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <p>接着看看Java提供的内置注解，主要有3个，如下：</p>
 <p>@Override：用于标明此方法覆盖了父类的方法，源码如下</p>
-<pre><code class="java">@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.SOURCE)
-public @interface Override &#123;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Override &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>@Deprecated：用于标明已经过时的方法或类，源码如下，关于@Documented稍后分析：</p>
-<pre><code class="java">@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(value=&#123;CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE&#125;)
-public @interface Deprecated &#123;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(value=&#123;CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Deprecated &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>@SuppressWarnnings:用于有选择的关闭编译器对类、方法、成员变量、变量初始化的警告，其实现源码如下：</p>
-<pre><code class="java">@Target(&#123;TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE&#125;)
-@Retention(RetentionPolicy.SOURCE)
-public @interface SuppressWarnings &#123;
-    String[] value();
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.SOURCE)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SuppressWarnings &#123;</span><br><span class="line">    String[] value();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其内部有一个String数组，主要接收值如下：</p>
-<pre><code class="java">deprecation：使用了不赞成使用的类或方法时的警告；
-unchecked：执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型; 
-fallthrough：当 Switch 程序块直接通往下一种情况而没有 Break 时的警告;
-path：在类路径、源文件路径等中有不存在的路径时的警告; 
-serial：当在可序列化的类上缺少 serialVersionUID 定义时的警告; 
-finally：任何 finally 子句不能正常完成时的警告; 
-all：关于以上所有情况的警告。
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">deprecation：使用了不赞成使用的类或方法时的警告；</span><br><span class="line">unchecked：执行了未检查的转换时的警告，例如当使用集合时没有用泛型 (Generics) 来指定集合保存的类型; </span><br><span class="line">fallthrough：当 Switch 程序块直接通往下一种情况而没有 Break 时的警告;</span><br><span class="line">path：在类路径、源文件路径等中有不存在的路径时的警告; </span><br><span class="line">serial：当在可序列化的类上缺少 serialVersionUID 定义时的警告; </span><br><span class="line"><span class="keyword">finally</span>：任何 <span class="keyword">finally</span> 子句不能正常完成时的警告; </span><br><span class="line">all：关于以上所有情况的警告。</span><br></pre></td></tr></table></figure>
 <p>这个三个注解比较简单，看个简单案例即可：</p>
-<pre><code class="java">//注明该类已过时，不建议使用
-@Deprecated
-class A&#123;
-    public void A()&#123; &#125;
-
-    //注明该方法已过时，不建议使用
-    @Deprecated()
-    public void B()&#123; &#125;
-&#125;
-
-class B extends A&#123;
-
-    @Override //标明覆盖父类A的A方法
-    public void A() &#123;
-        super.A();
-    &#125;
-
-    //去掉检测警告
-    @SuppressWarnings(&#123;&quot;uncheck&quot;,&quot;deprecation&quot;&#125;)
-    public void C()&#123; &#125; 
-    //去掉检测警告
-    @SuppressWarnings(&quot;uncheck&quot;)
-    public void D()&#123; &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注明该类已过时，不建议使用</span></span><br><span class="line"><span class="meta">@Deprecated</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//注明该方法已过时，不建议使用</span></span><br><span class="line">    <span class="meta">@Deprecated()</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">B</span><span class="params">()</span></span>&#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="comment">//标明覆盖父类A的A方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">A</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.A();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//去掉检测警告</span></span><br><span class="line">    <span class="meta">@SuppressWarnings(&#123;&quot;uncheck&quot;,&quot;deprecation&quot;&#125;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">C</span><span class="params">()</span></span>&#123; &#125; </span><br><span class="line">    <span class="comment">//去掉检测警告</span></span><br><span class="line">    <span class="meta">@SuppressWarnings(&quot;uncheck&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">D</span><span class="params">()</span></span>&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>除了这两种元注解，Java还提供了另外两种元注解，@Documented和@Inherited，下面分别介绍：</p>
-<pre><code class="java">@Documented 被修饰的注解会生成到javadoc中
-
-/**
- * Created by zejian on 2017/5/20.
- * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
- */
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DocumentA &#123;
-&#125;
-
-//没有使用@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DocumentB &#123;
-&#125;
-
-//使用注解
-@DocumentA
-@DocumentB
-public class DocumentDemo &#123;
-    public void A()&#123;
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span> 被修饰的注解会生成到javadoc中</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/20.</span></span><br><span class="line"><span class="comment"> * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DocumentA &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//没有使用@Documented</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DocumentB &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用注解</span></span><br><span class="line"><span class="meta">@DocumentA</span></span><br><span class="line"><span class="meta">@DocumentB</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DocumentDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以发现**使用@Documented元注解定义的注解(@DocumentA)将会生成到javadoc中,**而@DocumentB则没有在doc文档中出现，这就是元注解@Documented的作用。</p>
 <p>@Inherited 可以让注解被继承，但这并不是真的继承，只是通过使用@Inherited，可以<strong>让子类Class对象使用getAnnotations()获取父类</strong>被@Inherited修饰的注解，如下：</p>
-<pre><code class="java">@Inherited
-@Documented
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DocumentA &#123;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DocumentA &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DocumentB &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@DocumentA</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@DocumentB</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">D</span> <span class="keyword">extends</span> <span class="title">C</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//测试</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DocumentDemo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String... args)</span></span>&#123;</span><br><span class="line">        A instanceA=<span class="keyword">new</span> B();</span><br><span class="line">        System.out.println(<span class="string">&quot;已使用的@Inherited注解:&quot;</span>+Arrays.toString(instanceA.getClass().getAnnotations()));</span><br><span class="line"></span><br><span class="line">        C instanceC = <span class="keyword">new</span> D();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;没有使用的@Inherited注解:&quot;</span>+Arrays.toString(instanceC.getClass().getAnnotations()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 运行结果:</span></span><br><span class="line"><span class="comment">     已使用的<span class="doctag">@Inherited</span>注解:[<span class="doctag">@com</span>.zejian.annotationdemo.DocumentA()]</span></span><br><span class="line"><span class="comment">     没有使用的<span class="doctag">@Inherited</span>注解:[]</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface DocumentB &#123;
-&#125;
-
-@DocumentA
-class A&#123; &#125;
-
-class B extends A&#123; &#125;
-
-@DocumentB
-class C&#123; &#125;
-
-class D extends C&#123; &#125;
-
-//测试
-public class DocumentDemo &#123;
-
-    public static void main(String... args)&#123;
-        A instanceA=new B();
-        System.out.println(&quot;已使用的@Inherited注解:&quot;+Arrays.toString(instanceA.getClass().getAnnotations()));
-
-        C instanceC = new D();
-
-        System.out.println(&quot;没有使用的@Inherited注解:&quot;+Arrays.toString(instanceC.getClass().getAnnotations()));
-    &#125;
-
-    /**
-     * 运行结果:
-     已使用的@Inherited注解:[@com.zejian.annotationdemo.DocumentA()]
-     没有使用的@Inherited注解:[]
-     */
-&#125;
-</code></pre>
 <h2 id="注解与反射机制"><a href="#注解与反射机制" class="headerlink" title="注解与反射机制"></a>注解与反射机制</h2><p>前面经过反编译后，我们知道Java所有注解都继承了Annotation接口，也就是说　Java使用Annotation接口代表注解元素，该接口是所有Annotation类型的父接口。同时为了运行时能准确获取到注解的相关信息，Java在java.lang.reflect 反射包下新增了AnnotatedElement接口，它主要用于表示目前正在 VM 中运行的程序中已使用注解的元素，通过该接口提供的方法可以利用反射技术地读取注解的信息，如反射包的Constructor类、Field类、Method类、Package类和Class类都实现了AnnotatedElement接口，它简要含义如下（更多详细介绍可以看 深入理解Java类型信息(Class对象)与反射机制）：</p>
-<pre><code class="java">Class：类的Class对象定义 　
-Constructor：代表类的构造器定义 　
-Field：代表类的成员变量定义
-Method：代表类的方法定义 　
-Package：代表类的包定义
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Class：类的Class对象定义 　</span><br><span class="line">Constructor：代表类的构造器定义 　</span><br><span class="line">Field：代表类的成员变量定义</span><br><span class="line">Method：代表类的方法定义 　</span><br><span class="line">Package：代表类的包定义</span><br></pre></td></tr></table></figure>
+
 <p>下面是AnnotatedElement中相关的API方法，以上5个类都实现以下的方法<br><img src="https://img-blog.csdnimg.cn/20200607100256826.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<pre><code class="java">单案例演示如下：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">单案例演示如下：</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> com.zejian.annotationdemo;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/20.</span></span><br><span class="line"><span class="comment"> * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@DocumentA</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//继承了A类</span></span><br><span class="line"><span class="meta">@DocumentB</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DocumentDemo</span> <span class="keyword">extends</span> <span class="title">A</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String... args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; clazz = DocumentDemo.class;</span><br><span class="line">        <span class="comment">//根据指定注解类型获取该注解</span></span><br><span class="line">        DocumentA documentA=clazz.getAnnotation(DocumentA.class);</span><br><span class="line">        System.out.println(<span class="string">&quot;A:&quot;</span>+documentA);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取该元素上的所有注解，包含从父类继承</span></span><br><span class="line">        Annotation[] an= clazz.getAnnotations();</span><br><span class="line">        System.out.println(<span class="string">&quot;an:&quot;</span>+ Arrays.toString(an));</span><br><span class="line">        <span class="comment">//获取该元素上的所有注解，但不包含继承！</span></span><br><span class="line">        Annotation[] an2=clazz.getDeclaredAnnotations();</span><br><span class="line">        System.out.println(<span class="string">&quot;an2:&quot;</span>+ Arrays.toString(an2));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断注解DocumentA是否在该元素上</span></span><br><span class="line">        <span class="keyword">boolean</span> b=clazz.isAnnotationPresent(DocumentA.class);</span><br><span class="line">        System.out.println(<span class="string">&quot;b:&quot;</span>+b);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 执行结果:</span></span><br><span class="line"><span class="comment">         A:<span class="doctag">@com</span>.zejian.annotationdemo.DocumentA()</span></span><br><span class="line"><span class="comment">         an:[<span class="doctag">@com</span>.zejian.annotationdemo.DocumentA(), <span class="doctag">@com</span>.zejian.annotationdemo.DocumentB()]</span></span><br><span class="line"><span class="comment">         an2:<span class="doctag">@com</span>.zejian.annotationdemo.DocumentB()</span></span><br><span class="line"><span class="comment">         b:true</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-package com.zejian.annotationdemo;
-
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-
-/**
- * Created by zejian on 2017/5/20.
- * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
- */
-@DocumentA
-class A&#123; &#125;
-
-//继承了A类
-@DocumentB
-public class DocumentDemo extends A&#123;
-
-    public static void main(String... args)&#123;
-
-        Class&lt;?&gt; clazz = DocumentDemo.class;
-        //根据指定注解类型获取该注解
-        DocumentA documentA=clazz.getAnnotation(DocumentA.class);
-        System.out.println(&quot;A:&quot;+documentA);
-
-        //获取该元素上的所有注解，包含从父类继承
-        Annotation[] an= clazz.getAnnotations();
-        System.out.println(&quot;an:&quot;+ Arrays.toString(an));
-        //获取该元素上的所有注解，但不包含继承！
-        Annotation[] an2=clazz.getDeclaredAnnotations();
-        System.out.println(&quot;an2:&quot;+ Arrays.toString(an2));
-
-        //判断注解DocumentA是否在该元素上
-        boolean b=clazz.isAnnotationPresent(DocumentA.class);
-        System.out.println(&quot;b:&quot;+b);
-
-        /**
-         * 执行结果:
-         A:@com.zejian.annotationdemo.DocumentA()
-         an:[@com.zejian.annotationdemo.DocumentA(), @com.zejian.annotationdemo.DocumentB()]
-         an2:@com.zejian.annotationdemo.DocumentB()
-         b:true
-         */
-    &#125;
-&#125;
-</code></pre>
 <h2 id="注解作用与应用"><a href="#注解作用与应用" class="headerlink" title="注解作用与应用"></a>注解作用与应用</h2><p><strong>运行时注解处理器</strong><br>了解完注解与反射的相关API后，现在通过一个实例（该例子是博主改编自《Tinking in Java》）来演示利用运行时注解来组装数据库SQL的构建语句的过程</p>
-<pre><code class="java">/**
- * Created by wuzejian on 2017/5/18.
- * 表注解
- */
-@Target(ElementType.TYPE)//只能应用于类上
-@Retention(RetentionPolicy.RUNTIME)//保存到运行时
-public @interface DBTable &#123;
-    String name() default &quot;&quot;;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/18.</span></span><br><span class="line"><span class="comment"> * 表注解</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target(ElementType.TYPE)</span><span class="comment">//只能应用于类上</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span><span class="comment">//保存到运行时</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DBTable &#123;</span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/18.</span></span><br><span class="line"><span class="comment"> * 注解Integer类型的字段</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target(ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SQLInteger &#123;</span><br><span class="line">    <span class="comment">//该字段对应数据库表列名</span></span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line">    <span class="comment">//嵌套注解</span></span><br><span class="line">    <span class="function">Constraints <span class="title">constraint</span><span class="params">()</span> <span class="keyword">default</span> @Constraints</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/18.</span></span><br><span class="line"><span class="comment"> * 注解String类型的字段</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Target(ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SQLString &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//对应数据库表的列名</span></span><br><span class="line">    <span class="function">String <span class="title">name</span><span class="params">()</span> <span class="keyword">default</span> &quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//列类型分配的长度，如varchar(30)的30</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> 0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function">Constraints <span class="title">constraint</span><span class="params">()</span> <span class="keyword">default</span> @Constraints</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/18.</span></span><br><span class="line"><span class="comment"> * 约束注解</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(ElementType.FIELD)</span><span class="comment">//只能应用在字段上</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Constraints &#123;</span><br><span class="line">    <span class="comment">//判断是否作为主键约束</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">primaryKey</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">    <span class="comment">//判断是否允许为null</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">allowNull</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">    <span class="comment">//判断是否唯一</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">unique</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by wuzejian on 2017/5/18.</span></span><br><span class="line"><span class="comment"> * 数据库表Member对应实例类bean</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@DBTable(name = &quot;MEMBER&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Member</span> </span>&#123;</span><br><span class="line">    <span class="comment">//主键ID</span></span><br><span class="line">    <span class="meta">@SQLString(name = &quot;ID&quot;,value = 50, constraint = @Constraints(primaryKey = true))</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SQLString(name = &quot;NAME&quot; , value = 30)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SQLInteger(name = &quot;AGE&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@SQLString(name = &quot;DESCRIPTION&quot; ,value = 150 , constraint = @Constraints(allowNull = true))</span></span><br><span class="line">    <span class="keyword">private</span> String description;<span class="comment">//个人描述</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">//省略set get.....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-/**
- * Created by wuzejian on 2017/5/18.
- * 注解Integer类型的字段
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SQLInteger &#123;
-    //该字段对应数据库表列名
-    String name() default &quot;&quot;;
-    //嵌套注解
-    Constraints constraint() default @Constraints;
-&#125;
-
-
-/**
- * Created by wuzejian on 2017/5/18.
- * 注解String类型的字段
- */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SQLString &#123;
-
-    //对应数据库表的列名
-    String name() default &quot;&quot;;
-
-    //列类型分配的长度，如varchar(30)的30
-    int value() default 0;
-
-    Constraints constraint() default @Constraints;
-&#125;
-
-
-/**
- * Created by wuzejian on 2017/5/18.
- * 约束注解
- */
-
-@Target(ElementType.FIELD)//只能应用在字段上
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Constraints &#123;
-    //判断是否作为主键约束
-    boolean primaryKey() default false;
-    //判断是否允许为null
-    boolean allowNull() default false;
-    //判断是否唯一
-    boolean unique() default false;
-&#125;
-
-/**
- * Created by wuzejian on 2017/5/18.
- * 数据库表Member对应实例类bean
- */
-@DBTable(name = &quot;MEMBER&quot;)
-public class Member &#123;
-    //主键ID
-    @SQLString(name = &quot;ID&quot;,value = 50, constraint = @Constraints(primaryKey = true))
-    private String id;
-
-    @SQLString(name = &quot;NAME&quot; , value = 30)
-    private String name;
-
-    @SQLInteger(name = &quot;AGE&quot;)
-    private int age;
-
-    @SQLString(name = &quot;DESCRIPTION&quot; ,value = 150 , constraint = @Constraints(allowNull = true))
-    private String description;//个人描述
-
-   //省略set get.....
-&#125;
-</code></pre>
 <p>上述定义4个注解，分别是@DBTable(用于类上)、@Constraints(用于字段上)、 @SQLString(用于字段上)、@SQLString(用于字段上)并在Member类中使用这些注解，这些注解的作用的是用于帮助注解处理器生成创建数据库表MEMBER的构建语句，在这里有点需要注意的是，我们使用了嵌套注解@Constraints，该注解主要用于判断字段是否为null或者字段是否唯一。必须清楚认识到上述提供的注解生命周期必须为@Retention(RetentionPolicy.RUNTIME)，即运行时，这样才可以使用反射机制获取其信息。有了上述注解和使用，剩余的就是编写上述的注解处理器了，前面我们聊了很多注解，其处理器要么是Java自身已提供、要么是框架已提供的，我们自己都没有涉及到注解处理器的编写，但上述定义处理SQL的注解，其处理器必须由我们自己编写了，如下</p>
-<pre><code class="java">package com.zejian.annotationdemo;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.zejian.annotationdemo;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by zejian on 2017/5/13.</span></span><br><span class="line"><span class="comment"> * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]</span></span><br><span class="line"><span class="comment"> * 运行时注解处理器，构造表创建语句</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TableCreator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">createTableSql</span><span class="params">(String className)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line">    Class&lt;?&gt; cl = Class.forName(className);</span><br><span class="line">    DBTable dbTable = cl.getAnnotation(DBTable.class);</span><br><span class="line">    <span class="comment">//如果没有表注解，直接返回</span></span><br><span class="line">    <span class="keyword">if</span>(dbTable == <span class="keyword">null</span>) &#123;</span><br><span class="line">      System.out.println(</span><br><span class="line">              <span class="string">&quot;No DBTable annotations in class &quot;</span> + className);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    String tableName = dbTable.name();</span><br><span class="line">    <span class="comment">// If the name is empty, use the Class name:</span></span><br><span class="line">    <span class="keyword">if</span>(tableName.length() &lt; <span class="number">1</span>)</span><br><span class="line">      tableName = cl.getName().toUpperCase();</span><br><span class="line">    List&lt;String&gt; columnDefs = <span class="keyword">new</span> ArrayList&lt;String&gt;();</span><br><span class="line">    <span class="comment">//通过Class类API获取到所有成员字段</span></span><br><span class="line">    <span class="keyword">for</span>(Field field : cl.getDeclaredFields()) &#123;</span><br><span class="line">      String columnName = <span class="keyword">null</span>;</span><br><span class="line">      <span class="comment">//获取字段上的注解</span></span><br><span class="line">      Annotation[] anns = field.getDeclaredAnnotations();</span><br><span class="line">      <span class="keyword">if</span>(anns.length &lt; <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">continue</span>; <span class="comment">// Not a db table column</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//判断注解类型</span></span><br><span class="line">      <span class="keyword">if</span>(anns[<span class="number">0</span>] <span class="keyword">instanceof</span> SQLInteger) &#123;</span><br><span class="line">        SQLInteger sInt = (SQLInteger) anns[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">//获取字段对应列名称，如果没有就是使用字段名称替代</span></span><br><span class="line">        <span class="keyword">if</span>(sInt.name().length() &lt; <span class="number">1</span>)</span><br><span class="line">          columnName = field.getName().toUpperCase();</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          columnName = sInt.name();</span><br><span class="line">        <span class="comment">//构建语句</span></span><br><span class="line">        columnDefs.add(columnName + <span class="string">&quot; INT&quot;</span> +</span><br><span class="line">                getConstraints(sInt.constraint()));</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//判断String类型</span></span><br><span class="line">      <span class="keyword">if</span>(anns[<span class="number">0</span>] <span class="keyword">instanceof</span> SQLString) &#123;</span><br><span class="line">        SQLString sString = (SQLString) anns[<span class="number">0</span>];</span><br><span class="line">        <span class="comment">// Use field name if name not specified.</span></span><br><span class="line">        <span class="keyword">if</span>(sString.name().length() &lt; <span class="number">1</span>)</span><br><span class="line">          columnName = field.getName().toUpperCase();</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          columnName = sString.name();</span><br><span class="line">        columnDefs.add(columnName + <span class="string">&quot; VARCHAR(&quot;</span> +</span><br><span class="line">                sString.value() + <span class="string">&quot;)&quot;</span> +</span><br><span class="line">                getConstraints(sString.constraint()));</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//数据库表构建语句</span></span><br><span class="line">    StringBuilder createCommand = <span class="keyword">new</span> StringBuilder(</span><br><span class="line">            <span class="string">&quot;CREATE TABLE &quot;</span> + tableName + <span class="string">&quot;(&quot;</span>);</span><br><span class="line">    <span class="keyword">for</span>(String columnDef : columnDefs)</span><br><span class="line">      createCommand.append(<span class="string">&quot;\n    &quot;</span> + columnDef + <span class="string">&quot;,&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Remove trailing comma</span></span><br><span class="line">    String tableCreate = createCommand.substring(</span><br><span class="line">            <span class="number">0</span>, createCommand.length() - <span class="number">1</span>) + <span class="string">&quot;);&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> tableCreate;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 判断该字段是否有其他约束</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> con</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">getConstraints</span><span class="params">(Constraints con)</span> </span>&#123;</span><br><span class="line">    String constraints = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(!con.allowNull())</span><br><span class="line">      constraints += <span class="string">&quot; NOT NULL&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(con.primaryKey())</span><br><span class="line">      constraints += <span class="string">&quot; PRIMARY KEY&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span>(con.unique())</span><br><span class="line">      constraints += <span class="string">&quot; UNIQUE&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> constraints;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    String[] arg=&#123;<span class="string">&quot;com.zejian.annotationdemo.Member&quot;</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span>(String className : arg) &#123;</span><br><span class="line">      System.out.println(<span class="string">&quot;Table Creation SQL for &quot;</span> +</span><br><span class="line">              className + <span class="string">&quot; is :\n&quot;</span> + createTableSql(className));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 输出结果：</span></span><br><span class="line"><span class="comment">     Table Creation SQL for com.zejian.annotationdemo.Member is :</span></span><br><span class="line"><span class="comment">     CREATE TABLE MEMBER(</span></span><br><span class="line"><span class="comment">     ID VARCHAR(50) NOT NULL PRIMARY KEY,</span></span><br><span class="line"><span class="comment">     NAME VARCHAR(30) NOT NULL,</span></span><br><span class="line"><span class="comment">     AGE INT NOT NULL,</span></span><br><span class="line"><span class="comment">     DESCRIPTION VARCHAR(150)</span></span><br><span class="line"><span class="comment">     );</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 
-/**
- * Created by zejian on 2017/5/13.
- * Blog : http://blog.csdn.net/javazejian [原文地址,请尊重原创]
- * 运行时注解处理器，构造表创建语句
- */
-public class TableCreator &#123;
-
-  public static String createTableSql(String className) throws ClassNotFoundException &#123;
-    Class&lt;?&gt; cl = Class.forName(className);
-    DBTable dbTable = cl.getAnnotation(DBTable.class);
-    //如果没有表注解，直接返回
-    if(dbTable == null) &#123;
-      System.out.println(
-              &quot;No DBTable annotations in class &quot; + className);
-      return null;
-    &#125;
-    String tableName = dbTable.name();
-    // If the name is empty, use the Class name:
-    if(tableName.length() &lt; 1)
-      tableName = cl.getName().toUpperCase();
-    List&lt;String&gt; columnDefs = new ArrayList&lt;String&gt;();
-    //通过Class类API获取到所有成员字段
-    for(Field field : cl.getDeclaredFields()) &#123;
-      String columnName = null;
-      //获取字段上的注解
-      Annotation[] anns = field.getDeclaredAnnotations();
-      if(anns.length &lt; 1)
-        continue; // Not a db table column
-
-      //判断注解类型
-      if(anns[0] instanceof SQLInteger) &#123;
-        SQLInteger sInt = (SQLInteger) anns[0];
-        //获取字段对应列名称，如果没有就是使用字段名称替代
-        if(sInt.name().length() &lt; 1)
-          columnName = field.getName().toUpperCase();
-        else
-          columnName = sInt.name();
-        //构建语句
-        columnDefs.add(columnName + &quot; INT&quot; +
-                getConstraints(sInt.constraint()));
-      &#125;
-      //判断String类型
-      if(anns[0] instanceof SQLString) &#123;
-        SQLString sString = (SQLString) anns[0];
-        // Use field name if name not specified.
-        if(sString.name().length() &lt; 1)
-          columnName = field.getName().toUpperCase();
-        else
-          columnName = sString.name();
-        columnDefs.add(columnName + &quot; VARCHAR(&quot; +
-                sString.value() + &quot;)&quot; +
-                getConstraints(sString.constraint()));
-      &#125;
-
-
-    &#125;
-    //数据库表构建语句
-    StringBuilder createCommand = new StringBuilder(
-            &quot;CREATE TABLE &quot; + tableName + &quot;(&quot;);
-    for(String columnDef : columnDefs)
-      createCommand.append(&quot;\n    &quot; + columnDef + &quot;,&quot;);
-
-    // Remove trailing comma
-    String tableCreate = createCommand.substring(
-            0, createCommand.length() - 1) + &quot;);&quot;;
-    return tableCreate;
-  &#125;
-
-
-    /**
-     * 判断该字段是否有其他约束
-     * @param con
-     * @return
-     */
-  private static String getConstraints(Constraints con) &#123;
-    String constraints = &quot;&quot;;
-    if(!con.allowNull())
-      constraints += &quot; NOT NULL&quot;;
-    if(con.primaryKey())
-      constraints += &quot; PRIMARY KEY&quot;;
-    if(con.unique())
-      constraints += &quot; UNIQUE&quot;;
-    return constraints;
-  &#125;
-
-  public static void main(String[] args) throws Exception &#123;
-    String[] arg=&#123;&quot;com.zejian.annotationdemo.Member&quot;&#125;;
-    for(String className : arg) &#123;
-      System.out.println(&quot;Table Creation SQL for &quot; +
-              className + &quot; is :\n&quot; + createTableSql(className));
-    &#125;
-
-    /**
-     * 输出结果：
-     Table Creation SQL for com.zejian.annotationdemo.Member is :
-     CREATE TABLE MEMBER(
-     ID VARCHAR(50) NOT NULL PRIMARY KEY,
-     NAME VARCHAR(30) NOT NULL,
-     AGE INT NOT NULL,
-     DESCRIPTION VARCHAR(150)
-     );
-     */
-  &#125;
-</code></pre>
 <p>}</p>
 <p>如果对反射比较熟悉的同学，上述代码就相对简单了，我们通过传递Member的全路径后通过Class.forName()方法获取到Member的class对象，然后利用Class对象中的方法获取所有成员字段Field，最后利用field.getDeclaredAnnotations()遍历每个Field上的注解再通过注解的类型判断来构建建表的SQL语句。这便是利用注解结合反射来构建SQL语句的简单的处理器模型，是否已回想起Hibernate？</p>
 <p>现在我们再次回头看看开头官方文档的那句描述<br>Java 注解用于为 Java 代码提供元数据。作为元数据，注解不直接影响你的代码执行，但也有一些类型的注解实际上可以用于这一目的。</p>
 <p>经过我们前面的了解，注解其实是个很方便的东西，它存活的时间，作用的区域都可以由你方便设置，只是你用注解来干嘛的问题</p>
 <h2 id="使用注解进行参数配置"><a href="#使用注解进行参数配置" class="headerlink" title="使用注解进行参数配置"></a>使用注解进行参数配置</h2><p>下面我们看一个银行转账的例子，假设银行有个转账业务，转账的限额可能会根据汇率的变化而变化，我们可以利用注解灵活配置转账的限额，而不用每次都去修改我们的业务代码。</p>
-<pre><code class="java">/**定义限额注解*/
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface BankTransferMoney &#123;
-    double maxMoney() default 10000;
-&#125;
-/**转账处理业务类*/
-public class BankService &#123;
-    /**
-     * @param money 转账金额
-     */
-    @BankTransferMoney(maxMoney = 15000)
-    public static void TransferMoney(double money)&#123;
-        System.out.println(processAnnotationMoney(money));
-
-    &#125;
-    private static String processAnnotationMoney(double money) &#123;
-        try &#123;
-            Method transferMoney = BankService.class.getDeclaredMethod(&quot;TransferMoney&quot;,double.class);
-            boolean annotationPresent = transferMoney.isAnnotationPresent(BankTransferMoney.class);
-            if(annotationPresent)&#123;
-                BankTransferMoney annotation = transferMoney.getAnnotation(BankTransferMoney.class);
-                double l = annotation.maxMoney();
-                if(money&gt;l)&#123;
-                   return &quot;转账金额大于限额，转账失败&quot;;
-                &#125;else &#123;
-                    return&quot;转账金额为:&quot;+money+&quot;，转账成功&quot;;
-                &#125;
-            &#125;
-        &#125; catch ( NoSuchMethodException e) &#123;
-            e.printStackTrace();
-        &#125;
-        return &quot;转账处理失败&quot;;
-    &#125;
-    public static void main(String[] args)&#123;
-        TransferMoney(10000);
-    &#125;
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**定义限额注解*/</span></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> BankTransferMoney &#123;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">maxMoney</span><span class="params">()</span> <span class="keyword">default</span> 10000</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**转账处理业务类*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BankService</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> money 转账金额</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@BankTransferMoney(maxMoney = 15000)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">TransferMoney</span><span class="params">(<span class="keyword">double</span> money)</span></span>&#123;</span><br><span class="line">        System.out.println(processAnnotationMoney(money));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">processAnnotationMoney</span><span class="params">(<span class="keyword">double</span> money)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Method transferMoney = BankService.class.getDeclaredMethod(<span class="string">&quot;TransferMoney&quot;</span>,<span class="keyword">double</span>.class);</span><br><span class="line">            <span class="keyword">boolean</span> annotationPresent = transferMoney.isAnnotationPresent(BankTransferMoney.class);</span><br><span class="line">            <span class="keyword">if</span>(annotationPresent)&#123;</span><br><span class="line">                BankTransferMoney annotation = transferMoney.getAnnotation(BankTransferMoney.class);</span><br><span class="line">                <span class="keyword">double</span> l = annotation.maxMoney();</span><br><span class="line">                <span class="keyword">if</span>(money&gt;l)&#123;</span><br><span class="line">                   <span class="keyword">return</span> <span class="string">&quot;转账金额大于限额，转账失败&quot;</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">return</span><span class="string">&quot;转账金额为:&quot;</span>+money+<span class="string">&quot;，转账成功&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> ( NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;转账处理失败&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        TransferMoney(<span class="number">10000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="https://img-blog.csdnimg.cn/20200607094630615.png" alt="在这里插入图片描述"></p>
 <h2 id="注解的作用"><a href="#注解的作用" class="headerlink" title="注解的作用"></a>注解的作用</h2><ul>
 <li>提供信息给编译器： 编译器可以利用注解来检测出错误或者警告信息，打印出日志。</li>
@@ -1311,7 +509,7 @@ public class BankService &#123;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -1348,12 +546,8 @@ public class BankService &#123;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

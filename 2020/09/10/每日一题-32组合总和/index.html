@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。">
@@ -83,7 +83,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -227,58 +227,12 @@
 <p>candidates 中的数字可以无限制重复被选取。</p>
 <p>说明：</p>
 <p>所有数字（包括 target）都是正整数。<br>解集不能包含重复的组合。 </p>
-<pre><code class="java">示例 1：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">1</span>：</span><br><span class="line"></span><br><span class="line">输入：candidates = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>], target = <span class="number">7</span>,</span><br><span class="line">所求解集为：</span><br><span class="line">[</span><br><span class="line">  [<span class="number">7</span>],</span><br><span class="line">  [<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-输入：candidates = [2,3,6,7], target = 7,
-所求解集为：
-[
-  [7],
-  [2,2,3]
-]
-</code></pre>
-<pre><code class="java">示例 2：
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">2</span>：</span><br><span class="line"></span><br><span class="line">输入：candidates = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>], target = <span class="number">8</span>,</span><br><span class="line">所求解集为：</span><br><span class="line">[</span><br><span class="line">  [<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>],</span><br><span class="line">  [<span class="number">2</span>,<span class="number">3</span>,<span class="number">3</span>],</span><br><span class="line">  [<span class="number">3</span>,<span class="number">5</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
-输入：candidates = [2,3,5], target = 8,
-所求解集为：
-[
-  [2,2,2,2],
-  [2,3,3],
-  [3,5]
-]
-</code></pre>
 <p><img src="https://img-blog.csdnimg.cn/20200910131954407.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>加入剪枝操作 时间提高了很多呀</p>
-<pre><code class="java">class Solution &#123;
-    public List&lt;List&lt;Integer&gt;&gt; combinationSum(int[] nums, int target) &#123;
-        List&lt;List&lt;Integer&gt;&gt; res = new ArrayList&lt;&gt;();
-        Arrays.sort(nums);
-        if (nums.length == 0) &#123;
-            return res;
-        &#125;
-
-        Deque&lt;Integer&gt; path = new ArrayDeque&lt;&gt;();
-        dfs(nums, 0, target, path, res);
-        return res;
-    &#125;
-    //回溯
-    private void dfs(int[] candidates,int begin, int target, Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)&#123;
-        //终止条件
-       // if(target &lt; 0) return;
-        if(target == 0) &#123;
-            res.add(new ArrayList&lt;&gt;(path));
-            return;
-        &#125;
-        for(int i = begin; i &lt; candidates.length; i ++)&#123;
-            //剪枝
-            if(target - candidates[i] &lt; 0) break;
-
-            path.add(candidates[i]);
-            dfs(candidates,i,target-candidates[i],path,res);
-            path.removeLast();
-        &#125;
-    &#125;
-   
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; combinationSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        Arrays.sort(nums);</span><br><span class="line">        <span class="keyword">if</span> (nums.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Deque&lt;Integer&gt; path = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">        dfs(nums, <span class="number">0</span>, target, path, res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//回溯</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] candidates,<span class="keyword">int</span> begin, <span class="keyword">int</span> target, Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)</span></span>&#123;</span><br><span class="line">        <span class="comment">//终止条件</span></span><br><span class="line">       <span class="comment">// if(target &lt; 0) return;</span></span><br><span class="line">        <span class="keyword">if</span>(target == <span class="number">0</span>) &#123;</span><br><span class="line">            res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(path));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = begin; i &lt; candidates.length; i ++)&#123;</span><br><span class="line">            <span class="comment">//剪枝</span></span><br><span class="line">            <span class="keyword">if</span>(target - candidates[i] &lt; <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">            path.add(candidates[i]);</span><br><span class="line">            dfs(candidates,i,target-candidates[i],path,res);</span><br><span class="line">            path.removeLast();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>回溯算法第一题 后面再继续<br><img src="https://img-blog.csdnimg.cn/20200910132512245.png#pic_center" alt="在这里插入图片描述"></p>
 
     </div>
@@ -447,7 +401,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -484,12 +438,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="使用反射读取注解">
@@ -81,7 +81,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -228,107 +228,13 @@
       
         <h2 id="使用反射读取注解"><a href="#使用反射读取注解" class="headerlink" title="使用反射读取注解"></a>使用反射读取注解</h2><span id="more"></span>
 
-<pre><code class="java">package com.safecode;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.safecode;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SxtTable(&quot;tb_student&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SxtStudent</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@SxtFiled(columName=&quot;id&quot;,type=&quot;int&quot;,length=10)</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">	<span class="meta">@SxtFiled(columName=&quot;sname&quot;,type=&quot;varchar&quot;,length=10)</span></span><br><span class="line">	<span class="keyword">private</span> String studentName;</span><br><span class="line">	<span class="meta">@SxtFiled(columName=&quot;age&quot;,type=&quot;int&quot;,length=3)</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.id = id;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getStudentName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> studentName;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStudentName</span><span class="params">(String studentName)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.studentName = studentName;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> age;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.age = age;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-@SxtTable(&quot;tb_student&quot;)
-public class SxtStudent &#123;
-    
-    @SxtFiled(columName=&quot;id&quot;,type=&quot;int&quot;,length=10)
-    private int id;
-    @SxtFiled(columName=&quot;sname&quot;,type=&quot;varchar&quot;,length=10)
-    private String studentName;
-    @SxtFiled(columName=&quot;age&quot;,type=&quot;int&quot;,length=3)
-    private int age;
-    
-    
-    public int getId() &#123;
-        return id;
-    &#125;
-    public void setId(int id) &#123;
-        this.id = id;
-    &#125;
-    public String getStudentName() &#123;
-        return studentName;
-    &#125;
-    public void setStudentName(String studentName) &#123;
-        this.studentName = studentName;
-    &#125;
-    public int getAge() &#123;
-        return age;
-    &#125;
-    public void setAge(int age) &#123;
-        this.age = age;
-    &#125;
-    
-    
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.safecode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(value= &#123;ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SxtTable &#123;</span><br><span class="line">	<span class="function">String <span class="title">value</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-&#125;
-</code></pre>
-<pre><code class="java">package com.safecode;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.safecode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target(value=ElementType.FIELD)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> SxtFiled &#123;</span><br><span class="line">	<span class="function">String <span class="title">columName</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function">String <span class="title">type</span><span class="params">()</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">length</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(value= &#123;ElementType.TYPE&#125;)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SxtTable &#123;
-    String value();
-
-&#125;
-</code></pre>
-<pre><code class="java">package com.safecode;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target(value=ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface SxtFiled &#123;
-    String columName();
-    String type();
-    int length();
-
-&#125;
-</code></pre>
-<pre><code class="java">package com.safecode;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-
-/*
- * 使用反射读取注解
- * 模拟处理注解流程
- */
-
-public class test &#123;
-    public static void main(String[] args) &#123;
-        try &#123;
-            Class clazz = Class.forName(&quot;com.safecode.SxtStudent&quot;);
-            //获取所有注解
-            Annotation[] annotation = clazz.getAnnotations();
-            for(Annotation a: annotation) &#123;
-                System.out.println(a);
-            &#125;
-            //获得类指定注解
-            SxtTable st = (SxtTable) clazz.getAnnotation(SxtTable.class);
-            System.out.println(st.value());
-            
-            //获得类的属性注解
-            Field f = clazz.getDeclaredField(&quot;studentName&quot;);
-            SxtFiled sxtField = f.getAnnotation(SxtFiled.class);
-            System.out.println(sxtField.columName()+&quot;  &quot;+sxtField.type()+ &quot;  &quot;+ sxtField.length());
-            //根据获得表名信息拼出DDL语句，调用JDBC执行sql语句
-        &#125; catch (Exception e) &#123;
-            e.printStackTrace();
-        &#125;
-    &#125;
-
-&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.safecode;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Annotation;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Field;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 使用反射读取注解</span></span><br><span class="line"><span class="comment"> * 模拟处理注解流程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			Class clazz = Class.forName(<span class="string">&quot;com.safecode.SxtStudent&quot;</span>);</span><br><span class="line">			<span class="comment">//获取所有注解</span></span><br><span class="line">			Annotation[] annotation = clazz.getAnnotations();</span><br><span class="line">			<span class="keyword">for</span>(Annotation a: annotation) &#123;</span><br><span class="line">				System.out.println(a);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//获得类指定注解</span></span><br><span class="line">			SxtTable st = (SxtTable) clazz.getAnnotation(SxtTable.class);</span><br><span class="line">			System.out.println(st.value());</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//获得类的属性注解</span></span><br><span class="line">			Field f = clazz.getDeclaredField(<span class="string">&quot;studentName&quot;</span>);</span><br><span class="line">			SxtFiled sxtField = f.getAnnotation(SxtFiled.class);</span><br><span class="line">			System.out.println(sxtField.columName()+<span class="string">&quot;  &quot;</span>+sxtField.type()+ <span class="string">&quot;  &quot;</span>+ sxtField.length());</span><br><span class="line">			<span class="comment">//根据获得表名信息拼出DDL语句，调用JDBC执行sql语句</span></span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -498,7 +404,7 @@ public class test &#123;
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -535,12 +441,8 @@ public class test &#123;
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

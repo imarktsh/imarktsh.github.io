@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="异常体系简介异常是指由于各种不期而至的情况，导致程序中断运行的一种指令流">
@@ -83,7 +83,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,36 +247,13 @@
 <p>1、运行异常将由<strong>系统自动抛出</strong>，应用本身可以选择处理或者忽略该异常。</p>
 <p>2、对于方法中产生的Error，该异常一旦发生JVM将自行处理该异常，因此java允许应用不抛出此类异常。</p>
 <p>3、对于所有的可查异常，必须进行<strong>获或者抛出</strong>该方法之外交给上层处理。也就是当一个方法存在异常时，要么使用try-catch捕获，要么使用该方法使用throws将该异常抛调用该方法的上层调用者。</p>
-<h2 id="捕获异常-1"><a href="#捕获异常-1" class="headerlink" title="捕获异常"></a>捕获异常</h2><h3 id="try-catch语句"><a href="#try-catch语句" class="headerlink" title="try-catch语句"></a>try-catch语句</h3><pre><code class="java">try &#123;
-                  //可能产生的异常的代码区，也成为监控区
-        &#125;catch (ExceptionType1 e) &#123;
-                  //捕获并处理try抛出异常类型为ExceptionType1的异常
-        &#125;catch(ExceptionType2 e) &#123;
-                  //捕获并处理try抛出异常类型为ExceptionType2的异常
-        &#125;
-</code></pre>
+<h2 id="捕获异常-1"><a href="#捕获异常-1" class="headerlink" title="捕获异常"></a>捕获异常</h2><h3 id="try-catch语句"><a href="#try-catch语句" class="headerlink" title="try-catch语句"></a>try-catch语句</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">                  <span class="comment">//可能产生的异常的代码区，也成为监控区</span></span><br><span class="line">        &#125;<span class="keyword">catch</span> (ExceptionType1 e) &#123;</span><br><span class="line">                  <span class="comment">//捕获并处理try抛出异常类型为ExceptionType1的异常</span></span><br><span class="line">        &#125;<span class="keyword">catch</span>(ExceptionType2 e) &#123;</span><br><span class="line">                  <span class="comment">//捕获并处理try抛出异常类型为ExceptionType2的异常</span></span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
 <p>监控区一旦发生异常，则会根据当前运行时的信息创建异常对象，并将该异常对象抛出监控区，同时<br>系统根据该异常对象依次匹配catch子句，若匹配成功（抛出的异常对象的类型和catch子句的异常类的类型或者是该异常类的子类的类型一致），则运行其中catch代码块中的异常处理代码，一旦处理结束，那就意味着整个try-catch结束。含有多个catch子句，一旦其中一个catch子句与抛出的异常对象类型一致时，其他catch子句将不再有匹配异常对象的机会。</p>
-<h3 id="try-catch-finally"><a href="#try-catch-finally" class="headerlink" title="try-catch-finally"></a>try-catch-finally</h3><pre><code class="java">  try &#123;
+<h3 id="try-catch-finally"><a href="#try-catch-finally" class="headerlink" title="try-catch-finally"></a>try-catch-finally</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"></span><br><span class="line">     <span class="comment">//可能产生的异常的代码区</span></span><br><span class="line"> &#125;<span class="keyword">catch</span> (ExceptionType1 e) &#123;</span><br><span class="line">     <span class="comment">//捕获并处理try抛出异常类型为ExceptionType1的异常</span></span><br><span class="line"> &#125;<span class="keyword">catch</span> (ExceptionType2 e)&#123;</span><br><span class="line">     <span class="comment">//捕获并处理try抛出异常类型为ExceptionType2的异常</span></span><br><span class="line"> &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">     <span class="comment">//无论是出现异常，finally块中的代码都将被执行</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 
-       //可能产生的异常的代码区
-   &#125;catch (ExceptionType1 e) &#123;
-       //捕获并处理try抛出异常类型为ExceptionType1的异常
-   &#125;catch (ExceptionType2 e)&#123;
-       //捕获并处理try抛出异常类型为ExceptionType2的异常
-   &#125;finally&#123;
-       //无论是出现异常，finally块中的代码都将被执行
-   &#125;
-</code></pre>
-<h3 id="try-catch-finally代码块的执行顺序："><a href="#try-catch-finally代码块的执行顺序：" class="headerlink" title="try-catch-finally代码块的执行顺序："></a>try-catch-finally代码块的执行顺序：</h3><pre><code class="java">  A)try没有捕获异常时，try代码块中的语句依次被执行，跳过catch。
-  如果存在finally则执行finally代码块，否则执行后续代码。
+<h3 id="try-catch-finally代码块的执行顺序："><a href="#try-catch-finally代码块的执行顺序：" class="headerlink" title="try-catch-finally代码块的执行顺序："></a>try-catch-finally代码块的执行顺序：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">A)<span class="keyword">try</span>没有捕获异常时，<span class="keyword">try</span>代码块中的语句依次被执行，跳过<span class="keyword">catch</span>。</span><br><span class="line">如果存在<span class="keyword">finally</span>则执行<span class="keyword">finally</span>代码块，否则执行后续代码。</span><br><span class="line"></span><br><span class="line">B）<span class="keyword">try</span>捕获到异常时，如果没有与之匹配的<span class="keyword">catch</span>子句，则该异常交给JVM处理。</span><br><span class="line">如果存在<span class="keyword">finally</span>，则其中的代码仍然被执行，但是<span class="keyword">finally</span>之后的代码不会被执行。</span><br><span class="line"></span><br><span class="line">C）<span class="keyword">try</span>捕获到异常时，如果存在与之匹配的<span class="keyword">catch</span>，则跳到该<span class="keyword">catch</span>代码块执行处理。</span><br><span class="line">如果存在<span class="keyword">finally</span>则执行<span class="keyword">finally</span>代码块，执行完<span class="keyword">finally</span>代码块之后继续执行后续代码；</span><br><span class="line">否则直接执行后续代码。另外注意，<span class="keyword">try</span>代码块出现异常之后的代码不会被执行。（见下图：）</span><br></pre></td></tr></table></figure>
 
-  B）try捕获到异常时，如果没有与之匹配的catch子句，则该异常交给JVM处理。
-  如果存在finally，则其中的代码仍然被执行，但是finally之后的代码不会被执行。
-
-  C）try捕获到异常时，如果存在与之匹配的catch，则跳到该catch代码块执行处理。
-  如果存在finally则执行finally代码块，执行完finally代码块之后继续执行后续代码；
-  否则直接执行后续代码。另外注意，try代码块出现异常之后的代码不会被执行。（见下图：）
-</code></pre>
 <p> <img src="https://img-blog.csdn.net/20150107221333953?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZGQ4NjQxNDAxMzA=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center#pic_center" alt="在这里插入图片描述"></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>try代码块：用于捕获异常。其后可以接零个或者多个catch块。如果没有catch块，后必须跟finally块，来完成资源释放等操作，另外建议不要在finally中使用return，不用尝试通过catch来控制代码流程。</p>
 <p>catch代码块：用于捕获异常，并在其中处理异常。</p>
@@ -285,174 +262,35 @@
 <p>2、 程序所在的线程死亡或者cpu关闭</p>
 <p>3、 如果在finally代码块中的操作又产生异常，则该finally代码块不能完全执行结束，同时该异常会覆盖前边抛出的异常。</p>
 <h2 id="抛出异常-1"><a href="#抛出异常-1" class="headerlink" title="抛出异常"></a>抛出异常</h2><h3 id="throws抛出异常"><a href="#throws抛出异常" class="headerlink" title="throws抛出异常"></a>throws抛出异常</h3><p>如果一个方法可能抛出异常，但是没有能力处理该异常或者需要通过该异常向上层汇报处理结果，可以在方法声明时使用throws来抛出异常。这就相当于计算机硬件发生损坏，但是计算机本身无法处理，就将该异常交给维修人员来处理。</p>
-<pre><code class="java">publicmethodName throws Exception1,Exception2….(params)&#123;&#125;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">publicmethodName <span class="keyword">throws</span> Exception1,Exception2….(params)&#123;&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其中Exception1,Exception2…为异常列表一旦该方法中某行代码抛出异常，则该异常将由调用该方法的上层方法处理。如果上层方法无法处理，可以继续将该异常向上层抛。</p>
 <h3 id="throw抛出异常"><a href="#throw抛出异常" class="headerlink" title="throw抛出异常"></a>throw抛出异常</h3><p>在方法内，用throw来抛出一个Throwable类型的异常。一旦遇到到throw语句，<strong>后面的代码将不被执行</strong>。然后，便是进行异常处理——包含该异常的<strong>try-catch</strong>最终处理，也可以向上层抛出。注意我们只能抛出<strong>Throwable</strong>类和其子类的对象。</p>
-<pre><code class="java">throw new ExceptionType;
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">throw</span> <span class="keyword">new</span> ExceptionType;</span><br></pre></td></tr></table></figure>
+
 <p>比如我们可以抛出<code>throw new Exception();</code></p>
 <p>也有时候我们也需要在catch中抛出异常,这也是允许的，比如说：</p>
-<pre><code class="java">Try&#123;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Try&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//可能会发生异常的代码</span></span><br><span class="line"></span><br><span class="line">&#125;<span class="keyword">catch</span>(Exceptione)&#123;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">throw</span> newException(e);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-//可能会发生异常的代码
-
-&#125;catch(Exceptione)&#123;
-
-      throw newException(e);
-
-&#125;
-</code></pre>
 <h3 id="异常关系链"><a href="#异常关系链" class="headerlink" title="异常关系链"></a>异常关系链</h3><p>在实际开发过程中经常在捕获一个异常之后抛出另外一个异常，并且我们希望在新的异常对象中保存原始异常对象的信息，实际上就是异常传递，即把底层的异常对象传给上层，一级一级，逐层抛出。当程序捕获了一个底层的异常，而在catch处理异常的时候选择将该异常抛给上层…这样异常的原因就会逐层传递，形成一个由低到高的异常链。但是异常链在实际应用中一般不建议使用，同时异常链每次都需要就将原始的异常对象封装为新的异常对象，消耗大量资源。现在（jdk 1.4之后）所有的Throwable的子类构造中都可以接受一个cause对象，这个cause也就是原始的异常对象。</p>
 <p>下面是一个不错的例子：</p>
-<pre><code class="java">/*
- *高层异常
- */
-classHighLevelExceptionextends Exception&#123;
-   public HighLevelException(Throwable cause) &#123;
-      super(cause);
-   &#125;
-&#125;
-/*
- *中层异常
- */
-classMiddleLevelExceptionextends Exception&#123;
-   public MiddleLevelException(Throwable cause) &#123;
-      super(cause);
-   &#125;
-&#125;
-/*
- *底层异常
- */
-classLowLevelExceptionextends Exception&#123;
-&#125;
-publicclass TestException &#123;
-   publicvoid highLevelAccess()throws HighLevelException&#123;
-      try &#123;
-          middleLevelAccess();
-      &#125;catch (Exception e) &#123;
-          thrownew HighLevelException(e);
-      &#125;
-   &#125;
-   publicvoid middleLevelAccess()throws MiddleLevelException&#123;
-      try &#123;
-          lowLevelAccess();
-      &#125;catch (Exception e) &#123;
-          thrownew MiddleLevelException(e);
-      &#125;
-   &#125;
-   publicvoid lowLevelAccess()throws LowLevelException &#123;
-      thrownew LowLevelException();
-   &#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *高层异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">classHighLevelExceptionextends Exception&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">HighLevelException</span><span class="params">(Throwable cause)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(cause);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *中层异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">classMiddleLevelExceptionextends Exception&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">MiddleLevelException</span><span class="params">(Throwable cause)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(cause);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *底层异常</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">classLowLevelExceptionextends Exception&#123;</span><br><span class="line">&#125;</span><br><span class="line">publicclass TestException &#123;</span><br><span class="line">   <span class="function">publicvoid <span class="title">highLevelAccess</span><span class="params">()</span><span class="keyword">throws</span> HighLevelException</span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          middleLevelAccess();</span><br><span class="line">      &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          <span class="function">thrownew <span class="title">HighLevelException</span><span class="params">(e)</span></span>;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function">publicvoid <span class="title">middleLevelAccess</span><span class="params">()</span><span class="keyword">throws</span> MiddleLevelException</span>&#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          lowLevelAccess();</span><br><span class="line">      &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">          <span class="function">thrownew <span class="title">MiddleLevelException</span><span class="params">(e)</span></span>;</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="function">publicvoid <span class="title">lowLevelAccess</span><span class="params">()</span><span class="keyword">throws</span> LowLevelException </span>&#123;</span><br><span class="line">      <span class="function">thrownew <span class="title">LowLevelException</span><span class="params">()</span></span>;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function">publicstaticvoid <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">      <span class="comment">/*</span></span><br><span class="line"><span class="comment">       * lowlevelAccess()将异常对象抛给middleLevelAccess()，而</span></span><br><span class="line"><span class="comment">       * middleLevelAccess()又将异常对象抛给highLevelAccess(),</span></span><br><span class="line"><span class="comment">       *也就是底层的异常对象一层层传递给高层。最终在在高层可以获得底层的异常对象。</span></span><br><span class="line"><span class="comment">       */</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">new</span> TestException().highLevelAccess();</span><br><span class="line">      &#125;<span class="keyword">catch</span> (HighLevelException e) &#123;</span><br><span class="line">          e.printStackTrace();</span><br><span class="line">          System.out.println(e.getCause());</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
 
-   publicstaticvoid main(String[] args) &#123;
-      /*
-       * lowlevelAccess()将异常对象抛给middleLevelAccess()，而
-       * middleLevelAccess()又将异常对象抛给highLevelAccess(),
-       *也就是底层的异常对象一层层传递给高层。最终在在高层可以获得底层的异常对象。
-       */
-      try &#123;
-          new TestException().highLevelAccess();
-      &#125;catch (HighLevelException e) &#123;
-          e.printStackTrace();
-          System.out.println(e.getCause());
-      &#125;
-   &#125;
-&#125;
- 
-</code></pre>
 <h3 id="异常转译"><a href="#异常转译" class="headerlink" title="异常转译"></a>异常转译</h3><p>异常转义就是将一种类型的异常转成另一种类型的异常，然后再抛出异常。之所以要进行转译，是为了<strong>更准确的描述异常</strong>。在实际应用中，为了构建自己的日志系统，经常需要把系统的一些异常信息描述成我们想要的异常信息，就可以使用异常转译。异常转译针对所有Throwable类的子类而言，其子类型都可以相互转换。</p>
 <p>通常而言，更为合理的转换方式是：</p>
-<pre><code class="java">1、 Error——&gt;Exception
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、 Error——&gt;Exception</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、 Error——&gt;RuntimeException</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>、 Exception——&gt;RuntimeException</span><br></pre></td></tr></table></figure>
 
-2、 Error——&gt;RuntimeException
-
-3、 Exception——&gt;RuntimeException
-</code></pre>
 <p>在下面的代码中，我们自定义了MyException异常类，然后我们将IOException类型的异常转为MyException类型的异常，最后抛出。</p>
-<pre><code class="java">class MyExceptionextends Exception &#123;
-   public MyException(String msg, Throwable e) &#123;
-      super(msg, e);
-   &#125;
-&#125;
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyExceptionextends</span> <span class="title">Exception</span> </span>&#123;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="title">MyException</span><span class="params">(String msg, Throwable e)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">super</span>(msg, e);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">publicclass Demo &#123;</span><br><span class="line">   <span class="function">publicstaticvoid <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> MyException </span>&#123;</span><br><span class="line">      Filefile =<span class="keyword">new</span> File(<span class="string">&quot;H:/test.txt&quot;</span>);</span><br><span class="line">      <span class="keyword">if</span> (file.exists())</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">             file.createNewFile();</span><br><span class="line">          &#125;<span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">             <span class="function">thrownew <span class="title">MyException</span><span class="params">(<span class="string">&quot;文件创建失败！&quot;</span>, e)</span></span>;</span><br><span class="line">          &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-publicclass Demo &#123;
-   publicstaticvoid main(String[] args)throws MyException &#123;
-      Filefile =new File(&quot;H:/test.txt&quot;);
-      if (file.exists())
-          try &#123;
-             file.createNewFile();
-          &#125;catch (IOException e) &#123;
-             thrownew MyException(&quot;文件创建失败！&quot;, e);
-          &#125;
-   &#125;
-&#125;
-</code></pre>
 <h3 id="Throwable类中常用的方法"><a href="#Throwable类中常用的方法" class="headerlink" title="Throwable类中常用的方法"></a>Throwable类中常用的方法</h3><p>像catch(Exception e)中的Exception就是异常的变量类型，e则是形参。通常在进行异常输出时有如下几个方法可用：</p>
-<pre><code class="java">e.getCause():返回抛出异常的原因。
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e.getCause():返回抛出异常的原因。</span><br><span class="line"></span><br><span class="line">e.getMessage():返回异常信息。</span><br><span class="line"></span><br><span class="line">e.printStackTrace():发生异常时，跟踪堆栈信息并输出。</span><br></pre></td></tr></table></figure>
 
-e.getMessage():返回异常信息。
-
-e.printStackTrace():发生异常时，跟踪堆栈信息并输出。
-</code></pre>
 <h2 id="常异总结"><a href="#常异总结" class="headerlink" title="常异总结"></a>常异总结</h2><p>此部分可以api文档中进行查阅，这里仅做参考。</p>
 <p>常见异常：</p>
-<pre><code class="java">java.lang.IllegalAccessError：违法访问错误。当一个应用试图访问、修改某个类的域（Field）或者调用其方法，但是又违反域或方法的可见性声明，则抛出该异常。
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalAccessError：违法访问错误。当一个应用试图访问、修改某个类的域（Field）或者调用其方法，但是又违反域或方法的可见性声明，则抛出该异常。</span><br><span class="line"></span><br><span class="line">java.lang.InstantiationError：实例化错误。当一个应用试图通过Java的<span class="keyword">new</span>操作符构造一个抽象类或者接口时抛出该异常.</span><br><span class="line"></span><br><span class="line">java.lang.OutOfMemoryError：内存不足错误。当可用内存不足以让Java虚拟机分配给一个对象时抛出该错误。</span><br><span class="line">java.lang.StackOverflowError：堆栈溢出错误。当一个应用递归调用的层次太深而导致堆栈溢出或者陷入死循环时抛出该错误。</span><br><span class="line"></span><br><span class="line">java.lang.ClassCastException：类造型异常。假设有类A和B（A不是B的父类或子类），O是A的实例，那么当强制将O构造为类B的实例时抛出该异常。该异常经常被称为强制类型转换异常。</span><br><span class="line">java.lang.ClassNotFoundException：找不到类异常。当应用试图根据字符串形式的类名构造类，而在遍历CLASSPAH之后找不到对应名称的<span class="class"><span class="keyword">class</span>文件时，抛出该异常。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ArithmeticException</span>：算术条件异常。譬如：整数除零等。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ArrayIndexOutOfBoundsException</span>：数组索引越界异常。当对数组的索引值为负数或大于等于数组大小时抛出。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IndexOutOfBoundsException</span>：索引越界异常。当访问某个序列的索引值小于0或大于等于序列大小时，抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">InstantiationException</span>：实例化异常。当试图通过<span class="title">newInstance</span>()方法创建某个类的实例，而该类是一个抽象类或接口时，抛出该异常。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NoSuchFieldException</span>：属性不存在异常。当访问某个类的不存在的属性时抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NoSuchMethodException</span>：方法不存在异常。当访问某个类的不存在的方法时抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NullPointerException</span>：空指针异常。当应用试图在要求使用对象的地方使用了<span class="title">null</span>时，抛出该异常。譬如：调用<span class="title">null</span>对象的实例方法、访问<span class="title">null</span>对象的属性、计算<span class="title">null</span>对象的长度、使用<span class="title">throw</span>语句抛出<span class="title">null</span>等等。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NumberFormatException</span>：数字格式异常。当试图将一个<span class="title">String</span>转换为指定的数字类型，而该字符串确不满足数字类型要求的格式时，抛出该异常。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">StringIndexOutOfBoundsException</span>：字符串索引越界异常。当使用索引值访问某个字符串中的字符，而该索引值小于0或大于等于序列大小时，抛出该异常。</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">其他异常：</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">AbstractMethodError</span>：抽象方法错误。当应用试图调用抽象方法时抛出。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">AssertionError</span>：断言错。用来指示一个断言失败的情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassCircularityError</span>：类循环依赖错误。在初始化一个类时，若检测到类之间循环依赖则抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ClassFormatError</span>：类格式错误。当<span class="title">Java</span>虚拟机试图从一个文件中读取<span class="title">Java</span>类，而检测到该文件的内容不符合类的有效格式时抛出。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">Error</span>：错误。是所有错误的基类，用于标识严重的程序运行问题。这些问题通常描述一些不应被应用程序捕获的反常情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ExceptionInInitializerError</span>：初始化程序错误。当执行一个类的静态初始化程序的过程中，发生了异常时抛出。静态初始化程序是指直接包含于类中的<span class="title">static</span>语句段。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IncompatibleClassChangeError</span>：不兼容的类变化错误。当正在执行的方法所依赖的类定义发生了不兼容的改变时，抛出该异常。一般在修改了应用中的某些类的声明定义而没有对整个应用重新编译而直接运行的情况下，容易引发该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">InternalError</span>：内部错误。用于指示<span class="title">Java</span>虚拟机发生了内部错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">LinkageError</span>：链接错误。该错误及其所有子类指示某个类依赖于另外一些类，在该类编译之后，被依赖的类改变了其类定义而没有重新编译所有的类，进而引发错误的情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NoClassDefFoundError</span>：未找到类定义错误。当<span class="title">Java</span>虚拟机或者类装载器试图实例化某个类，而找不到该类的定义时抛出该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NoSuchFieldError</span>：域不存在错误。当应用试图访问或者修改某类的某个域，而该类的定义中没有该域的定义时抛出该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NoSuchMethodError</span>：方法不存在错误。当应用试图调用某类的某个方法，而该类的定义中没有该方法的定义时抛出该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ThreadDeath</span>：线程结束。当调用<span class="title">Thread</span>类的<span class="title">stop</span>方法时抛出该错误，用于指示线程结束。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">UnknownError</span>：未知错误。用于指示<span class="title">Java</span>虚拟机发生了未知严重错误的情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">UnsatisfiedLinkError</span>：未满足的链接错误。当<span class="title">Java</span>虚拟机未找到某个类的声明为<span class="title">native</span>方法的本机语言定义时抛出。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">UnsupportedClassVersionError</span>：不支持的类版本错误。当<span class="title">Java</span>虚拟机试图从读取某个类文件，但是发现该文件的主、次版本号不被当前<span class="title">Java</span>虚拟机支持的时候，抛出该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">VerifyError</span>：验证错误。当验证器检测到某个类文件中存在内部不兼容或者安全问题时抛出该错误。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">VirtualMachineError</span>：虚拟机错误。用于指示虚拟机被破坏或者继续执行操作所需的资源不足的情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">ArrayStoreException</span>：数组存储异常。当向数组中存放非数组声明类型对象时抛出。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">CloneNotSupportedException</span>：不支持克隆异常。当没有实现<span class="title">Cloneable</span>接口或者不支持克隆方法时,调用其<span class="title">clone</span>()方法则抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">EnumConstantNotPresentException</span>：枚举常量不存在异常。当应用试图通过名称和枚举类型访问一个枚举对象，但该枚举对象并不包含常量时，抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">Exception</span>：根异常。用以描述应用程序希望捕获的情况。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IllegalAccessException</span>：违法的访问异常。当应用试图通过反射方式创建某个类的实例、访问该类属性、调用该类方法，而当时又无法访问类的、属性的、方法的或构造方法的定义时抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IllegalMonitorStateException</span>：违法的监控状态异常。当某个线程试图等待一个自己并不拥有的对象（<span class="title">O</span>）的监控器或者通知其他线程等待该对象（<span class="title">O</span>）的监控器时，抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IllegalStateException</span>：违法的状态异常。当在<span class="title">Java</span>环境和应用尚未处于某个方法的合法调用状态，而调用了该方法时，抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">IllegalThreadStateException</span>：违法的线程状态异常。当县城尚未处于某个方法的合法调用状态，而调用了该方法时，抛出异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">InterruptedException</span>：被中止异常。当某个线程处于长时间的等待、休眠或其他暂停状态，而此时其他的线程通过<span class="title">Thread</span>的<span class="title">interrupt</span>方法终止该线程时抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">NegativeArraySizeException</span>：数组大小为负值异常。当使用负数大小值创建数组时抛出该异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">SecurityException</span>：安全异常。由安全管理器抛出，用于指示违反安全情况的异常。</span></span><br><span class="line"><span class="class"><span class="title">java</span>.<span class="title">lang</span>.<span class="title">TypeNotPresentException</span>：类型不存在异常。</span></span><br><span class="line"><span class="class"> </span></span><br></pre></td></tr></table></figure>
 
-java.lang.InstantiationError：实例化错误。当一个应用试图通过Java的new操作符构造一个抽象类或者接口时抛出该异常.
 
-java.lang.OutOfMemoryError：内存不足错误。当可用内存不足以让Java虚拟机分配给一个对象时抛出该错误。
-java.lang.StackOverflowError：堆栈溢出错误。当一个应用递归调用的层次太深而导致堆栈溢出或者陷入死循环时抛出该错误。
-
-java.lang.ClassCastException：类造型异常。假设有类A和B（A不是B的父类或子类），O是A的实例，那么当强制将O构造为类B的实例时抛出该异常。该异常经常被称为强制类型转换异常。
-java.lang.ClassNotFoundException：找不到类异常。当应用试图根据字符串形式的类名构造类，而在遍历CLASSPAH之后找不到对应名称的class文件时，抛出该异常。
-
-java.lang.ArithmeticException：算术条件异常。譬如：整数除零等。
-java.lang.ArrayIndexOutOfBoundsException：数组索引越界异常。当对数组的索引值为负数或大于等于数组大小时抛出。
-
-java.lang.IndexOutOfBoundsException：索引越界异常。当访问某个序列的索引值小于0或大于等于序列大小时，抛出该异常。
-java.lang.InstantiationException：实例化异常。当试图通过newInstance()方法创建某个类的实例，而该类是一个抽象类或接口时，抛出该异常。
-
-java.lang.NoSuchFieldException：属性不存在异常。当访问某个类的不存在的属性时抛出该异常。
-java.lang.NoSuchMethodException：方法不存在异常。当访问某个类的不存在的方法时抛出该异常。
-java.lang.NullPointerException：空指针异常。当应用试图在要求使用对象的地方使用了null时，抛出该异常。譬如：调用null对象的实例方法、访问null对象的属性、计算null对象的长度、使用throw语句抛出null等等。
-java.lang.NumberFormatException：数字格式异常。当试图将一个String转换为指定的数字类型，而该字符串确不满足数字类型要求的格式时，抛出该异常。
-
-java.lang.StringIndexOutOfBoundsException：字符串索引越界异常。当使用索引值访问某个字符串中的字符，而该索引值小于0或大于等于序列大小时，抛出该异常。
-
-其他异常：
-java.lang.AbstractMethodError：抽象方法错误。当应用试图调用抽象方法时抛出。
-java.lang.AssertionError：断言错。用来指示一个断言失败的情况。
-java.lang.ClassCircularityError：类循环依赖错误。在初始化一个类时，若检测到类之间循环依赖则抛出该异常。
-java.lang.ClassFormatError：类格式错误。当Java虚拟机试图从一个文件中读取Java类，而检测到该文件的内容不符合类的有效格式时抛出。
-java.lang.Error：错误。是所有错误的基类，用于标识严重的程序运行问题。这些问题通常描述一些不应被应用程序捕获的反常情况。
-java.lang.ExceptionInInitializerError：初始化程序错误。当执行一个类的静态初始化程序的过程中，发生了异常时抛出。静态初始化程序是指直接包含于类中的static语句段。
-java.lang.IncompatibleClassChangeError：不兼容的类变化错误。当正在执行的方法所依赖的类定义发生了不兼容的改变时，抛出该异常。一般在修改了应用中的某些类的声明定义而没有对整个应用重新编译而直接运行的情况下，容易引发该错误。
-java.lang.InternalError：内部错误。用于指示Java虚拟机发生了内部错误。
-java.lang.LinkageError：链接错误。该错误及其所有子类指示某个类依赖于另外一些类，在该类编译之后，被依赖的类改变了其类定义而没有重新编译所有的类，进而引发错误的情况。
-java.lang.NoClassDefFoundError：未找到类定义错误。当Java虚拟机或者类装载器试图实例化某个类，而找不到该类的定义时抛出该错误。
-java.lang.NoSuchFieldError：域不存在错误。当应用试图访问或者修改某类的某个域，而该类的定义中没有该域的定义时抛出该错误。
-java.lang.NoSuchMethodError：方法不存在错误。当应用试图调用某类的某个方法，而该类的定义中没有该方法的定义时抛出该错误。
-java.lang.ThreadDeath：线程结束。当调用Thread类的stop方法时抛出该错误，用于指示线程结束。
-java.lang.UnknownError：未知错误。用于指示Java虚拟机发生了未知严重错误的情况。
-java.lang.UnsatisfiedLinkError：未满足的链接错误。当Java虚拟机未找到某个类的声明为native方法的本机语言定义时抛出。
-java.lang.UnsupportedClassVersionError：不支持的类版本错误。当Java虚拟机试图从读取某个类文件，但是发现该文件的主、次版本号不被当前Java虚拟机支持的时候，抛出该错误。
-java.lang.VerifyError：验证错误。当验证器检测到某个类文件中存在内部不兼容或者安全问题时抛出该错误。
-java.lang.VirtualMachineError：虚拟机错误。用于指示虚拟机被破坏或者继续执行操作所需的资源不足的情况。
-java.lang.ArrayStoreException：数组存储异常。当向数组中存放非数组声明类型对象时抛出。
-java.lang.CloneNotSupportedException：不支持克隆异常。当没有实现Cloneable接口或者不支持克隆方法时,调用其clone()方法则抛出该异常。
-java.lang.EnumConstantNotPresentException：枚举常量不存在异常。当应用试图通过名称和枚举类型访问一个枚举对象，但该枚举对象并不包含常量时，抛出该异常。
-java.lang.Exception：根异常。用以描述应用程序希望捕获的情况。
-java.lang.IllegalAccessException：违法的访问异常。当应用试图通过反射方式创建某个类的实例、访问该类属性、调用该类方法，而当时又无法访问类的、属性的、方法的或构造方法的定义时抛出该异常。
-java.lang.IllegalMonitorStateException：违法的监控状态异常。当某个线程试图等待一个自己并不拥有的对象（O）的监控器或者通知其他线程等待该对象（O）的监控器时，抛出该异常。
-java.lang.IllegalStateException：违法的状态异常。当在Java环境和应用尚未处于某个方法的合法调用状态，而调用了该方法时，抛出该异常。
-java.lang.IllegalThreadStateException：违法的线程状态异常。当县城尚未处于某个方法的合法调用状态，而调用了该方法时，抛出异常。
-java.lang.InterruptedException：被中止异常。当某个线程处于长时间的等待、休眠或其他暂停状态，而此时其他的线程通过Thread的interrupt方法终止该线程时抛出该异常。
-java.lang.NegativeArraySizeException：数组大小为负值异常。当使用负数大小值创建数组时抛出该异常。
-java.lang.SecurityException：安全异常。由安全管理器抛出，用于指示违反安全情况的异常。
-java.lang.TypeNotPresentException：类型不存在异常。
- 
-</code></pre>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhanaolu4821/article/details/81012382">原文链接</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/49d2c3975c56">原文链接</a></p>
 
@@ -623,7 +461,7 @@ java.lang.TypeNotPresentException：类型不存在异常。
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -660,12 +498,8 @@ java.lang.TypeNotPresentException：类型不存在异常。
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>

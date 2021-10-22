@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Hadoop MR 核心原理">
@@ -92,7 +92,7 @@
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
+  <div class="container">
     <div class="headband"></div>
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -264,9 +264,8 @@
 <li>将切片的规划放入文件内job.xml等文件.<br>切片相关参数: Math.max(minSize,Math.min(maxSize,blockSize)).minSize: 默认为1, 配置参数mapreduce.input.fileinputformat.split.minsize.<br>maxSize: 默认值为Long.MAXVALUE,<br>配置参数mapreduce.input.fileinputformat.split.maxsize.</li>
 </ul>
 <p><strong>blockSize</strong><br>默认情况下,切片大小为BlockSize. maxsize, 如果设置比blockSize小会使得切片变小. minsize, 如果设置比BlockSize大, 则可以让切片变得比BlockSize大.<br>实例:</p>
-<pre><code class="java">比如有两个文件: file1.txt 320M file2.txt 10M
-切分后的结果为: file1.txt.split1 1-128M / file1.txt.split2 128-256 / file1.txt.split3 256-320 /file2.txt.split1 1-10M
-</code></pre>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">比如有两个文件: file1.txt 320M file2.txt 10M</span><br><span class="line">切分后的结果为: file1.txt.split1 <span class="number">1</span>-128M / file1.txt.split2 <span class="number">128</span>-<span class="number">256</span> / file1.txt.split3 <span class="number">256</span>-<span class="number">320</span> /file2.txt.split1 <span class="number">1</span>-10M</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 <p>主要影响: 结点硬件环境/运算类型:IO密集型/CPU密集型/运算任务的数据量,</p>
 <p>Job的提交流程<br><img src="https://img-blog.csdnimg.cn/20200607102116391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM2NzA1NzA1,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <ul>
@@ -486,7 +485,7 @@
             document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
     }
     setInterval("createtime()",250);
-    </script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+    </script>
 
         
 <div class="busuanzi-count">
@@ -523,12 +522,8 @@
 
   
   <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
 <script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
 
 
 <script src="/js/schemes/pisces.js"></script>
