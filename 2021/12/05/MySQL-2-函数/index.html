@@ -20,30 +20,36 @@
     var CONFIG = {"hostname":"onlyear.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="明天一定学">
-<meta property="og:type" content="website">
-<meta property="og:title" content="imarktsh的博客">
-<meta property="og:url" content="http://onlyear.com/index.html">
+  <meta name="description" content="函数的理解不同DBMS函数的差异我们在使用 SQL 语言的时候，不是直接和这门语言打交道，而是通过它使用不同的数据库软件，即 DBMS。DBMS 之间的差异性很大，远大于同一个语言不同版本之间的差异。实际上，只有很少的函数是被 DBMS 同时支持的。比如，大多数 DBMS 使用（||）或者（+）来做拼接符，而在 MySQL 中的字符串拼接函数为concat()。大部分 DBMS 会有自己特定的函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL (2)函数">
+<meta property="og:url" content="http://onlyear.com/2021/12/05/MySQL-2-%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="imarktsh的博客">
-<meta property="og:description" content="明天一定学">
+<meta property="og:description" content="函数的理解不同DBMS函数的差异我们在使用 SQL 语言的时候，不是直接和这门语言打交道，而是通过它使用不同的数据库软件，即 DBMS。DBMS 之间的差异性很大，远大于同一个语言不同版本之间的差异。实际上，只有很少的函数是被 DBMS 同时支持的。比如，大多数 DBMS 使用（||）或者（+）来做拼接符，而在 MySQL 中的字符串拼接函数为concat()。大部分 DBMS 会有自己特定的函数">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2ce4329857c34bc98b5066ab6fcd566f.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/052bff6a95a84c8b8bce299a9246059f.png">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/56d7e693d2f04bbca4afc3c1a6106e6b.png">
+<meta property="article:published_time" content="2021-12-05T04:27:43.000Z">
+<meta property="article:modified_time" content="2021-12-05T04:35:43.330Z">
 <meta property="article:author" content="imarktsh">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2ce4329857c34bc98b5066ab6fcd566f.png">
 
-<link rel="canonical" href="http://onlyear.com/">
+<link rel="canonical" href="http://onlyear.com/2021/12/05/MySQL-2-%E5%87%BD%E6%95%B0/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>imarktsh的博客</title>
+  <title>MySQL (2)函数 | imarktsh的博客</title>
   
 
 
@@ -155,9 +161,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -173,10 +180,9 @@
       <meta itemprop="name" content="imarktsh的博客">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/05/MySQL-2-%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">MySQL (2)函数</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          MySQL (2)函数
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -190,6 +196,13 @@
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -200,7 +213,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="函数的理解"><a href="#函数的理解" class="headerlink" title="函数的理解"></a>函数的理解</h2><h3 id="不同DBMS函数的差异"><a href="#不同DBMS函数的差异" class="headerlink" title="不同DBMS函数的差异"></a>不同DBMS函数的差异</h3><p>我们在使用 SQL 语言的时候，不是直接和这门语言打交道，而是通过它使用不同的数据库软件，即 DBMS。<strong>DBMS 之间的差异性很大，远大于同一个语言不同版本之间的差异。</strong>实际上，只有很少的函数是被 DBMS 同时支持的。比如，大多数 DBMS 使用（||）或者（+）来做拼接符，而在 MySQL 中的字符串拼接函数为concat()。大部分 DBMS 会有自己特定的函数，这就意味着<strong>采用 SQL 函数的代码可移植性是很差的</strong>，因此在使用函数的时候需要特别注意。</p>
+        <h2 id="函数的理解"><a href="#函数的理解" class="headerlink" title="函数的理解"></a>函数的理解</h2><h3 id="不同DBMS函数的差异"><a href="#不同DBMS函数的差异" class="headerlink" title="不同DBMS函数的差异"></a>不同DBMS函数的差异</h3><p>我们在使用 SQL 语言的时候，不是直接和这门语言打交道，而是通过它使用不同的数据库软件，即 DBMS。<strong>DBMS 之间的差异性很大，远大于同一个语言不同版本之间的差异。</strong>实际上，只有很少的函数是被 DBMS 同时支持的。比如，大多数 DBMS 使用（||）或者（+）来做拼接符，而在 MySQL 中的字符串拼接函数为concat()。大部分 DBMS 会有自己特定的函数，这就意味着<strong>采用 SQL 函数的代码可移植性是很差的</strong>，因此在使用函数的时候需要特别注意。</p>
 <h3 id="MySQL的内置函数及分类"><a href="#MySQL的内置函数及分类" class="headerlink" title="MySQL的内置函数及分类"></a>MySQL的内置函数及分类</h3><p>MySQL提供了丰富的内置函数，这些函数使得数据的维护与管理更加方便，能够更好地提供数据的分析与统计功能，在一定程度上提高了开发人员进行数据分析与统计的效率。</p>
 <p>MySQL提供的内置函数从<code>实现的功能角度</code>可以分为数值函数、字符串函数、日期和时间函数、流程控制函数、加密与解密函数、获取MySQL信息函数、聚合函数等。这里，我将这些丰富的内置函数再分为两类：<code>单行函数</code>、<code>聚合函数（或分组函数）</code>。</p>
 <p><strong>单行函数</strong></p>
@@ -1223,859 +1236,31 @@
 <p>当然我们在写 SELECT 语句的时候，不一定存在所有的关键字，相应的阶段就会省略。</p>
 <p>同时因为 SQL 是一门类似英语的结构化查询语言，所以我们在写 SELECT 语句的时候，还要注意相应的关键字顺序，<strong>所谓底层运行的原理，就是我们刚才讲到的执行顺序。</strong></p>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/12/05/MySQL-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/05/MySQL-1/" class="post-title-link" itemprop="url">MySQL (1)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-12-05 09:59:00 / 修改时间：09:59:09" itemprop="dateCreated datePublished" datetime="2021-12-05T09:59:00+08:00">2021-12-05</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="首先回答一个问题：为什么要使用数据库？"><a href="#首先回答一个问题：为什么要使用数据库？" class="headerlink" title="首先回答一个问题：为什么要使用数据库？"></a>首先回答一个问题：为什么要使用数据库？</h2><p>我们在实际应用中需要将数据持久化，以便我们不丢失数据，所以数据库提供了数据持久化的功能。但是数据的存储文件系统也能做，相比而言数据库对数据的组织和管理更为重要，可以选择查询我们想要的数据，并且兼顾性能、速度、数据管理方式、容灾、备份等多因素。对于我们，数据库是一种工具，帮助我们科学合理组织数据，快速存取。</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>DataBase 数据库：存储数据表。<br>DataBase Management System 数据库管理系统：用于建立管理数据库，通过它来访问数据库的数据表。<br>SQL：结构化查询语言。</p>
-<h2 id="RDBMS与非RDBMS对比"><a href="#RDBMS与非RDBMS对比" class="headerlink" title="RDBMS与非RDBMS对比"></a>RDBMS与非RDBMS对比</h2><p>R表示关系型，关系型数据库的特点就是用二维表来描述实体，及实体间的关系。 在70年代还没关系型数据库时，那时候的数据库有各种数据模型的结构，树型，星型，后来关系型的出现就是为了解决各种模型的复杂化并统一。 关系型的优点是结构清晰，易管理（基于表），但海量数据时性能不佳，所以现在NOSQL又起来<br> <strong>RDBMS</strong></p>
-<ul>
-<li>高度组织化结构化数据</li>
-<li>结构化查询语言（SQL）</li>
-<li>数据和关系都存储在单独的表中</li>
-<li>数据操纵语言，数据定义语言</li>
-<li>严格的一致性</li>
-<li>基础事务</li>
-</ul>
-<p><strong>NoSQL</strong></p>
-<ul>
-<li>代表着不仅仅是SQL</li>
-<li>没有声明性查询语言</li>
-<li>没有预定义的模式  键-值对存储edis，列存储 Hbase，文档存储MongoDB，图形数据库</li>
-<li>最终一致性，而非ACID属性</li>
-<li>非结构化和不可预知的数据</li>
-<li>CAP定理</li>
-<li>高性能，高可用性和可伸缩性<h2 id="关系型数据库设计原则"><a href="#关系型数据库设计原则" class="headerlink" title="关系型数据库设计原则"></a>关系型数据库设计原则</h2><h2 id="ER图-（entity-relationship）"><a href="#ER图-（entity-relationship）" class="headerlink" title="ER图 （entity-relationship）"></a>ER图 （entity-relationship）</h2>包含三个概念：实体集 属性 联系集<br>一个实体集就对应数据表的一行也称为：一条记录<br>一个属性对于数据表的一列：一个字段<br>表的关联关系：一对一 一对多 多对多 自我引用<h2 id="Mysql-安装"><a href="#Mysql-安装" class="headerlink" title="Mysql 安装"></a>Mysql 安装</h2>系统centos6.5 安装mysql8.0</li>
-</ul>
-<ol>
-<li>下载</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//dev.mysql.com/get/mysql80-community-release-el6-1.noarch.rpm</span></span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>yun源安装命令</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo rpm -ivh mysql80-community-release-el6-<span class="number">1.</span>noarch.rpm</span><br></pre></td></tr></table></figure>
-
-<ol start="3">
-<li>使用yum命令安装mysql</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#安装</span><br><span class="line">sudo yum install -y mysql-community-server</span><br><span class="line"></span><br><span class="line">#启动服务</span><br><span class="line">sudo systemctl start mysqld</span><br><span class="line"></span><br><span class="line">#查看版本信息</span><br><span class="line">mysql -V</span><br><span class="line">报错：</span><br><span class="line">yum 命令没有这个包，centos6停止维护需要切换源</span><br><span class="line">yum安装报错的包</span><br></pre></td></tr></table></figure>
-
-<ol start="4">
-<li>启动mysql</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service start mysqld</span><br></pre></td></tr></table></figure>
-
-<ol start="5">
-<li>检查是否安装启动成功</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">service mysqld start</span><br><span class="line"></span><br><span class="line">service mysqld restart</span><br><span class="line"></span><br><span class="line">service mysqld stop</span><br></pre></td></tr></table></figure>
-
-<ol start="6">
-<li>登录修改密码</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">1</span>、查看MySQL为Root账号生成的临时密码</span><br><span class="line">grep <span class="string">&quot;A temporary password&quot;</span> /<span class="keyword">var</span>/log/mysqld.log</span><br><span class="line"></span><br><span class="line">#<span class="number">2</span>、进入MySQL shell</span><br><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line">#<span class="number">3</span>、修改密码</span><br><span class="line">ALTER USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED BY <span class="string">&#x27;Mypwd123!&#x27;</span>;</span><br></pre></td></tr></table></figure>
-<p>修改引擎和字符编码</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#修改配置文件</span><br><span class="line">vi /etc/my.cnf</span><br><span class="line"></span><br><span class="line">#修改<span class="number">1</span>：增加client配置（文件开头）</span><br><span class="line">[client]</span><br><span class="line"><span class="keyword">default</span>-character-set=utf8mb4</span><br><span class="line"></span><br><span class="line">#修改<span class="number">2</span>：增加mysqld配置（文件结尾）</span><br><span class="line">#charset</span><br><span class="line">character-set-server=utf8mb4</span><br><span class="line">collation-server=utf8mb4_general_ci</span><br></pre></td></tr></table></figure>
-<ol start="7">
-<li>再搞一个可视化软件</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">下载地址<span class="number">1</span>:</span><br><span class="line">链接:https:<span class="comment">//pan.baidu.com/s/1HjjQA_S1vRcMN94zeBSzOA</span></span><br><span class="line">密码:3wco</span><br></pre></td></tr></table></figure>
-<p>mac版解压之后连接mysql<br>需要mysql设置远程访问</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">查看登陆用户</span><br><span class="line">select host from user where user=<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line">设置远程</span><br><span class="line">update user set host = <span class="string">&#x27;%&#x27;</span> where user =<span class="string">&#x27;root&#x27;</span>;</span><br><span class="line">生产环境可不能这么搞</span><br></pre></td></tr></table></figure>
-<p><img src="https://img-blog.csdnimg.cn/b7fbcdd651bc4cffaea552366c806702.png" alt="可视化"></p>
-<h1 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a>SQL</h1><p>SQL语言在功能上主要分为如下3大类：</p>
-<ul>
-<li><p><strong>DDL（Data Definition Languages、数据定义语言）</strong>，这些语句定义了不同的数据库、表、视图、索引等数据库对象，还可以用来创建、删除、修改数据库和数据表的结构。</p>
-<ul>
-<li>主要的语句关键字包括<code>CREATE</code>、<code>DROP</code>、<code>ALTER</code>等。</li>
-</ul>
-</li>
-<li><p><strong>DML（Data Manipulation Language、数据操作语言）</strong>，用于添加、删除、更新和查询数据库记录，并检查数据完整性。</p>
-<ul>
-<li>主要的语句关键字包括<code>INSERT</code>、<code>DELETE</code>、<code>UPDATE</code>、<code>SELECT</code>等。</li>
-<li><strong>SELECT是SQL语言的基础，最为重要。</strong></li>
-</ul>
-</li>
-<li><p><strong>DCL（Data Control Language、数据控制语言）</strong>，用于定义数据库、表、字段、用户的访问权限和安全级别。</p>
-<ul>
-<li>主要的语句关键字包括<code>GRANT</code>、<code>REVOKE</code>、<code>COMMIT</code>、<code>ROLLBACK</code>、<code>SAVEPOINT</code>等。<h2 id="SQL语言的规则与规范"><a href="#SQL语言的规则与规范" class="headerlink" title="SQL语言的规则与规范"></a>SQL语言的规则与规范</h2></li>
-</ul>
-</li>
-</ul>
-<h3 id="基本规则"><a href="#基本规则" class="headerlink" title="基本规则"></a>基本规则</h3><ul>
-<li>SQL 可以写在一行或者多行。为了提高可读性，各子句分行写，必要时使用缩进</li>
-<li>每条命令以 ; 或 \g 或 \G 结束</li>
-<li>关键字不能被缩写也不能分行</li>
-<li>关于标点符号<ul>
-<li>必须保证所有的()、单引号、双引号是成对结束的</li>
-<li>必须使用英文状态下的半角输入方式</li>
-<li>字符串型和日期时间类型的数据可以使用单引号（’ ‘）表示</li>
-<li>列的别名，尽量使用双引号（” “），而且不建议省略as</li>
-</ul>
-</li>
-</ul>
-<h3 id="SQL大小写规范-（建议遵守）"><a href="#SQL大小写规范-（建议遵守）" class="headerlink" title="SQL大小写规范 （建议遵守）"></a>SQL大小写规范 （建议遵守）</h3><ul>
-<li><strong>MySQL 在 Windows 环境下是大小写不敏感的</strong></li>
-<li><strong>MySQL 在 Linux 环境下是大小写敏感的</strong><ul>
-<li>数据库名、表名、表的别名、变量名是严格区分大小写的</li>
-<li>关键字、函数名、列名(或字段名)、列的别名(字段的别名) 是忽略大小写的。</li>
-</ul>
-</li>
-<li><strong>推荐采用统一的书写规范：</strong><ul>
-<li>数据库名、表名、表别名、字段名、字段别名等都小写</li>
-<li>SQL 关键字、函数名、绑定变量等都大写</li>
-</ul>
-</li>
-</ul>
-<h3 id="注-释"><a href="#注-释" class="headerlink" title="注 释"></a>注 释</h3><p>可以使用如下格式的注释结构</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">单行注释：#注释文字(MySQL特有的方式)</span><br><span class="line">单行注释：-- 注释文字(--后面必须包含一个空格。)</span><br><span class="line">多行注释：/* 注释文字  */</span><br></pre></td></tr></table></figure>
-
-<h3 id="命名规则"><a href="#命名规则" class="headerlink" title="命名规则"></a>命名规则</h3><ul>
-<li>数据库、表名不得超过30个字符，变量名限制为29个</li>
-<li>必须只能包含 A–Z, a–z, 0–9, _共63个字符</li>
-<li>数据库名、表名、字段名等对象名中间不要包含空格</li>
-<li>同一个MySQL软件中，数据库不能同名；同一个库中，表不能重名；同一个表中，字段不能重名</li>
-<li>必须保证你的字段没有和保留字、数据库系统或常用方法冲突。如果坚持使用，请在SQL语句中使用`（着重号）引起来</li>
-<li>保持字段名和类型的一致性，在命名字段并为其指定数据类型的时候一定要保证一致性。假如数据类型在一个表里是整数，那在另一个表里可就别变成字符型了</li>
-</ul>
-<h3 id="数据导入指令"><a href="#数据导入指令" class="headerlink" title="数据导入指令"></a>数据导入指令</h3><p>在命令行客户端登录mysql，使用source指令导入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; source d:\mysqldb.sql</span><br></pre></td></tr></table></figure>
-<h2 id="基本的SELECT语句"><a href="#基本的SELECT语句" class="headerlink" title="基本的SELECT语句"></a>基本的SELECT语句</h2><h3 id="SELECT…"><a href="#SELECT…" class="headerlink" title="SELECT…"></a>SELECT…</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT 1; #没有任何子句</span><br><span class="line">SELECT 9/2; #没有任何子句</span><br></pre></td></tr></table></figure>
-
-<h3 id="SELECT-…-FROM"><a href="#SELECT-…-FROM" class="headerlink" title="SELECT … FROM"></a>SELECT … FROM</h3><ul>
-<li>语法：</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span>   标识选择哪些列</span><br><span class="line"><span class="keyword">FROM</span>     标识从哪个表中选择</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>选择全部列：</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span>   departments;</span><br></pre></td></tr></table></figure>
-
-<p>[外链图片转存失败,源站可能有防盗链机制,建议将图片保存下来直接上传(img-S2kvB3aO-1638265521202)(images/1554950890895.png)]</p>
-<blockquote>
-<p>一般情况下，除非需要使用表中所有的字段数据，最好不要使用通配符‘*’。使用通配符虽然可以节省输入查询语句的时间，但是获取不需要的列数据通常会降低查询和所使用的应用程序的效率。通配符的优势是，当不知道所需要的列的名称时，可以通过它获取它们。</p>
-<p>在生产环境下，不推荐你直接使用<code>SELECT *</code>进行查询。</p>
-</blockquote>
-<ul>
-<li>选择特定的列：</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> department_id, location_id</span><br><span class="line"><span class="keyword">FROM</span>   departments;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>MySQL中的SQL语句是不区分大小写的，因此SELECT和select的作用是相同的，但是，许多开发人员习惯将关键字大写、数据列和表名小写，读者也应该养成一个良好的编程习惯，这样写出来的代码更容易阅读和维护。</p>
-</blockquote>
-<h3 id="列的别名"><a href="#列的别名" class="headerlink" title="列的别名"></a>列的别名</h3><ul>
-<li><p>重命名一个列</p>
-</li>
-<li><p>便于计算</p>
-</li>
-<li><p>紧跟列名，也可以<strong>在列名和别名之间加入关键字AS，别名使用双引号</strong>，以便在别名中包含空格或特殊的字符并区分大小写。</p>
-</li>
-<li><p>AS 可以省略</p>
-</li>
-<li><p>建议别名简短，见名知意</p>
-</li>
-<li><p>举例</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT last_name AS name, commission_pct comm</span><br><span class="line">FROM   employees;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT last_name &quot;Name&quot;, salary*12 &quot;Annual Salary&quot;</span><br><span class="line">FROM   employees;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="去除重复行"><a href="#去除重复行" class="headerlink" title="去除重复行"></a>去除重复行</h3><p>默认情况下，查询会返回全部行，包括重复行。</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> department_id</span><br><span class="line"><span class="keyword">FROM</span>   employees;</span><br></pre></td></tr></table></figure>
-<p><strong>在SELECT语句中使用关键字DISTINCT去除重复行</strong></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> department_id</span><br><span class="line"><span class="keyword">FROM</span>   employees;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>针对于：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT DISTINCT department_id,salary </span><br><span class="line">FROM employees;</span><br></pre></td></tr></table></figure>
-
-<p>这里有两点需要注意：</p>
-<ol>
-<li>DISTINCT 需要放到所有列名的前面，如果写成<code>SELECT salary, DISTINCT department_id FROM employees</code>会报错。</li>
-<li>DISTINCT 其实是对后面所有列名的组合进行去重，你能看到最后的结果是 74 条，因为这 74 个部门id不同，都有 salary 这个属性值。如果你想要看都有哪些不同的部门（department_id），只需要写<code>DISTINCT department_id</code>即可，后面不需要再加其他的列名了。</li>
-</ol>
-<h3 id="空值参与运算"><a href="#空值参与运算" class="headerlink" title="空值参与运算"></a>空值参与运算</h3><ul>
-<li>所有运算符或列值遇到null值，运算的结果都为null</li>
-</ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> employee_id,salary,commission_pct,</span><br><span class="line"><span class="number">12</span> <span class="operator">*</span> salary <span class="operator">*</span> (<span class="number">1</span> <span class="operator">+</span> commission_pct) &quot;annual_sal&quot;</span><br><span class="line"><span class="keyword">FROM</span> employees;</span><br></pre></td></tr></table></figure>
-
-<p>这里你一定要注意，在 MySQL 里面， 空值不等于空字符串。一个空字符串的长度是 0，而一个空值的长度是空。而且，在 MySQL 里面，空值是占用空间的。</p>
-<p>七种SQL join实现<br><img src="https://img-blog.csdnimg.cn/62c59c30aa1141379c7cfb43777b54a3.png" alt="join"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/10/29/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/10/29/JVM%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F/" class="post-title-link" itemprop="url">JVM内存区域</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-10-29 19:06:00 / 修改时间：19:33:40" itemprop="dateCreated datePublished" datetime="2021-10-29T19:06:00+08:00">2021-10-29</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="JVM内存区域"><a href="#JVM内存区域" class="headerlink" title="JVM内存区域"></a>JVM内存区域</h1><p><img src="https://img-blog.csdnimg.cn/afa7b88fb074428aa72c233e094c53ff.png"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/" class="post-title-link" itemprop="url">每日一题@79区域和检索 - 数组不可变</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-03-04 21:10:00 / 修改时间：21:11:06" itemprop="dateCreated datePublished" datetime="2021-03-04T21:10:00+08:00">2021-03-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>给定一个整数数组  <code>nums</code>，求出数组从索引 <code>i</code> 到 j<code>（i ≤ j）</code>范围内元素的总和，包含 <code>i</code>、<code>j</code> 两点。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/03/04/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-79%E5%8C%BA%E5%9F%9F%E5%92%8C%E6%A3%80%E7%B4%A2-%E6%95%B0%E7%BB%84%E4%B8%8D%E5%8F%AF%E5%8F%98/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">每日一题@78单词搜索</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-03-03 21:29:00 / 修改时间：21:30:02" itemprop="dateCreated datePublished" datetime="2021-03-03T21:29:00+08:00">2021-03-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>经典回溯法</p>
-<p>给定一个二维网格和一个单词，找出该单词是否存在于网格中。</p>
-<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/03/03/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-78%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/12/05/MySQL-1/" rel="prev" title="MySQL (1)">
+      <i class="fa fa-chevron-left"></i> MySQL (1)
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
   
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/" class="post-title-link" itemprop="url">看书Apache Spark 1</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-03-01 11:36:00 / 修改时间：11:37:06" itemprop="dateCreated datePublished" datetime="2021-03-01T11:36:00+08:00">2021-03-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>看书Apache Spark 1<br><strong>大数据处理框架<br>Apache Spark<br>设计与实现</strong></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/03/01/%E7%9C%8B%E4%B9%A6Apache-Spark-1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/28/Linux%E5%91%BD%E4%BB%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">Linux命令</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-02-28 21:01:00 / 修改时间：21:01:25" itemprop="dateCreated datePublished" datetime="2021-02-28T21:01:00+08:00">2021-02-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Linux相关</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/28/Linux%E5%91%BD%E4%BB%A4/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/" class="post-title-link" itemprop="url">每日一题@77不同路径 II</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-02-28 17:55:00 / 修改时间：17:55:55" itemprop="dateCreated datePublished" datetime="2021-02-28T17:55:00+08:00">2021-02-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。</p>
-<p>机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。</p>
-<p>现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/28/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98-77%E4%B8%8D%E5%90%8C%E8%B7%AF%E5%BE%84-II/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/" class="post-title-link" itemprop="url">大数据电信客服3</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-02-24 14:04:00 / 修改时间：14:05:34" itemprop="dateCreated datePublished" datetime="2021-02-24T14:04:00+08:00">2021-02-24</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>大数据电信客服3<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17t411W7wZ?spm_id_from=333.788.b_636f6d6d656e74.19">B站链接</a><br>数据分析部分</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/24/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://onlyear.com/2021/02/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://img-blog.csdnimg.cn/2020053010414625.jpg">
-      <meta itemprop="name" content="imarktsh">
-      <meta itemprop="description" content="明天一定学">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="imarktsh的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D2/" class="post-title-link" itemprop="url">大数据电信客服2</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-02-23 21:16:00 / 修改时间：21:17:12" itemprop="dateCreated datePublished" datetime="2021-02-23T21:16:00+08:00">2021-02-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>大数据电信客服2<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV17t411W7wZ?spm_id_from=333.788.b_636f6d6d656e74.19">B站链接</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/23/%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%94%B5%E4%BF%A1%E5%AE%A2%E6%9C%8D2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -2127,6 +1312,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E7%9A%84%E7%90%86%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">函数的理解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8CDBMS%E5%87%BD%E6%95%B0%E7%9A%84%E5%B7%AE%E5%BC%82"><span class="nav-number">1.1.</span> <span class="nav-text">不同DBMS函数的差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL%E7%9A%84%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0%E5%8F%8A%E5%88%86%E7%B1%BB"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL的内置函数及分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">数值函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%87%BD%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">基本函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%92%E5%BA%A6%E4%B8%8E%E5%BC%A7%E5%BA%A6%E4%BA%92%E6%8D%A2%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">角度与弧度互换函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">三角函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E6%95%B0%E4%B8%8E%E5%AF%B9%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">指数与对数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%88%B6%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">2.5.</span> <span class="nav-text">进制间的转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0"><span class="nav-number">4.</span> <span class="nav-text">日期和时间函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%97%A5%E6%9C%9F%E3%80%81%E6%97%B6%E9%97%B4"><span class="nav-number">4.1.</span> <span class="nav-text">获取日期、时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E4%B8%8E%E6%97%B6%E9%97%B4%E6%88%B3%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.2.</span> <span class="nav-text">日期与时间戳的转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%9C%88%E4%BB%BD%E3%80%81%E6%98%9F%E6%9C%9F%E3%80%81%E6%98%9F%E6%9C%9F%E6%95%B0%E3%80%81%E5%A4%A9%E6%95%B0%E7%AD%89%E5%87%BD%E6%95%B0"><span class="nav-number">4.3.</span> <span class="nav-text">获取月份、星期、星期数、天数等函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E7%9A%84%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0"><span class="nav-number">4.4.</span> <span class="nav-text">日期的操作函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E5%92%8C%E7%A7%92%E9%92%9F%E8%BD%AC%E6%8D%A2%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">4.5.</span> <span class="nav-text">时间和秒钟转换的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%97%A5%E6%9C%9F%E5%92%8C%E6%97%B6%E9%97%B4%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">4.6.</span> <span class="nav-text">计算日期和时间的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E6%9C%9F%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E8%A7%A3%E6%9E%90"><span class="nav-number">4.7.</span> <span class="nav-text">日期的格式化与解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%87%BD%E6%95%B0"><span class="nav-number">5.</span> <span class="nav-text">流程控制函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86%E5%87%BD%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">加密与解密函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%BF%A1%E6%81%AF%E5%87%BD%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">MySQL信息函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0"><span class="nav-number">8.</span> <span class="nav-text">其他函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D"><span class="nav-number">9.</span> <span class="nav-text">1. 聚合函数介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-AVG%E5%92%8CSUM%E5%87%BD%E6%95%B0"><span class="nav-number">9.1.</span> <span class="nav-text">1.1 AVG和SUM函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-MIN%E5%92%8CMAX%E5%87%BD%E6%95%B0"><span class="nav-number">9.2.</span> <span class="nav-text">1.2 MIN和MAX函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-COUNT%E5%87%BD%E6%95%B0"><span class="nav-number">9.3.</span> <span class="nav-text">1.3 COUNT函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-GROUP-BY"><span class="nav-number">10.</span> <span class="nav-text">2. GROUP BY</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">10.1.</span> <span class="nav-text">2.1 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E4%BD%BF%E7%94%A8%E5%A4%9A%E4%B8%AA%E5%88%97%E5%88%86%E7%BB%84"><span class="nav-number">10.2.</span> <span class="nav-text">2.2 使用多个列分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-GROUP-BY%E4%B8%AD%E4%BD%BF%E7%94%A8WITH-ROLLUP"><span class="nav-number">10.3.</span> <span class="nav-text">2.3 GROUP BY中使用WITH ROLLUP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-HAVING"><span class="nav-number">11.</span> <span class="nav-text">3. HAVING</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">11.1.</span> <span class="nav-text">3.1 基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-WHERE%E5%92%8CHAVING%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">11.2.</span> <span class="nav-text">3.2 WHERE和HAVING的对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-SELECT%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">12.</span> <span class="nav-text">4. SELECT的执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">12.1.</span> <span class="nav-text">4.1 查询的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-SELECT%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">12.2.</span> <span class="nav-text">4.2 SELECT执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-SQL-%E7%9A%84%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="nav-number">12.3.</span> <span class="nav-text">4.3 SQL 的执行原理</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
